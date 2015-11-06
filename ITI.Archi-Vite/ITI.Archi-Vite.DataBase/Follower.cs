@@ -9,7 +9,8 @@ namespace ITI.Archi_Vite.DataBase
     public class Follower
     {
         public int FollowerId { get; set; }
-        public User User { get; set; }
-        public PatientFile PatientFiles { get; set; }
+        public int UserId { get; set; }
+        public virtual User User { get; set; }
+        public PatientFile PatientFile { get; set; }
     }
 }

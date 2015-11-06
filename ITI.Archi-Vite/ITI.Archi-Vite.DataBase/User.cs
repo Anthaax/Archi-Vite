@@ -16,16 +16,24 @@ namespace ITI.Archi_Vite.DataBase
             Follower = new List<Follower>();
         }
         public int UserId { get; set; }
+        [Required]
         public string FirstName { get; set; }
+        [Required]
         public string LastName { get; set; }
         public DateTime Birthdate { get; set; }
         [Column(TypeName = "ntext")]
+        [Required]
         public string Adress { get; set; }
+        [Required]
         public string City { get; set; }
         public int Postcode { get; set; }
         public int PhoneNumber { get; set; }
+        [Required]
         public string Email { get; set; }
+        [Required]
+        public string Role { get; set; }
         [Column(TypeName = "ntext")]
+        [Required]
         public string Photo { get; set; }
         public ICollection<PatientFile> PatientFile { get; set; }
         public ICollection<Follower> Follower { get; set; }
