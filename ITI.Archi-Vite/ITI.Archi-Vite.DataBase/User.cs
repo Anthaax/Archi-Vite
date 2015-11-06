@@ -12,7 +12,8 @@ namespace ITI.Archi_Vite.DataBase
     {
         public User()
         {
-
+            PatientFile = new List<PatientFile>();
+            Follower = new List<Follower>();
         }
         public int UserId { get; set; }
         public string FirstName { get; set; }
@@ -27,6 +28,6 @@ namespace ITI.Archi_Vite.DataBase
         [Column(TypeName = "ntext")]
         public string Photo { get; set; }
         public ICollection<PatientFile> PatientFile { get; set; }
-        public PatientFile Follower { get; set; }
+        public ICollection<Follower> Follower { get; set; }
     }
 }

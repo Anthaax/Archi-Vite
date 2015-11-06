@@ -16,5 +16,6 @@ namespace ITI.Archi_Vite.DataBase
         }
         public DbSet<User> User { get; set; }
         public DbSet<PatientFile> PatientFile { get; set; }
+        public DbSet<Follower> Follower { get; set; }
     }
 }

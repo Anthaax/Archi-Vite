@@ -10,12 +10,12 @@ namespace ITI.Archi_Vite.DataBase
     {
         public PatientFile()
         {
-
+            Follower = new List<Follower>();
         }
         public int PatientFileId { get; set; }
         public string PathFiles { get; set; }
         public int Referent { get; set; }
         public User User { get; set; }
-        public ICollection<User> Follower { get; set; }
+        public ICollection<Follower> Follower { get; set; }
     }
 }
