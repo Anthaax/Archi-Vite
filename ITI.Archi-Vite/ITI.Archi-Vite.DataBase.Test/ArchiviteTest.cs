@@ -165,8 +165,8 @@ namespace ITI.Archi_Vite.DataBase.Test
         [Test]
         public void CreateFileForNewUser()
         {
-            Class1 c = new Class1();
-            c.CreateFileIfNotExist("Guillaume", "Fist", 3);
+            AccountManagement Account = new AccountManagement();
+            Account.CreateFileIfNotExist("Guillaume", "Fist", 3);
         }
     }
 }

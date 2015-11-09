@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ITI.Archi_Vite.Core
 {
-    public class Class1
+    public class AccountManagement
     {
         public void CreateFileIfNotExist(string FirstName, string LastName, int userId)
         {
