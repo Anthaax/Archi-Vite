@@ -23,7 +23,8 @@ namespace ITI.Archi_Vite.GUI
                 string fileName = openFileDialog1.SafeFileName;
                 try
                 {
-                    File.Move(path, path2+fileName);
+                    System.IO.File.Copy(path, path2 + fileName, true);
+ //                   File.Move(path, path2+fileName);
 
                 }
                 catch (Exception ex)
