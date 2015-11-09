@@ -55,7 +55,7 @@ namespace ITI.Archi_Vite.DataBase.Test
                 Birthdate = DateTime.Now,
                 City = "Ivry-sur-Seine",
                 Email = "sfavraud@intechinfo.fr",
-                Role = "Archi'Mède",
+                Role = "Infirmier",
                 PhoneNumber = 0606066606,
                 Photo = "yolo",
                 Postcode = 12452
@@ -68,7 +68,7 @@ namespace ITI.Archi_Vite.DataBase.Test
                 Birthdate = DateTime.Now,
                 City = "Ivry-sur-Seine",
                 Email = "sfavraud@intechinfo.fr",
-                Role = "Archi'Mède",
+                Role = "Patient",
                 PhoneNumber = 0606066606,
                 Photo = "yolo",
                 Postcode = 12452
@@ -109,11 +109,54 @@ namespace ITI.Archi_Vite.DataBase.Test
         {
             using (ArchiViteContexts context = new ArchiViteContexts())
             {
-                List<User> selectQuery = context.User.Where(s => s.Role.Equals("Patient")).ToList<User>();
+                var selectQuery = context.User.Where(s => s.Role.Equals("Patient")).ToList();
                 foreach(var user in selectQuery)
                 {
-                    Console.WriteLine(user.FirstName);
+                    Console.WriteLine("FirstName : {0} LastName : {1}  Role : {2}", user.FirstName, user.LastName, user.Role);
                 }
+                var selectQuery1 = context.User.Where(s => s.Role.Equals("Infirmier")).ToList();
+                foreach (var user in selectQuery1)
+                {
+                    Console.WriteLine("FirstName : {0} LastName : {1}  Role : {2}", user.FirstName, user.LastName, user.Role);
+                }
+            }
+        }
+        [Test]
+        public void UpdateRequest()
+        {
+            using (ArchiViteContexts context = new ArchiViteContexts())
+            {
+                var selectQuery = context.User.Where(s => s.FirstName.Equals("Guillaume")).FirstOrDefault();
+                if(selectQuery != null)
+                {
+                    selectQuery.Role = "Infirmier";
+                }
+                context.Entry(selectQuery).State = System.Data.Entity.EntityState.Modified;
+                context.SaveChanges();
+            }
+        }
+        [Test]
+        public void UpdateWithMethod()
+        {
+            User u = new User()
+            {
+                FirstName = "Guillaume",
+                LastName = "Fimes",
+                Adress = "72 avenue maurice thorez",
+                Birthdate = DateTime.Now,
+                City = "Ivry-sur-Seine",
+                Email = "fimes@intechinfo.fr",
+                Role = "Patient",
+                PhoneNumber = 0662147351,
+                Photo = "yolo",
+                Postcode = 75015
+            };
+            UserInfoUpdate info = new UserInfoUpdate(u);
+            info.CheckInfo("Guillaume", "Fist", "13 rue des potiers", DateTime.Now, u.City, u.Email, u.Postcode, u.PhoneNumber);
+            using (ArchiViteContexts context = new ArchiViteContexts())
+            {
+                var user = context.User.Where(s => s.FirstName.Equals("Guillaume")).FirstOrDefault();
+                Console.WriteLine("FirstName : {0} LastName : {1}  Adress : {2} BirthDate : {3}", user.FirstName, user.LastName, user.Adress, user.Birthdate);
             }
         }
     }

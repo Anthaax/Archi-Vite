@@ -10,7 +10,7 @@ namespace ITI.Archi_Vite.DataBase
     public class ArchiViteContexts : DbContext
     {
         public ArchiViteContexts()
-            :base("ArchiVite")
+            :base("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=ArchiVite;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False")
         {
 
         }
