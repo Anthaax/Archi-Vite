@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ITI.Archi_Vite.Core;
 
 namespace ITI.Archi_Vite.DataBase.Test
 {
@@ -140,6 +141,7 @@ namespace ITI.Archi_Vite.DataBase.Test
         {
             User u = new User()
             {
+                UserId = 1,
                 FirstName = "Guillaume",
                 LastName = "Fimes",
                 Adress = "72 avenue maurice thorez",
@@ -158,6 +160,13 @@ namespace ITI.Archi_Vite.DataBase.Test
                 var user = context.User.Where(s => s.FirstName.Equals("Guillaume")).FirstOrDefault();
                 Console.WriteLine("FirstName : {0} LastName : {1}  Adress : {2} BirthDate : {3}", user.FirstName, user.LastName, user.Adress, user.Birthdate);
             }
+        }
+
+        [Test]
+        public void CreateFileForNewUser()
+        {
+            Class1 c = new Class1();
+            c.CreateFileIfNotExist("Guillaume", "Fist", 3);
         }
     }
 }
