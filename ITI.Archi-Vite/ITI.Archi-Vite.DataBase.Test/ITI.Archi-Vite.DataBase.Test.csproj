@@ -62,7 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ITI.Archi-Vite.Core\ITI.Archi-Vite.Core.csproj">
-      <Project>{e4da36d2-3f85-4d38-af23-669e1ac89923}</Project>
+      <Project>{8e1dd5e5-0186-4be5-9999-970ba6d75744}</Project>
       <Name>ITI.Archi-Vite.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\ITI.Archi-Vite.DataBase\ITI.Archi-Vite.DataBase.csproj">
