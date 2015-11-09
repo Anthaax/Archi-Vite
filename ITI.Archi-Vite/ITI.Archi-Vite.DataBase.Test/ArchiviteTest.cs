@@ -140,6 +140,7 @@ namespace ITI.Archi_Vite.DataBase.Test
         {
             User u = new User()
             {
+                UserId = 0,
                 FirstName = "Guillaume",
                 LastName = "Fimes",
                 Adress = "72 avenue maurice thorez",

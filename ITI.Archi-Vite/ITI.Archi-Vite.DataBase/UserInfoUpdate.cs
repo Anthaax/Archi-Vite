@@ -29,9 +29,9 @@ namespace ITI.Archi_Vite.DataBase
                     if (selectQuery.City != City) UpdateCity(City, selectQuery);
                     if (selectQuery.Email != Email) UpdateEmail(Email, selectQuery);
                     if (selectQuery.Postcode != PostCode) UpdatePostcode(PostCode, selectQuery);
-                    if (selectQuery.PhoneNumber != PhoneNumber) UpdatePhoneNumber(PhoneNumber, selectQuery); 
+                    if (selectQuery.PhoneNumber != PhoneNumber) UpdatePhoneNumber(PhoneNumber, selectQuery);
+                    context.Entry(selectQuery).State = System.Data.Entity.EntityState.Modified;
                 }
-                context.Entry(selectQuery).State = System.Data.Entity.EntityState.Modified;
                 context.SaveChanges();
             }
             
