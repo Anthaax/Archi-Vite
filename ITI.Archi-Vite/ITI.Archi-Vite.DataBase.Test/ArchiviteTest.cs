@@ -166,7 +166,9 @@ namespace ITI.Archi_Vite.DataBase.Test
         public void CreateFileForNewUser()
         {
             PatientManagement Account = new PatientManagement();
-            Account.CreatePatient("Guillaume", "Fist", 3);
+            Person person = new Person("Guillaume", "Fimes", DateTime.Now, "11 rue yolo", "Paris", 75015, 0603020104, "yolo@yolo", "Medecin", "coucou");
+            Patient patient = new Patient("Clement", "Rousseau", DateTime.Now, "11 rue yolo", "Paris", 75015, 0603020104, "yolo@yolo", "coucou", person);
+            Account.CreatePatient(patient);
         }
     }
 }

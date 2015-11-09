@@ -11,8 +11,8 @@ namespace ITI.Archi_Vite.Core
         readonly Person referent;
         readonly List<Message> comment;
         readonly List<Person> follow;
-        public Patient(int ID, string FirstName, string LastName, DateTime BirthDate, string Adress, string City, int PostCode, int PhoneNumber, string Email, string Role, string Photo, Person Referent)
-            :base(ID, FirstName, LastName, BirthDate, Adress, City, PostCode, PhoneNumber, Email, Role, Photo)
+        public Patient(string FirstName, string LastName, DateTime BirthDate, string Adress, string City, int PostCode, int PhoneNumber, string Email, string Photo, Person Referent)
+            :base(FirstName, LastName, BirthDate, Adress, City, PostCode, PhoneNumber, Email, "Patient", Photo)
         {
             referent = Referent;
             comment = new List<Message>();

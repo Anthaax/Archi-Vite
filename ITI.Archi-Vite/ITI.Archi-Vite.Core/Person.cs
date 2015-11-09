@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ITI.Archi_Vite.DataBase;
 
 namespace ITI.Archi_Vite.Core
 {
@@ -20,9 +21,13 @@ namespace ITI.Archi_Vite.Core
         readonly string role;
         string photo;
         public Person
-            (int ID, string FirstName, string LastName, DateTime BirthDate, string Adress, string City, int PostCode, int PhoneNumber, string Email, string Role, string Photo)
+            (string FirstName, string LastName, DateTime BirthDate, string Adress, string City, int PostCode, int PhoneNumber, string Email, string Role, string Photo)
         {
-            Id = ID;
+            using (ArchiViteContexts ctx = new ArchiViteContexts())
+            {
+                Id = ctx.User.Count() + 1;
+            }
+                
             firstName = FirstName;
             lastName = LastName;
             birthDate = BirthDate;
