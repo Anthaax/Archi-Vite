@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="ArchiViteContext.cs" />
     <Compile Include="Follower.cs" />
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Patient.cs" />
     <Compile Include="Professional.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

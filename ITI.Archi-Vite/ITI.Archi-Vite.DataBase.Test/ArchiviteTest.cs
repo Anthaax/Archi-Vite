@@ -14,7 +14,7 @@ namespace ITI.Archi_Vite.DataBase.Test
         [Test]
         public void CreateDatabase()
         {
-            using (ArchiViteContexts context = new ArchiViteContexts())
+            using (ArchiViteContext context = new ArchiViteContext())
             {
                 context.Database.Create();
             }
@@ -91,7 +91,7 @@ namespace ITI.Archi_Vite.DataBase.Test
                 Patient = p,
                 Professionnal = pro1
             };
-            using (ArchiViteContexts context = new ArchiViteContexts())
+            using (ArchiViteContext context = new ArchiViteContext())
             {
                 context.User.Add(u);
                 context.User.Add(u1);
@@ -105,7 +105,7 @@ namespace ITI.Archi_Vite.DataBase.Test
         [Test]
         public void DeleteData()
         {
-            using (ArchiViteContexts context = new ArchiViteContexts())
+            using (ArchiViteContext context = new ArchiViteContext())
             {
                 context.Database.Delete();
             }
@@ -113,7 +113,7 @@ namespace ITI.Archi_Vite.DataBase.Test
         [Test]
         public void SelectRequest()
         {
-            using (ArchiViteContexts context = new ArchiViteContexts())
+            using (ArchiViteContext context = new ArchiViteContext())
             {
                 var selectQuery = context.Patient.ToList();
                 foreach(var user in selectQuery)
@@ -130,7 +130,7 @@ namespace ITI.Archi_Vite.DataBase.Test
         [Test]
         public void UpdateRequest()
         {
-            using (ArchiViteContexts context = new ArchiViteContexts())
+            using (ArchiViteContext context = new ArchiViteContext())
             {
                 var selectQuery = context.User.Where(s => s.FirstName.Equals("Guillaume")).FirstOrDefault();
                 if(selectQuery != null)
@@ -159,7 +159,7 @@ namespace ITI.Archi_Vite.DataBase.Test
             };
             UserInfoUpdate info = new UserInfoUpdate(u);
             info.CheckInfo("Guillaume", "Fist", "13 rue des potiers", DateTime.Now, u.City, u.Email, u.Postcode, u.PhoneNumber);
-            using (ArchiViteContexts context = new ArchiViteContexts())
+            using (ArchiViteContext context = new ArchiViteContext())
             {
                 var user = context.User.Where(s => s.FirstName.Equals("Guillaume")).FirstOrDefault();
                 Console.WriteLine("FirstName : {0} LastName : {1}  Adress : {2} BirthDate : {3}", user.FirstName, user.LastName, user.Adress, user.Birthdate);

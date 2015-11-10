@@ -23,7 +23,7 @@ namespace ITI.Archi_Vite.Core
         public Person
             (string FirstName, string LastName, DateTime BirthDate, string Adress, string City, int PostCode, int PhoneNumber, string Email, string Role, string Photo)
         {
-            using (ArchiViteContexts ctx = new ArchiViteContexts())
+            using (ArchiViteContext ctx = new ArchiViteContext())
             {
                 Id = ctx.User.Count() + 1;
             }

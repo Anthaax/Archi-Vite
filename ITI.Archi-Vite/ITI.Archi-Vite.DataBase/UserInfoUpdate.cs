@@ -17,7 +17,7 @@ namespace ITI.Archi_Vite.DataBase
 
         public void CheckInfo(string FirstName, string LastName, string Adress, DateTime Birthdate, string City, string Email, int PostCode, int PhoneNumber)
         {
-            using (ArchiViteContexts context = new ArchiViteContexts())
+            using (ArchiViteContext context = new ArchiViteContext())
             {
                 var selectQuery = context.User.Where(s => s.UserId.Equals(user.UserId)).FirstOrDefault();
                 if (selectQuery != null)
