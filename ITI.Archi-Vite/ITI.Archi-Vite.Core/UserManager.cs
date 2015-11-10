@@ -21,7 +21,6 @@ namespace ITI.Archi_Vite.Core
                 Postcode = p.PostCode,
                 PhoneNumber = p.PhoneNumber,
                 Email = p.Email,
-                Role = p.Role,
                 Photo = p.Photo                
             };
             return u;

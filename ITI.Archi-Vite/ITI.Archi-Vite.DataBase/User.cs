@@ -12,8 +12,6 @@ namespace ITI.Archi_Vite.DataBase
     {
         public User()
         {
-            PatientFile = new List<PatientFile>();
-            Follower = new List<Follower>();
         }
         public int UserId { get; set; }
         [Required]
@@ -30,12 +28,8 @@ namespace ITI.Archi_Vite.DataBase
         public int PhoneNumber { get; set; }
         [Required]
         public string Email { get; set; }
-        [Required]
-        public string Role { get; set; }
         [Column(TypeName = "ntext")]
         [Required]
         public string Photo { get; set; }
-        public ICollection<PatientFile> PatientFile { get; set; }
-        public ICollection<Follower> Follower { get; set; }
     }
 }

@@ -30,7 +30,6 @@ namespace ITI.Archi_Vite.DataBase.Test
                 Birthdate = DateTime.Now,
                 City = "Ivry-sur-Seine",
                 Email = "fimes@intechinfo.fr",
-                Role = "Patient",
                 PhoneNumber = 0662147351,
                 Photo = "yolo",
                 Postcode = 75015
@@ -43,7 +42,6 @@ namespace ITI.Archi_Vite.DataBase.Test
                 Birthdate = DateTime.Now,
                 City = "Ivry-sur-Seine",
                 Email = "crousseau@intechinfo.fr",
-                Role = "Medecin",
                 PhoneNumber = 0606060606,
                 Photo = "yolo",
                 Postcode = 12452
@@ -55,8 +53,6 @@ namespace ITI.Archi_Vite.DataBase.Test
                 Adress = "72 avenue maurice thorez",
                 Birthdate = DateTime.Now,
                 City = "Ivry-sur-Seine",
-                Email = "sfavraud@intechinfo.fr",
-                Role = "Infirmier",
                 PhoneNumber = 0606066606,
                 Photo = "yolo",
                 Postcode = 12452
@@ -69,22 +65,31 @@ namespace ITI.Archi_Vite.DataBase.Test
                 Birthdate = DateTime.Now,
                 City = "Ivry-sur-Seine",
                 Email = "sfavraud@intechinfo.fr",
-                Role = "Patient",
                 PhoneNumber = 0606066606,
                 Photo = "yolo",
                 Postcode = 12452
             };
-            PatientFile p = new PatientFile()
+            Professional pro1 = new Professional()
+            {
+                Role = "Infirmier",
+                User = u2
+            };
+            Professional pro2 = new Professional()
+            {
+                Role = "Medecin",
+                User = u1
+            };
+            Patient p = new Patient()
             {
                 PathFiles = "abc",
-                Referent = 2,
+                Referent = pro1,
                 User =  u,
 
             };
             Follower f = new Follower()
             {
-                User = u2,
-                PatientFile = p
+                Patient = p,
+                Professionnal = pro1
             };
             using (ArchiViteContexts context = new ArchiViteContexts())
             {
@@ -92,7 +97,7 @@ namespace ITI.Archi_Vite.DataBase.Test
                 context.User.Add(u1);
                 context.User.Add(u2);
                 context.User.Add(u3);
-                context.PatientFile.Add(p);
+                context.Patient.Add(p);
                 context.Follower.Add(f);
                 context.SaveChanges();
             }
@@ -110,15 +115,15 @@ namespace ITI.Archi_Vite.DataBase.Test
         {
             using (ArchiViteContexts context = new ArchiViteContexts())
             {
-                var selectQuery = context.User.Where(s => s.Role.Equals("Patient")).ToList();
+                var selectQuery = context.Patient.ToList();
                 foreach(var user in selectQuery)
                 {
-                    Console.WriteLine("FirstName : {0} LastName : {1}  Role : {2}", user.FirstName, user.LastName, user.Role);
+                    Console.WriteLine("FirstName : {0} LastName : {1}", user.User.FirstName, user.User.LastName);
                 }
-                var selectQuery1 = context.User.Where(s => s.Role.Equals("Infirmier")).ToList();
+                var selectQuery1 = context.Professional.Where(s => s.Role.Equals("Infirmier")).ToList();
                 foreach (var user in selectQuery1)
                 {
-                    Console.WriteLine("FirstName : {0} LastName : {1}  Role : {2}", user.FirstName, user.LastName, user.Role);
+                    Console.WriteLine("FirstName : {0} LastName : {1}", user.User.FirstName, user.User.LastName, user.Role);
                 }
             }
         }
@@ -130,7 +135,7 @@ namespace ITI.Archi_Vite.DataBase.Test
                 var selectQuery = context.User.Where(s => s.FirstName.Equals("Guillaume")).FirstOrDefault();
                 if(selectQuery != null)
                 {
-                    selectQuery.Role = "Infirmier";
+                    selectQuery.LastName = "Fist";
                 }
                 context.Entry(selectQuery).State = System.Data.Entity.EntityState.Modified;
                 context.SaveChanges();
@@ -148,7 +153,6 @@ namespace ITI.Archi_Vite.DataBase.Test
                 Birthdate = DateTime.Now,
                 City = "Ivry-sur-Seine",
                 Email = "fimes@intechinfo.fr",
-                Role = "Patient",
                 PhoneNumber = 0662147351,
                 Photo = "yolo",
                 Postcode = 75015
@@ -167,7 +171,7 @@ namespace ITI.Archi_Vite.DataBase.Test
         {
             PatientManagement Account = new PatientManagement();
             Person person = new Person("Guillaume", "Fimes", DateTime.Now, "11 rue yolo", "Paris", 75015, 0603020104, "yolo@yolo", "Medecin", "coucou");
-            Patient patient = new Patient("Clement", "Rousseau", DateTime.Now, "11 rue yolo", "Paris", 75015, 0603020104, "yolo@yolo", "coucou", person);
+            Core.Patient patient = new Core.Patient("Clement", "Rousseau", DateTime.Now, "11 rue yolo", "Paris", 75015, 0603020104, "yolo@yolo", "coucou", person);
             Account.CreatePatient(patient);
         }
     }
