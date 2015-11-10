@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,6 +20,7 @@ namespace ITI.Archi_Vite.DataBase
         [Required]
         public Professional Referent { get; set; }
         
+        [ForeignKey("PatientId")]
         public User User { get; set; }
         public ICollection<Follower> Followers { get; set; }
     }
