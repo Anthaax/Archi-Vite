@@ -10,9 +10,9 @@ namespace ITI.Archi_Vite.DataBase
     {
         User user;
 
-        public UserInfoUpdate(User user)
+        public UserInfoUpdate(User User)
         {
-            this.user = user;
+            user = User;
         }
 
         public void CheckInfo(string FirstName, string LastName, string Adress, DateTime Birthdate, string City, string Email, int PostCode, int PhoneNumber)
