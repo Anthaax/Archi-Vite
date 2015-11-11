@@ -18,6 +18,7 @@ namespace ITI.Archi_Vite.DataBase.Test
             {
                 context.Database.Create();
             }
+            DeleteData();
         }
         [Test]
         public void InsertInDatabase()
@@ -80,10 +81,15 @@ namespace ITI.Archi_Vite.DataBase.Test
                 Role = "Medecin",
                 User = u1
             };
+            Professional pro3 = new Professional()
+            {
+                Role = "Medecin",
+                User = u3
+            };
             Patient p = new Patient()
             {
                 PathFiles = "abc",
-                Referent = pro1,
+                Referent = pro2,
                 User =  u
 
             };
@@ -101,6 +107,7 @@ namespace ITI.Archi_Vite.DataBase.Test
                 context.User.Add(u3);
                 context.Professional.Add(pro1);
                 context.Professional.Add(pro2);
+                context.Professional.Add(pro3);
                 context.Patient.Add(p);
                 context.Follower.Add(f);
                 context.SaveChanges();
@@ -139,81 +146,93 @@ namespace ITI.Archi_Vite.DataBase.Test
             }
         }
         [Test]
-        public void UpdateWithMethod()
+        public void UpdateUser()
         {
             
             using (ArchiViteContext context = new ArchiViteContext())
             {
                 var user = context.User.Where(s => s.FirstName.Equals("Guillaume")).FirstOrDefault();
-                UserInfoUpdate info = new UserInfoUpdate(user);
-                info.CheckInfo("Guillaume", "Fist", "13 rue des potiers", DateTime.Now, user.City, user.Email, user.Postcode, user.PhoneNumber);
+                UpdateRequest update = new UpdateRequest();
+                update.CheckUserInfo("Guillaume", "Fist", "13 rue des potiers", DateTime.Now, user.City, user.Email, user.Postcode, user.PhoneNumber, user);
                 var u = context.User.Where(s => s.FirstName.Equals("Guillaume")).FirstOrDefault();
                 Console.WriteLine("FirstName : {0} LastName : {1}  Adress : {2} BirthDate : {3}", u.FirstName, u.LastName, u.Adress, u.Birthdate);
             }
         }
-            //[Test]
-            //public void SelectRequest()
-            //{
-            //    using (ArchiViteContext context = new ArchiViteContext())
-            //    {
-            //        var selectQuery = context.Patient.ToList();
-            //        foreach(var user in selectQuery)
-            //        {
-            //            Console.WriteLine("FirstName : {0} LastName : {1}", user.User.FirstName, user.User.LastName);
-            //        }
-            //        var selectQuery1 = context.Professional.Where(s => s.Role.Equals("Infirmier")).ToList();
-            //        foreach (var user in selectQuery1)
-            //        {
-            //            Console.WriteLine("FirstName : {0} LastName : {1}", user.User.FirstName, user.User.LastName, user.Role);
-            //        }
-            //    }
-            //}
-            //[Test]
-            //public void UpdateRequest()
-            //{
-            //    using (ArchiViteContext context = new ArchiViteContext())
-            //    {
-            //        var selectQuery = context.User.Where(s => s.FirstName.Equals("Guillaume")).FirstOrDefault();
-            //        if(selectQuery != null)
-            //        {
-            //            selectQuery.LastName = "Fist";
-            //        }
-            //        context.Entry(selectQuery).State = System.Data.Entity.EntityState.Modified;
-            //        context.SaveChanges();
-            //    }
-            //}
-            //[Test]
-            //public void UpdateWithMethod()
-            //{
-            //    User u = new User()
-            //    {
-            //        UserId = 1,
-            //        FirstName = "Guillaume",
-            //        LastName = "Fimes",
-            //        Adress = "72 avenue maurice thorez",
-            //        Birthdate = DateTime.Now,
-            //        City = "Ivry-sur-Seine",
-            //        Email = "fimes@intechinfo.fr",
-            //        PhoneNumber = 0662147351,
-            //        Photo = "yolo",
-            //        Postcode = 75015
-            //    };
-            //    UserInfoUpdate info = new UserInfoUpdate(u);
-            //    info.CheckInfo("Guillaume", "Fist", "13 rue des potiers", DateTime.Now, u.City, u.Email, u.Postcode, u.PhoneNumber);
-            //    using (ArchiViteContext context = new ArchiViteContext())
-            //    {
-            //        var user = context.User.Where(s => s.FirstName.Equals("Guillaume")).FirstOrDefault();
-            //        Console.WriteLine("FirstName : {0} LastName : {1}  Adress : {2} BirthDate : {3}", user.FirstName, user.LastName, user.Adress, user.Birthdate);
-            //    }
-            //}
+        [Test]
+        public void UpdatePatient()
+        {
+            UpdateRequest update = new UpdateRequest();
+            using (ArchiViteContext context = new ArchiViteContext())
+            {
+                var Pro = context.Professional.Where(t => t.ProfessionalId.Equals(2003)).FirstOrDefault();
+                var Patient = context.Patient.Where(t => t.PatientId.Equals(2005)).FirstOrDefault();
+                if(Pro != null && Patient != null ) update.CheckPatientInfo(Pro, Patient);
 
-            //[Test]
-            //public void CreateFileForNewUser()
-            //{
-            //    PatientManagement Account = new PatientManagement();
-            //    Person person = new Person("Guillaume", "Fimes", DateTime.Now, "11 rue yolo", "Paris", 75015, 0603020104, "yolo@yolo", "Medecin", "coucou");
-            //    Core.Patient patient = new Core.Patient("Clement", "Rousseau", DateTime.Now, "11 rue yolo", "Paris", 75015, 0603020104, "yolo@yolo", "coucou", person);
-            //    Account.CreatePatient(patient);
-            //}
+
+                var patient = context.Patient.Where(t => t.PatientId.Equals(2005)).FirstOrDefault();
+                var user = context.User.Where(t => t.UserId.Equals(patient.PatientId)).FirstOrDefault();
+                var selectpro = context.Professional.Where(t => t.ProfessionalId.Equals(patient.Referent.ProfessionalId)).FirstOrDefault();
+                var pro = context.User.Where(t => t.UserId.Equals(selectpro.ProfessionalId)).FirstOrDefault();
+                Console.WriteLine("FirstName : {0} LastName : {1} FisrtName Referent : {2}  LastName Referent : {3}", user.FirstName, user.LastName, pro.FirstName, pro.LastName);
+            }
         }
+        [Test]
+        public void UpdatePro()
+        {
+
+            using (ArchiViteContext context = new ArchiViteContext())
+            {
+                var user = context.User.Where(s => s.FirstName.Equals("Guillaume")).FirstOrDefault();
+                UpdateRequest update = new UpdateRequest();
+                update.CheckUserInfo("Guillaume", "Fist", "13 rue des potiers", DateTime.Now, user.City, user.Email, user.Postcode, user.PhoneNumber, user);
+                var u = context.User.Where(s => s.FirstName.Equals("Guillaume")).FirstOrDefault();
+                Console.WriteLine("FirstName : {0} LastName : {1}  Adress : {2} BirthDate : {3}", u.FirstName, u.LastName, u.Adress, u.Birthdate);
+            }
+        }
+
+        [Test]
+        public void SelectRequest()
+        {
+            using (ArchiViteContext context = new ArchiViteContext())
+            {
+                var selectQuery = context.Patient.ToList();
+                foreach (var patient in selectQuery)
+                {
+                    var user = context.User.Where(t => t.UserId.Equals(patient.PatientId)).FirstOrDefault();
+                    Console.WriteLine("FirstName : {0} LastName : {1}", user.FirstName, user.LastName);
+                }
+                var selectQuery1 = context.Professional.ToList();
+                foreach (var professional in selectQuery1)
+                {
+                    var user = context.User.Where(t => t.UserId.Equals(professional.ProfessionalId)).FirstOrDefault();
+                    Console.WriteLine("FirstName : {0} LastName : {1}", user.FirstName, user.LastName);
+                }
+            }
+        }
+        
+        //[Test]
+        //public void UpdateRequest()
+        //{
+        //    using (ArchiViteContext context = new ArchiViteContext())
+        //    {
+        //        var selectQuery = context.User.Where(s => s.FirstName.Equals("Guillaume")).FirstOrDefault();
+        //        if(selectQuery != null)
+        //        {
+        //            selectQuery.LastName = "Fist";
+        //        }
+        //        context.Entry(selectQuery).State = System.Data.Entity.EntityState.Modified;
+        //        context.SaveChanges();
+        //    }
+        //}
+        
+
+        //[Test]
+        //public void CreateFileForNewUser()
+        //{
+        //    PatientManagement Account = new PatientManagement();
+        //    Person person = new Person("Guillaume", "Fimes", DateTime.Now, "11 rue yolo", "Paris", 75015, 0603020104, "yolo@yolo", "Medecin", "coucou");
+        //    Core.Patient patient = new Core.Patient("Clement", "Rousseau", DateTime.Now, "11 rue yolo", "Paris", 75015, 0603020104, "yolo@yolo", "coucou", person);
+        //    Account.CreatePatient(patient);
+        //}
+    }
 }
