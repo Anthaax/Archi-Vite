@@ -158,37 +158,37 @@ namespace ITI.Archi_Vite.DataBase.Test
                 Console.WriteLine("FirstName : {0} LastName : {1}  Adress : {2} BirthDate : {3}", u.FirstName, u.LastName, u.Adress, u.Birthdate);
             }
         }
-        [Test]
-        public void UpdatePatient()
-        {
-            UpdateRequest update = new UpdateRequest();
-            using (ArchiViteContext context = new ArchiViteContext())
-            {
-                var Pro = context.Professional.Where(t => t.ProfessionalId.Equals(2003)).FirstOrDefault();
-                var Patient = context.Patient.Where(t => t.PatientId.Equals(2005)).FirstOrDefault();
-                if(Pro != null && Patient != null ) update.CheckPatientInfo(Pro, Patient);
+        //[Test]
+        //public void UpdatePatient()
+        //{
+        //    UpdateRequest update = new UpdateRequest();
+        //    using (ArchiViteContext context = new ArchiViteContext())
+        //    {
+        //        var Pro = context.Professional.Where(t => t.ProfessionalId.Equals(2003)).FirstOrDefault();
+        //        var Patient = context.Patient.Where(t => t.PatientId.Equals(2005)).FirstOrDefault();
+        //        if(Pro != null && Patient != null ) update.CheckPatientInfo(Pro, Patient);
 
 
-                var patient = context.Patient.Where(t => t.PatientId.Equals(2005)).FirstOrDefault();
-                var user = context.User.Where(t => t.UserId.Equals(patient.PatientId)).FirstOrDefault();
-                var selectpro = context.Professional.Where(t => t.ProfessionalId.Equals(patient.Referent.ProfessionalId)).FirstOrDefault();
-                var pro = context.User.Where(t => t.UserId.Equals(selectpro.ProfessionalId)).FirstOrDefault();
-                Console.WriteLine("FirstName : {0} LastName : {1} FisrtName Referent : {2}  LastName Referent : {3}", user.FirstName, user.LastName, pro.FirstName, pro.LastName);
-            }
-        }
-        [Test]
-        public void UpdatePro()
-        {
+        //        var patient = context.Patient.Where(t => t.PatientId.Equals(2005)).FirstOrDefault();
+        //        var user = context.User.Where(t => t.UserId.Equals(patient.PatientId)).FirstOrDefault();
+        //        var selectpro = context.Professional.Where(t => t.ProfessionalId.Equals(patient.Referent.ProfessionalId)).FirstOrDefault();
+        //        var pro = context.User.Where(t => t.UserId.Equals(selectpro.ProfessionalId)).FirstOrDefault();
+        //        Console.WriteLine("FirstName : {0} LastName : {1} FisrtName Referent : {2}  LastName Referent : {3}", user.FirstName, user.LastName, pro.FirstName, pro.LastName);
+        //    }
+        //}
+        //[Test]
+        //public void UpdatePro()
+        //{
 
-            using (ArchiViteContext context = new ArchiViteContext())
-            {
-                var user = context.User.Where(s => s.FirstName.Equals("Guillaume")).FirstOrDefault();
-                UpdateRequest update = new UpdateRequest();
-                update.CheckUserInfo("Guillaume", "Fist", "13 rue des potiers", DateTime.Now, user.City, user.Email, user.Postcode, user.PhoneNumber, user);
-                var u = context.User.Where(s => s.FirstName.Equals("Guillaume")).FirstOrDefault();
-                Console.WriteLine("FirstName : {0} LastName : {1}  Adress : {2} BirthDate : {3}", u.FirstName, u.LastName, u.Adress, u.Birthdate);
-            }
-        }
+        //    using (ArchiViteContext context = new ArchiViteContext())
+        //    {
+        //        var user = context.User.Where(s => s.FirstName.Equals("Guillaume")).FirstOrDefault();
+        //        UpdateRequest update = new UpdateRequest();
+        //        update.CheckUserInfo("Guillaume", "Fist", "13 rue des potiers", DateTime.Now, user.City, user.Email, user.Postcode, user.PhoneNumber, user);
+        //        var u = context.User.Where(s => s.FirstName.Equals("Guillaume")).FirstOrDefault();
+        //        Console.WriteLine("FirstName : {0} LastName : {1}  Adress : {2} BirthDate : {3}", u.FirstName, u.LastName, u.Adress, u.Birthdate);
+        //    }
+        //}
 
         [Test]
         public void SelectRequest()
