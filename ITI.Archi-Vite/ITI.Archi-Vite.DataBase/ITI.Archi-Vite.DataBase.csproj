@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddRequest.cs" />
     <Compile Include="ArchiViteContext.cs" />
     <Compile Include="Follower.cs" />
     <Compile Include="Migrations\201511101428410_Initial.cs" />
