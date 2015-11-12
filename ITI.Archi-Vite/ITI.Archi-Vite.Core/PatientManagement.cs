@@ -8,7 +8,7 @@ using ITI.Archi_Vite.DataBase;
 
 namespace ITI.Archi_Vite.Core
 {
-    public class PatientManagement : UserManager
+    public class PatientManagement 
     {
         public void CreatePatient(Patient Patient)
         {

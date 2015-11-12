@@ -49,12 +49,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Patient.cs" />
     <Compile Include="PatientManagement.cs" />
-    <Compile Include="Message.cs" />
-    <Compile Include="Person.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UserManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ITI.Archi-Vite.DataBase\ITI.Archi-Vite.DataBase.csproj">
