@@ -90,7 +90,7 @@ namespace ITI.Archi_Vite.DataBase.Test
             {
                 PathFiles = "abc",
                 Referent = pro2,
-                User =  u
+                User = u
 
             };
             Follower f = new Follower()
@@ -120,7 +120,7 @@ namespace ITI.Archi_Vite.DataBase.Test
             using (ArchiViteContext context = new ArchiViteContext())
             {
                 var selectQuery1 = context.Follower.ToList();
-                foreach( var follow in selectQuery1)
+                foreach (var follow in selectQuery1)
                 {
                     context.Follower.Remove(follow);
                     context.SaveChanges();
@@ -148,7 +148,7 @@ namespace ITI.Archi_Vite.DataBase.Test
         [Test]
         public void UpdateUser()
         {
-            
+
             using (ArchiViteContext context = new ArchiViteContext())
             {
                 var user = context.User.Where(s => s.FirstName.Equals("Guillaume")).FirstOrDefault();
@@ -230,36 +230,37 @@ namespace ITI.Archi_Vite.DataBase.Test
                 var professional = context.Professional.Where(t => t.User.FirstName.Equals("Antoine")).FirstOrDefault();
                 a.AddFollow("yolo", patient, professional);
                 var follow = context.Follower.ToList();
-                foreach( var f in follow)
+                foreach (var f in follow)
                 {
                     Console.WriteLine("FirstName : {0} LastName : {1} FirstNamePro : {2} LastNamePro : {3}", f.Patient.User.FirstName, f.Patient.User.LastName, f.Professionnal.User.FirstName, f.Professionnal.User.LastName);
                 }
                 Console.WriteLine();
+            }
+
+            //[Test]
+            //public void UpdateRequest()
+            //{
+            //    using (ArchiViteContext context = new ArchiViteContext())
+            //    {
+            //        var selectQuery = context.User.Where(s => s.FirstName.Equals("Guillaume")).FirstOrDefault();
+            //        if(selectQuery != null)
+            //        {
+            //            selectQuery.LastName = "Fist";
+            //        }
+            //        context.Entry(selectQuery).State = System.Data.Entity.EntityState.Modified;
+            //        context.SaveChanges();
+            //    }
+            //}
+
+
+            //[Test]
+            //public void CreateFileForNewUser()
+            //{
+            //    PatientManagement Account = new PatientManagement();
+            //    Person person = new Person("Guillaume", "Fimes", DateTime.Now, "11 rue yolo", "Paris", 75015, 0603020104, "yolo@yolo", "Medecin", "coucou");
+            //    Core.Patient patient = new Core.Patient("Clement", "Rousseau", DateTime.Now, "11 rue yolo", "Paris", 75015, 0603020104, "yolo@yolo", "coucou", person);
+            //    Account.CreatePatient(patient);
+            //}
         }
-
-        //[Test]
-        //public void UpdateRequest()
-        //{
-        //    using (ArchiViteContext context = new ArchiViteContext())
-        //    {
-        //        var selectQuery = context.User.Where(s => s.FirstName.Equals("Guillaume")).FirstOrDefault();
-        //        if(selectQuery != null)
-        //        {
-        //            selectQuery.LastName = "Fist";
-        //        }
-        //        context.Entry(selectQuery).State = System.Data.Entity.EntityState.Modified;
-        //        context.SaveChanges();
-        //    }
-        //}
-
-
-        //[Test]
-        //public void CreateFileForNewUser()
-        //{
-        //    PatientManagement Account = new PatientManagement();
-        //    Person person = new Person("Guillaume", "Fimes", DateTime.Now, "11 rue yolo", "Paris", 75015, 0603020104, "yolo@yolo", "Medecin", "coucou");
-        //    Core.Patient patient = new Core.Patient("Clement", "Rousseau", DateTime.Now, "11 rue yolo", "Paris", 75015, 0603020104, "yolo@yolo", "coucou", person);
-        //    Account.CreatePatient(patient);
-        //}
     }
 }
