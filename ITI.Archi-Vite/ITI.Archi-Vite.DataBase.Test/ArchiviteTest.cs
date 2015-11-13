@@ -164,9 +164,9 @@ namespace ITI.Archi_Vite.DataBase.Test
         //    UpdateRequest update = new UpdateRequest();
         //    using (ArchiViteContext context = new ArchiViteContext())
         //    {
-        //        var Pro = context.Professional.Where(t => t.ProfessionalId.Equals(2003)).FirstOrDefault();
-        //        var Patient = context.Patient.Where(t => t.PatientId.Equals(2005)).FirstOrDefault();
-        //        if(Pro != null && Patient != null ) update.CheckPatientInfo(Pro, Patient);
+                var Pro = context.Professional.Where(t => t.ProfessionalId.Equals(2003)).FirstOrDefault();
+                var Patient = context.Patient.Where(t => t.PatientId.Equals(2005)).FirstOrDefault();
+                if (Pro != null && Patient != null) update.CheckPatientInfo(Pro, Patient);
 
 
         //        var patient = context.Patient.Where(t => t.PatientId.Equals(2005)).FirstOrDefault();
