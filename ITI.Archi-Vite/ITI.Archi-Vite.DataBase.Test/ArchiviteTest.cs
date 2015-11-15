@@ -99,6 +99,18 @@ namespace ITI.Archi_Vite.DataBase.Test
                 FilePath = "asd",
                 Professionnal = pro1
             };
+            Follower f1 = new Follower()
+            {
+                Patient = p,
+                FilePath = "asd",
+                Professionnal = pro2
+            };
+            Follower f2 = new Follower()
+            {
+                Patient = p,
+                FilePath = "asd",
+                Professionnal = pro3
+            };
             using (ArchiViteContext context = new ArchiViteContext())
             {
                 context.User.Add(u);
@@ -110,6 +122,8 @@ namespace ITI.Archi_Vite.DataBase.Test
                 context.Professional.Add(pro3);
                 context.Patient.Add(p);
                 context.Follower.Add(f);
+                context.Follower.Add(f1);
+                context.Follower.Add(f2);
                 context.SaveChanges();
 
             }
@@ -158,37 +172,32 @@ namespace ITI.Archi_Vite.DataBase.Test
                 Console.WriteLine("FirstName : {0} LastName : {1}  Adress : {2} BirthDate : {3}", u.FirstName, u.LastName, u.Adress, u.Birthdate);
             }
         }
-        //[Test]
-        //public void UpdatePatient()
-        //{
-        //    UpdateRequest update = new UpdateRequest();
-        //    using (ArchiViteContext context = new ArchiViteContext())
-        //    {
-                var Pro = context.Professional.Where(t => t.ProfessionalId.Equals(2003)).FirstOrDefault();
-                var Patient = context.Patient.Where(t => t.PatientId.Equals(2005)).FirstOrDefault();
+        [Test]
+        public void UpdatePatient()
+        {
+            UpdateRequest update = new UpdateRequest();
+            using (ArchiViteContext context = new ArchiViteContext())
+            {
+                var Patient = context.Patient.Where(t => t.User.FirstName.Equals("Guillaume")).FirstOrDefault();
+                var Pro = context.Professional.Where(t => t.User.FirstName.Equals("Antoine")).FirstOrDefault();
                 if (Pro != null && Patient != null) update.CheckPatientInfo(Pro, Patient);
+                var NewPatient = context.Patient.Where(t => t.User.FirstName.Equals("Guillaume")).FirstOrDefault();
+                Console.WriteLine("FirstName : {0} LastName : {1} FisrtName Referent : {2}  LastName Referent : {3}", NewPatient.User.FirstName, NewPatient.User.LastName, NewPatient.Referent.User.FirstName, NewPatient.Referent.User.LastName);
+            }
+        }
+        [Test]
+        public void UpdatePro()
+        {
 
-
-        //        var patient = context.Patient.Where(t => t.PatientId.Equals(2005)).FirstOrDefault();
-        //        var user = context.User.Where(t => t.UserId.Equals(patient.PatientId)).FirstOrDefault();
-        //        var selectpro = context.Professional.Where(t => t.ProfessionalId.Equals(patient.Referent.ProfessionalId)).FirstOrDefault();
-        //        var pro = context.User.Where(t => t.UserId.Equals(selectpro.ProfessionalId)).FirstOrDefault();
-        //        Console.WriteLine("FirstName : {0} LastName : {1} FisrtName Referent : {2}  LastName Referent : {3}", user.FirstName, user.LastName, pro.FirstName, pro.LastName);
-        //    }
-        //}
-        //[Test]
-        //public void UpdatePro()
-        //{
-
-        //    using (ArchiViteContext context = new ArchiViteContext())
-        //    {
-        //        var user = context.User.Where(s => s.FirstName.Equals("Guillaume")).FirstOrDefault();
-        //        UpdateRequest update = new UpdateRequest();
-        //        update.CheckUserInfo("Guillaume", "Fist", "13 rue des potiers", DateTime.Now, user.City, user.Email, user.Postcode, user.PhoneNumber, user);
-        //        var u = context.User.Where(s => s.FirstName.Equals("Guillaume")).FirstOrDefault();
-        //        Console.WriteLine("FirstName : {0} LastName : {1}  Adress : {2} BirthDate : {3}", u.FirstName, u.LastName, u.Adress, u.Birthdate);
-        //    }
-        //}
+            using (ArchiViteContext context = new ArchiViteContext())
+            {
+                var user = context.User.Where(s => s.FirstName.Equals("Guillaume")).FirstOrDefault();
+                UpdateRequest update = new UpdateRequest();
+                update.CheckUserInfo("Guillaume", "Fist", "13 rue des potiers", DateTime.Now, user.City, user.Email, user.Postcode, user.PhoneNumber, user);
+                var u = context.User.Where(s => s.FirstName.Equals("Guillaume")).FirstOrDefault();
+                Console.WriteLine("FirstName : {0} LastName : {1}  Adress : {2} BirthDate : {3}", u.FirstName, u.LastName, u.Adress, u.Birthdate);
+            }
+        }
 
         [Test]
         public void SelectRequest()
@@ -221,20 +230,23 @@ namespace ITI.Archi_Vite.DataBase.Test
                 Console.WriteLine("FirstName : {0} LastName : {1}", selectQueryPro.User.FirstName, selectQueryPro.User.LastName);
             }
         }
+        [Test]
         public void CreateFollow()
         {
             AddRequest a = new AddRequest();
+            DocumentManager dm = new DocumentManager();
             using (ArchiViteContext context = new ArchiViteContext())
             {
                 var patient = context.Patient.Where(t => t.User.FirstName.Equals("Guillaume")).FirstOrDefault();
                 var professional = context.Professional.Where(t => t.User.FirstName.Equals("Antoine")).FirstOrDefault();
-                a.AddFollow("yolo", patient, professional);
-                var follow = context.Follower.ToList();
-                foreach (var f in follow)
+                a.AddFollow(patient, professional);
+                var path = context.Follower.Where(t => t.FilePath.Equals(patient.PatientId + "/$" + professional.ProfessionalId)).FirstOrDefault();
+                dm.CreateEmptyFile(path.FilePath);
+                var follows = context.Follower.ToList();
+                foreach (var f in follows)
                 {
                     Console.WriteLine("FirstName : {0} LastName : {1} FirstNamePro : {2} LastNamePro : {3}", f.Patient.User.FirstName, f.Patient.User.LastName, f.Professionnal.User.FirstName, f.Professionnal.User.LastName);
                 }
-                Console.WriteLine();
             }
 
             //[Test]
@@ -264,3 +276,4 @@ namespace ITI.Archi_Vite.DataBase.Test
         }
     }
 }
+

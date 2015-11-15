@@ -62,23 +62,20 @@ namespace ITI.Archi_Vite.DataBase
         /// <summary>
         /// Change Referent of a Patient
         /// </summary>
-        /// <param name="Pro"> New Referent </param>
-        /// <param name="Patient"> Patient to modifie </param>
+        /// <param name="Pro"> New Referent not null</param>
+        /// <param name="Patient"> Patient to modifie not null</param>
         public void CheckPatientInfo(Professional Pro, Patient Patient)
         {
-            using (ArchiViteContext context = new ArchiViteContext())
+            if (Patient == null || Pro == null) throw new ArgumentNullException("All value need to be not null");
+            if (Patient.Referent != Pro)
             {
-                var patient = context.Patient.Where(s => s.PatientId.Equals(Patient.PatientId)).FirstOrDefault();
-                if (patient != null || patient.Referent != null)
+                using (ArchiViteContext context = new ArchiViteContext())
                 {
-                    if (patient.Referent != Pro)
-                    {
-                        UpdateReferent(Pro, patient);
-                        context.Entry(patient).State = System.Data.Entity.EntityState.Modified;
-                    }
+                    UpdateReferent(Pro, Patient);
+                    context.Entry(Patient).State = System.Data.Entity.EntityState.Modified;
+                    context.SaveChanges();
                 }
-                context.SaveChanges();
-            }
+            } 
         }
 
         private void UpdateReferent(Professional Pro, Patient Patient)

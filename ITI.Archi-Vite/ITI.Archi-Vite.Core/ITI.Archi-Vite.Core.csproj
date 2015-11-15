@@ -49,9 +49,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Documents.cs" />
     <Compile Include="Message.cs" />
-    <Compile Include="MessageManager.cs" />
-    <Compile Include="PatientManagement.cs" />
+    <Compile Include="DocumentManager.cs" />
+    <Compile Include="Prescription.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

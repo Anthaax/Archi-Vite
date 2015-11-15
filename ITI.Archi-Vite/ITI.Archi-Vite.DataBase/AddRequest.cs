@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -63,12 +64,13 @@ namespace ITI.Archi_Vite.DataBase
             }
             return p;
         }
-        public void AddFollow(string FilePath, Patient Patient, Professional Professional)
+        public void AddFollow(Patient Patient, Professional Professional)
         {
+            string filePath = Patient.PatientId + "/$" + Professional.ProfessionalId;
             Follower f = new Follower()
             {
                 Patient = Patient,
-                FilePath = FilePath,
+                FilePath = filePath,
                 Professionnal = Professional
             };
             using (ArchiViteContext context = new ArchiViteContext())
@@ -76,6 +78,7 @@ namespace ITI.Archi_Vite.DataBase
                 context.Follower.Add(f);
                 context.SaveChanges();
             }
+
         }
     }
 }
