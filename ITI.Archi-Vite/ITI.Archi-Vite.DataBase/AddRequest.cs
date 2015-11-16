@@ -70,8 +70,10 @@ namespace ITI.Archi_Vite.DataBase
             Follower f = new Follower()
             {
                 Patient = Patient,
+                PatientId = Patient.PatientId,
                 FilePath = filePath,
-                Professionnal = Professional
+                Professionnal = Professional,
+                ProfessionnalId = Professional.ProfessionalId
             };
             using (ArchiViteContext context = new ArchiViteContext())
             {

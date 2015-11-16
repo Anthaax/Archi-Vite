@@ -25,25 +25,29 @@ namespace ITI.Archi_Vite.Core
         public void CreateEmptyFile(string FileName)
         {
             List<Document> empty = new List<Document>();
-            string path = CreateFile(FileName);
+            string path = GetPathFile(FileName);
             SerializeListDoc(empty, path);
         }
         private void CreateDoc(Document d)
         {
             using (ArchiViteContext context = new ArchiViteContext())
             {
-                foreach (var receiver in d.Receivers)
-                {
-                    var follow = context.Follower.Where(t => t.Patient.PatientId.Equals(d.Patient.PatientId)).Where(t => t.ProfessionnalId.Equals(receiver.ProfessionalId)).FirstOrDefault();
-                    if (follow != null)
-                    {
-                        AddDocForOnePerson(follow.Professionnal, follow.Patient, d, follow.FilePath);
-                    }
-                }
-                var senderFollow = context.Follower.Where(t => t.Patient.PatientId.Equals(d.Patient.PatientId)).Where(t => t.ProfessionnalId.Equals(d.Sender.ProfessionalId)).FirstOrDefault();
+                var senderFollow = context.Follower.Include("Patient").Include("Professionnal").Where(t => t.Patient.PatientId.Equals(d.Patient.PatientId)).Where(t => t.ProfessionnalId.Equals(d.Sender.ProfessionalId)).FirstOrDefault();
                 if (senderFollow != null)
                 {
-                    AddDocForOnePerson(senderFollow.Professionnal, senderFollow.Patient, d, senderFollow.FilePath);
+                    var patient = context.Patient.Include("User").Include("Referent").Where(t => t.PatientId.Equals(senderFollow.PatientId)).FirstOrDefault();
+                    var pro = context.Professional.Include("User").Where(t => t.ProfessionalId.Equals(senderFollow.ProfessionnalId)).FirstOrDefault();
+                    AddDocForOnePerson(pro, patient, d, senderFollow.FilePath);
+                }
+                foreach (var receiver in d.Receivers)
+                {
+                    var follow = context.Follower.Include("Patient").Include("Professionnal").Where(t => t.Patient.PatientId.Equals(d.Patient.PatientId)).Where(t => t.ProfessionnalId.Equals(receiver.ProfessionalId)).FirstOrDefault();
+                    if (follow != null && follow != senderFollow)
+                    {
+                        var patient = context.Patient.Include("User").Include("Referent").Where(t => t.PatientId.Equals(follow.PatientId)).FirstOrDefault();
+                        var pro = context.Professional.Include("User").Where(t => t.ProfessionalId.Equals(follow.ProfessionnalId)).FirstOrDefault();
+                        AddDocForOnePerson(pro, patient, d, follow.FilePath);
+                    }
                 }
             }
         }
@@ -51,7 +55,7 @@ namespace ITI.Archi_Vite.Core
         {
             if (Pro == null) throw new ArgumentNullException("Pro can't be null");
             List<Document> ProDocuments = new List<Document>();
-            ProDocuments = DeserializeListDoc(FilePath);
+            ProDocuments = DeserializeListDoc(GetPathFile(FilePath));
             ProDocuments.Add(Document);
             SerializeListDoc(ProDocuments, FilePath);
         }
@@ -96,12 +100,10 @@ namespace ITI.Archi_Vite.Core
             }
             return d;
         }
-        private string CreateFile(string fileName)
+        private string GetPathFile(string fileName)
         {
             string folderName = @"C:\ArchiFile";
             string pathString = Path.Combine(folderName, fileName);
-            Console.WriteLine("Path to my file: {0}\n", pathString);
-            File.Create(pathString);
             return pathString;
         }
     }

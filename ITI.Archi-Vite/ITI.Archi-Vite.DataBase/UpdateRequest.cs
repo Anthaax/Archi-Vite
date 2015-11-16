@@ -46,11 +46,11 @@ namespace ITI.Archi_Vite.DataBase
         /// </summary>
         /// <param name="Role"> New Role </param>
         /// <param name="Pro"> Professional to modifie </param>
-        public void CheckProInfo(string Role, Professional Pro)
+        public void UpdateProInfo(string Role, Professional Pro)
         {
             using (ArchiViteContext context = new ArchiViteContext())
             {
-                var professional = context.Professional.Where(s => s.ProfessionalId.Equals(Pro.ProfessionalId)).FirstOrDefault();
+                var professional = context.Professional.Include("User").Where(s => s.ProfessionalId.Equals(Pro.ProfessionalId)).FirstOrDefault();
                 if (professional != null)
                 {
                     if (professional.Role != Role) UpdateRole(Role, professional);   
