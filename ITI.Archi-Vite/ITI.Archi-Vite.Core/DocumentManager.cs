@@ -7,6 +7,7 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data.Entity;
 
 namespace ITI.Archi_Vite.Core
 {
@@ -28,32 +29,47 @@ namespace ITI.Archi_Vite.Core
             string path = GetPathFile(FileName);
             SerializeListDoc(empty, path);
         }
+        public List<Document> SeeDocument(Professional pro, Patient patient)
+        {
+            List<Document> d = new List<Document>();
+            d = DeserializeListDoc(patient.PatientId + "$" + pro.ProfessionalId);
+            return d;
+        }
         private void CreateDoc(Document d)
         {
             using (ArchiViteContext context = new ArchiViteContext())
             {
-                var senderFollow = context.Follower.Include("Patient").Include("Professionnal").Where(t => t.Patient.PatientId.Equals(d.Patient.PatientId)).Where(t => t.ProfessionnalId.Equals(d.Sender.ProfessionalId)).FirstOrDefault();
+                var senderFollow = context.Follower
+                                        .Include(c => c.Patient)
+                                        .Include(c => c.Professionnal)
+                                        .Include(c => c.Professionnal.User)
+                                        .Include(c => c.Patient.User)
+                                        .Include(c => c.Patient.Referent)
+                                        .Where(t => t.Patient.PatientId.Equals(d.Patient.PatientId) && t.ProfessionnalId.Equals(d.Sender.ProfessionalId))
+                                        .FirstOrDefault();
                 if (senderFollow != null)
                 {
-                    var patient = context.Patient.Include("User").Include("Referent").Where(t => t.PatientId.Equals(senderFollow.PatientId)).FirstOrDefault();
-                    var pro = context.Professional.Include("User").Where(t => t.ProfessionalId.Equals(senderFollow.ProfessionnalId)).FirstOrDefault();
-                    AddDocForOnePerson(pro, patient, d, senderFollow.FilePath);
+                    AddDoc(d, senderFollow.FilePath);
                 }
                 foreach (var receiver in d.Receivers)
                 {
-                    var follow = context.Follower.Include("Patient").Include("Professionnal").Where(t => t.Patient.PatientId.Equals(d.Patient.PatientId)).Where(t => t.ProfessionnalId.Equals(receiver.ProfessionalId)).FirstOrDefault();
+                    var follow = context.Follower
+                                        .Include(c => c.Patient)
+                                        .Include(c => c.Professionnal)
+                                        .Include(c => c.Professionnal.User)
+                                        .Include(c => c.Patient.User)
+                                        .Include(c => c.Patient.Referent)
+                                        .Where(t => t.Patient.PatientId.Equals(d.Patient.PatientId) && t.ProfessionnalId.Equals(receiver.ProfessionalId))
+                                        .FirstOrDefault();
                     if (follow != null && follow != senderFollow)
                     {
-                        var patient = context.Patient.Include("User").Include("Referent").Where(t => t.PatientId.Equals(follow.PatientId)).FirstOrDefault();
-                        var pro = context.Professional.Include("User").Where(t => t.ProfessionalId.Equals(follow.ProfessionnalId)).FirstOrDefault();
-                        AddDocForOnePerson(pro, patient, d, follow.FilePath);
+                        AddDoc(d, follow.FilePath);
                     }
                 }
             }
         }
-        private void AddDocForOnePerson(Professional Pro, Patient Patient, Document Document, string FilePath)
+        private void AddDoc(Document Document, string FilePath)
         {
-            if (Pro == null) throw new ArgumentNullException("Pro can't be null");
             List<Document> ProDocuments = new List<Document>();
             ProDocuments = DeserializeListDoc(GetPathFile(FilePath));
             ProDocuments.Add(Document);

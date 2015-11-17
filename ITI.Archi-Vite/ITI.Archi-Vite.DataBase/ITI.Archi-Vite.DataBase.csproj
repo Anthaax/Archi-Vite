@@ -60,6 +60,7 @@
     <Compile Include="Patient.cs" />
     <Compile Include="Professional.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SelectRequest.cs" />
     <Compile Include="User.cs" />
     <Compile Include="UpdateRequest.cs" />
   </ItemGroup>

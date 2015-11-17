@@ -157,7 +157,7 @@ namespace ITI.Archi_Vite.DataBase.Test
             {
                 var user = context.User.Where(s => s.FirstName.Equals("Guillaume")).FirstOrDefault();
                 UpdateRequest update = new UpdateRequest();
-                update.CheckUserInfo("Guillaume", "Fist", "13 rue des potiers", DateTime.Now, user.City, user.Email, user.Postcode, user.PhoneNumber, user);
+                update.CheckUserInfo("Guillaume", "Fist", "13 rue des potiers", DateTime.Now, user.City, user.Email, user.Postcode, user.PhoneNumber, user.Photo ,user);
                 var u = context.User.Where(s => s.FirstName.Equals("Guillaume")).FirstOrDefault();
                 Console.WriteLine("FirstName : {0} LastName : {1}  Adress : {2} BirthDate : {3}", u.FirstName, u.LastName, u.Adress, u.Birthdate);
             }
@@ -211,8 +211,10 @@ namespace ITI.Archi_Vite.DataBase.Test
             AddRequest a = new AddRequest();
             Professional pro = a.AddProfessional("Yolo1", "Raquillet", DateTime.Now, "72 avenue maurice thorez", "Ivry-sur-Seine", 12452, 0606066606, "sfavraud@intechinfo.fr", "yolo", "Medecin");
             Patient patient = a.AddPatient("Yolo", "Fimes", DateTime.Now, "72 avenue maurice thorez", "Ivry-sur-Seine", 12452, 0606066606, "sfavraud@intechinfo.fr", "yolo", pro, "yolo");
+
             using (ArchiViteContext context = new ArchiViteContext())
             {
+
                 var selectQuery = context.Patient.Include("User").Include("Referent").Where(t => t.PatientId.Equals(patient.PatientId)).FirstOrDefault();
                 Console.WriteLine("FirstName : {0} LastName : {1}", selectQuery.User.FirstName, selectQuery.User.LastName);
                 var selectQueryPro = context.Professional.Include("User").Where(t => t.ProfessionalId.Equals(pro.ProfessionalId)).FirstOrDefault();

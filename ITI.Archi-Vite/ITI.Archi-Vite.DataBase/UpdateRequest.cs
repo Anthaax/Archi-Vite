@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data.Entity;
+
 
 namespace ITI.Archi_Vite.DataBase
 {
@@ -20,7 +22,7 @@ namespace ITI.Archi_Vite.DataBase
         /// <param name="PostCode"> new PostCode </param>
         /// <param name="PhoneNumber"> new PhoneNumber </param>
         /// <param name="User"> User to modifie </param>
-        public void CheckUserInfo(string FirstName, string LastName, string Adress, DateTime Birthdate, string City, string Email, int PostCode, int PhoneNumber, User User)
+        public void CheckUserInfo(string FirstName, string LastName, string Adress, DateTime Birthdate, string City, string Email, int PostCode, int PhoneNumber, string Photo, User User)
         {
             using (ArchiViteContext context = new ArchiViteContext())
             {
@@ -34,7 +36,8 @@ namespace ITI.Archi_Vite.DataBase
                     if (selectQuery.City != City) UpdateCity(City, selectQuery);
                     if (selectQuery.Email != Email) UpdateEmail(Email, selectQuery);
                     if (selectQuery.Postcode != PostCode) UpdatePostcode(PostCode, selectQuery);
-                    if (selectQuery.PhoneNumber != PhoneNumber) UpdatePhoneNumber(PhoneNumber, selectQuery); 
+                    if (selectQuery.PhoneNumber != PhoneNumber) UpdatePhoneNumber(PhoneNumber, selectQuery);
+                    if (selectQuery.Photo != Photo) UpdatePhoto(Photo, selectQuery);
                 }
                 context.Entry(selectQuery).State = System.Data.Entity.EntityState.Modified;
                 context.SaveChanges();
@@ -67,17 +70,27 @@ namespace ITI.Archi_Vite.DataBase
         public void CheckPatientInfo(Professional Pro, Patient Patient)
         {
             if (Patient == null || Pro == null) throw new ArgumentNullException("All value need to be not null");
-            if (Patient.Referent != Pro)
+            using (ArchiViteContext context = new ArchiViteContext())
             {
-                using (ArchiViteContext context = new ArchiViteContext())
+                var patient = context.Patient
+                                .Include(c => c.User)
+                                .Include(c => c.Referent)
+                                .Include(c => c.Referent.User)
+                                .Where(t => t.PatientId.Equals(Patient.PatientId))
+                                .FirstOrDefault();
+                if (patient.Referent != Pro)
                 {
-                    UpdateReferent(Pro, Patient);
-                    context.Entry(Patient).State = System.Data.Entity.EntityState.Modified;
+                    UpdateReferent(Pro, patient);
+                    context.Entry(patient).State = System.Data.Entity.EntityState.Modified;
                     context.SaveChanges();
                 }
             } 
         }
 
+        private void UpdatePhoto(string Photo, User User)
+        {
+            User.Photo = Photo;
+        }
         private void UpdateReferent(Professional Pro, Patient Patient)
         {
             Patient.Referent = Pro;
