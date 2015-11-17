@@ -31,14 +31,13 @@ namespace ITI.Archi_Vite.DataBase
             };
             using (ArchiViteContext context = new ArchiViteContext())
             {
-                context.Professional.Attach(Referent);
                 context.User.Add(u);
+                context.SaveChanges();
                 context.Patient.Add(p);
                 context.SaveChanges();
                 AddFollow(p, Referent, context);
-                context.SaveChanges();
             }
-
+            
             return p;
         }
         public Professional AddProfessional(string FirstName, string LastName, DateTime BirthDate, string Adress, string City, int PostCode, int PhoneNumber, string Email, string Photo, string Role)
@@ -93,7 +92,12 @@ namespace ITI.Archi_Vite.DataBase
                 FilePath = filePath,
                 Professionnal = Professional
             };
-            ctx.Follower.Add(f);
+            using (ArchiViteContext context = ctx)
+            {
+                context.Follower.Add(f);
+                context.SaveChanges();
+            }
+
         }
     }
 }
