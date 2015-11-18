@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace ITI.Archi_Vite.DataBase
 {
-    public class DatabaseManager
+    public class ContextManager
     {
         readonly ArchiViteContext _context;
 
-        public DatabaseManager()
+        public ContextManager()
         {
             _context = new ArchiViteContext();
         }

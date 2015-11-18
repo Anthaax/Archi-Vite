@@ -30,17 +30,18 @@ namespace ITI.Archi_Vite.Core
         }
         public void CreateEmptyFile(string FileName)
         {
-            List<Document> empty = new List<Document>();
+            List<Message> m = new List<Message>();
+            List<Prescription> p = new List<Prescription>();
+            DocumentSerializable d = new DocumentSerializable(m, p);
             string path = GetPathFile(FileName);
-            SerializeListDoc(empty, path);
+            SerializeListDoc(d, path);
         }
-        public List<Document> SeeDocument(Professional pro, Patient patient)
+        public DocumentSerializable SeeDocument(Professional pro, Patient patient)
         {
-            List<Document> d = new List<Document>();
-            d = DeserializeListDoc(patient.PatientId + "$" + pro.ProfessionalId);
-            return d;
+            DocumentSerializable Documents = DeserializeListDoc(patient.PatientId + "$" + pro.ProfessionalId);
+            return Documents;
         }
-        private void CreateDoc(Document d)
+        private void CreateDoc(Message message)
         {
             var senderFollow = _context.Follower
                                     .Include(c => c.Patient)
@@ -48,13 +49,13 @@ namespace ITI.Archi_Vite.Core
                                     .Include(c => c.Professionnal.User)
                                     .Include(c => c.Patient.User)
                                     .Include(c => c.Patient.Referent)
-                                    .Where(t => t.Patient.PatientId.Equals(d.Patient.PatientId) && t.ProfessionnalId.Equals(d.Sender.ProfessionalId))
+                                    .Where(t => t.Patient.PatientId.Equals(message.Patient.PatientId) && t.ProfessionnalId.Equals(message.Sender.ProfessionalId))
                                     .FirstOrDefault();
             if (senderFollow != null)
             {
-                AddDoc(d, senderFollow.FilePath);
+                AddDoc(message, senderFollow.FilePath);
             }
-            foreach (var receiver in d.Receivers)
+            foreach (var receiver in message.Receivers)
             {
                 var follow = _context.Follower
                                     .Include(c => c.Patient)
@@ -62,23 +63,58 @@ namespace ITI.Archi_Vite.Core
                                     .Include(c => c.Professionnal.User)
                                     .Include(c => c.Patient.User)
                                     .Include(c => c.Patient.Referent)
-                                    .Where(t => t.Patient.PatientId.Equals(d.Patient.PatientId) && t.ProfessionnalId.Equals(receiver.ProfessionalId))
+                                    .Where(t => t.Patient.PatientId.Equals(message.Patient.PatientId) && t.ProfessionnalId.Equals(receiver.ProfessionalId))
                                     .FirstOrDefault();
                 if (follow != null && follow != senderFollow)
                 {
-                    AddDoc(d, follow.FilePath);
+                    AddDoc(message, follow.FilePath);
                 }
             }
         }
-        private void AddDoc(Document Document, string FilePath)
+        private void CreateDoc(Prescription prescription)
         {
-            List<Document> ProDocuments = new List<Document>();
-            ProDocuments = DeserializeListDoc(GetPathFile(FilePath));
-            ProDocuments.Add(Document);
-            SerializeListDoc(ProDocuments, FilePath);
+            var senderFollow = _context.Follower
+                                    .Include(c => c.Patient)
+                                    .Include(c => c.Professionnal)
+                                    .Include(c => c.Professionnal.User)
+                                    .Include(c => c.Patient.User)
+                                    .Include(c => c.Patient.Referent)
+                                    .Where(t => t.Patient.PatientId.Equals(prescription.Patient.PatientId) && t.ProfessionnalId.Equals(prescription.Sender.ProfessionalId))
+                                    .FirstOrDefault();
+            if (senderFollow != null)
+            {
+                AddDoc(prescription, senderFollow.FilePath);
+            }
+            foreach (var receiver in prescription.Receivers)
+            {
+                var follow = _context.Follower
+                                    .Include(c => c.Patient)
+                                    .Include(c => c.Professionnal)
+                                    .Include(c => c.Professionnal.User)
+                                    .Include(c => c.Patient.User)
+                                    .Include(c => c.Patient.Referent)
+                                    .Where(t => t.Patient.PatientId.Equals(prescription.Patient.PatientId) && t.ProfessionnalId.Equals(receiver.ProfessionalId))
+                                    .FirstOrDefault();
+                if (follow != null && follow != senderFollow)
+                {
+                    AddDoc(prescription, follow.FilePath);
+                }
+            }
+        }
+        private void AddDoc(Message message, string FilePath)
+        {
+            DocumentSerializable Documents = DeserializeListDoc(GetPathFile(FilePath));
+            Documents.Messages.Add(message);
+            SerializeListDoc(Documents, FilePath);
+        }
+        private void AddDoc(Prescription prescription, string FilePath)
+        {
+            DocumentSerializable Documents = DeserializeListDoc(GetPathFile(FilePath));
+            Documents.Prescriptions.Add(prescription);
+            SerializeListDoc(Documents, FilePath);
         }
 
-        private void SerializeListDoc(List<Document> Documents, string FilePath)
+        private void SerializeListDoc(DocumentSerializable Documents, string FilePath)
         {
             Stream fileStream = new FileStream(FilePath, FileMode.Create, FileAccess.Write, FileShare.None);
             BinaryFormatter formatter = new BinaryFormatter();
@@ -97,15 +133,25 @@ namespace ITI.Archi_Vite.Core
             }
         }
 
-        private List<Document> DeserializeListDoc(string FilePath)
+        private DocumentSerializable DeserializeListDoc(string FilePath)
         {
-            List<Document> d = new List<Document>();
+            List<Message> m = new List<Message>();
+            List<Prescription> p = new List<Prescription>();
+            DocumentSerializable d = new DocumentSerializable(m, p);
 
             Stream fileStream = new FileStream(FilePath, FileMode.Open, FileAccess.Read, FileShare.Read);
             try
             {
                 BinaryFormatter formatter = new BinaryFormatter();
-                d = (List<Document>)formatter.Deserialize(fileStream);
+                DocumentSerializable newdoc = (DocumentSerializable)formatter.Deserialize(fileStream);
+                foreach(var message in newdoc.Messages)
+                {
+                    d.Messages.Add(message);
+                }
+                foreach (var prescription in newdoc.Prescriptions)
+                {
+                    d.Prescriptions.Add(prescription);
+                }
             }
             catch (SerializationException e)
             {
@@ -118,6 +164,7 @@ namespace ITI.Archi_Vite.Core
             }
             return d;
         }
+
         private string GetPathFile(string fileName)
         {
             string folderName = @"C:\ArchiFile";

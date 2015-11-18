@@ -11,10 +11,10 @@ namespace ITI.Archi_Vite.DataBase.Test
     [TestFixture]
     public class MessageTest
     {
-        DatabaseManager _archiVite;
+        ContextManager _archiVite;
         public MessageTest()
         {
-            _archiVite = new DatabaseManager();
+            _archiVite = new ContextManager();
         }
         [Test]
         public void CreatePatientAndPro()
@@ -70,17 +70,6 @@ namespace ITI.Archi_Vite.DataBase.Test
                 Assert.AreEqual(f1.FilePath, f1.PatientId + "$" + f1.ProfessionnalId);
                 context.SaveChanges();
             }
-            //Assert.AreEqual(Pro2.ProfessionalId, pro2.ProfessionalId);
-            //Professional Pro3 = s.SelectProfessional(pro3.ProfessionalId);
-            //Console.WriteLine("Nom : {0}   Prénom : {1}", Pro3.User.LastName, Pro3.User.FirstName);
-            //Assert.AreEqual(Pro3.ProfessionalId, pro3.ProfessionalId);
-
-            //Follower f = s.SelectOneFollow(patient.PatientId, patient.Referent.ProfessionalId);
-            //Console.WriteLine("PathFile : {0}", f.FilePath);
-            //Assert.AreEqual(f.FilePath, f.PatientId + "$" + f.ProfessionnalId);
-            //Follower f1 = s.SelectOneFollow(patient1.PatientId, patient1.Referent.ProfessionalId);
-            //Console.WriteLine("PathFile : {0}", f1.FilePath);
-            //Assert.AreEqual(f1.FilePath, f1.PatientId + "$" + f1.ProfessionnalId);
         }
         [Test]
         public void CreateMessage()
@@ -89,16 +78,22 @@ namespace ITI.Archi_Vite.DataBase.Test
             {
                 DocumentManager dm = new DocumentManager(context);
                 SelectRequest s = new SelectRequest(context);
-                List<Professional> sender = new List<Professional>();
+                List<Professional> receivers = new List<Professional>();
                 foreach(var f in s.SelectFollowForPatient(s.SelectPatient("Guillaume", "Fimes").PatientId))
                 {
-                    sender.Add(f.Professionnal);
+                    receivers.Add(f.Professionnal);
                 }
-                dm.CreateMessage(sender, s.SelectProfessional("Antoine", "Raquillet"), "Coucou", "J'ai un pb", s.SelectPatient("Guillaume", "Fimes"));
-                List<Document> document = dm.SeeDocument(s.SelectProfessional(s.SelectPatient("Guillaume", "Fimes").Referent.ProfessionalId), s.SelectPatient("Guillaume", "Fimes"));
-                foreach(var doc in document)
+                dm.CreateMessage(receivers, s.SelectProfessional("Antoine", "Raquillet"), "Coucou", "J'ai un pb", s.SelectPatient("Guillaume", "Fimes"));
+                dm.CreateMessage(receivers, s.SelectProfessional("Antoine", "Raquillet"), "Salut", "Hey", s.SelectPatient("Guillaume", "Fimes"));
+                DocumentSerializable document = dm.SeeDocument(s.SelectProfessional(s.SelectPatient("Guillaume", "Fimes").Referent.ProfessionalId), s.SelectPatient("Guillaume", "Fimes"));
+                Assert.AreEqual(document.Messages.Count, 2);
+                foreach( var message in document.Messages)
                 {
-                    Console.WriteLine(doc.Title);
+                    //Assert.AreEqual("Coucou", message.Title);
+                    //Assert.AreEqual("J'ai un pb", message.Contents);
+                    //Assert.AreEqual(receivers.Count, message.Receivers.Count);
+                    //Assert.AreEqual(s.SelectProfessional("Antoine", "Raquillet").ProfessionalId, message.Sender.ProfessionalId);
+                    //Assert.AreEqual(s.SelectPatient("Guillaume", "Fimes").PatientId, message.Patient.PatientId);
                 }
             }
         }

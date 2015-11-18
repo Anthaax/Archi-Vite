@@ -15,7 +15,7 @@ namespace ITI.Archi_Vite.DataBase
         {
             _context = context;
         }
-
+        public ArchiViteContext Context
         {
             get
             {
@@ -47,7 +47,7 @@ namespace ITI.Archi_Vite.DataBase
             _context.User.Add(u);
             _context.Patient.Add(p);
             _context.SaveChanges();
-            AddFollow(p, Referent);
+            AddFollow(p, referent);
             
             return p;
         }
@@ -77,14 +77,14 @@ namespace ITI.Archi_Vite.DataBase
 
             return p;
         }
-        public void AddFollow(Patient Patient, Professional Professional)
+        public void AddFollow(Patient patient, Professional professional)
         {
-            string filePath = Patient.PatientId + "$" + Professional.ProfessionalId;
+            string filePath = patient.PatientId + "$" + professional.ProfessionalId;
             Follower f = new Follower()
             {
-                Patient = Patient,
+                Patient = patient,
                 FilePath = filePath,
-                Professionnal = Professional
+                Professionnal = professional
             };
             _context.Follower.Add(f);
             _context.SaveChanges();

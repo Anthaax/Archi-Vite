@@ -13,10 +13,10 @@ namespace ITI.Archi_Vite.DataBase.Test
     [TestFixture]
     public class AddAndUpdateTest
     {
-        DatabaseManager _archiVite;
+        ContextManager _archiVite;
         public AddAndUpdateTest()
         {
-            _archiVite = new DatabaseManager();
+            _archiVite = new ContextManager();
         }
         [Test]
         public void CreatePatientAndPro()
