@@ -9,167 +9,169 @@ namespace ITI.Archi_Vite.DataBase
 {
     public class SelectRequest
     {
+        ArchiViteContext _context;
+        public SelectRequest(ArchiViteContext context)
+        {
+            _context = context;
+        }
         public User SelectUser(int ID)
         {
-            using (ArchiViteContext context = new ArchiViteContext())
-            {
-                var selectQuery = context.User
-                                        .Where(t => t.UserId.Equals(ID))
-                                        .FirstOrDefault();
-                return selectQuery;
-            }
+            var selectQuery = _context.User
+                                    .Where(t => t.UserId.Equals(ID))
+                                    .FirstOrDefault();
+            return selectQuery;
         }
-        public User SelectUser(string Pseudo)
+        public User SelectUser(string pseudo)
         {
-            using (ArchiViteContext context = new ArchiViteContext())
-            {
-                var selectQuery = context.User
-                                        .Where(t => t.Email.Equals(Pseudo))
+                var selectQuery = _context.User
+                                        .Where(t => t.Email.Equals(pseudo))
                                         .FirstOrDefault();
                 return selectQuery;
-            }
         }
-        public User SelectUser(string FirstName, string LastName)
+        public User SelectUser(string firstName, string lastName)
         {
-            using (ArchiViteContext context = new ArchiViteContext())
-            {
-                var selectQuery = context.User
-                                        .Where(t => t.FirstName.Equals(FirstName) && t.LastName.Equals(LastName))
-                                        .FirstOrDefault();
-                return selectQuery;
-            }
+            var selectQuery = _context.User
+                                    .Where(t => t.FirstName.Equals(firstName) && t.LastName.Equals(lastName))
+                                    .FirstOrDefault();
+            return selectQuery;
         }
         public Patient SelectPatient(int ID)
         {
-            using (ArchiViteContext context = new ArchiViteContext())
-            {
-                var selectQuery = context.Patient
-                                        .Include(c => c.User)
-                                        .Include(c => c.Referent)
-                                        .Include(c => c.Referent.User)
-                                        .Where(t => t.PatientId.Equals(ID))
-                                        .FirstOrDefault();
-                return selectQuery;
-            }
+            var selectQuery = _context.Patient
+                                    .Include(c => c.User)
+                                    .Include(c => c.Referent)
+                                    .Include(c => c.Referent.User)
+                                    .Where(t => t.PatientId.Equals(ID))
+                                    .FirstOrDefault();
+            return selectQuery;
         }
         public Patient SelectPatient(string Pseudo)
         {
-            using (ArchiViteContext context = new ArchiViteContext())
-            {
-                var selectQuery = context.Patient
-                                        .Include(c => c.User)
-                                        .Include(c => c.Referent)
-                                        .Include(c => c.Referent.User)
-                                        .Where(t => t.PatientId.Equals(Pseudo))
-                                        .FirstOrDefault();
-                return selectQuery;
-            }
+            var selectQuery = _context.Patient
+                                    .Include(c => c.User)
+                                    .Include(c => c.Referent)
+                                    .Include(c => c.Referent.User)
+                                    .Where(t => t.PatientId.Equals(Pseudo))
+                                    .FirstOrDefault();
+            return selectQuery;
         }
-        public Patient SelectPatient(string FirstName, string LastName)
+        public Patient SelectPatient(string firstName, string lastName)
         {
-            using (ArchiViteContext context = new ArchiViteContext())
-            {
-                var selectQuery = context.Patient
-                                        .Include(c => c.User)
-                                        .Include(c => c.Referent)
-                                        .Include(c => c.Referent.User)
-                                        .Where(t => t.User.FirstName.Equals(FirstName) && t.User.LastName.Equals(LastName))
-                                        .FirstOrDefault();
-                return selectQuery;
-            }
+            var selectQuery = _context.Patient
+                                    .Include(c => c.User)
+                                    .Include(c => c.Referent)
+                                    .Include(c => c.Referent.User)
+                                    .Where(t => t.User.FirstName.Equals(firstName) && t.User.LastName.Equals(lastName))
+                                    .FirstOrDefault();
+            return selectQuery;
         }
         public Professional SelectProfessional(int ID)
         {
-            using (ArchiViteContext context = new ArchiViteContext())
-            {
-                var selectQuery = context.Professional
-                                        .Include(c => c.User)
-                                        .Where(t => t.ProfessionalId.Equals(ID))
-                                        .FirstOrDefault();
-                return selectQuery;
-            }
+            var selectQuery = _context.Professional
+                                    .Include(c => c.User)
+                                    .Where(t => t.ProfessionalId.Equals(ID))
+                                    .FirstOrDefault();
+            return selectQuery;
         }
-        public Professional SelectProfessional(string Pseudo)
+        public Professional SelectProfessional(string pseudo)
         {
-            using (ArchiViteContext context = new ArchiViteContext())
-            {
-                var selectQuery = context.Professional
-                                        .Include(c => c.User)
-                                        .Where(t => t.User.Email.Equals(Pseudo))
-                                        .FirstOrDefault();
-                return selectQuery;
-            }
+            var selectQuery = _context.Professional
+                                    .Include(c => c.User)
+                                    .Where(t => t.User.Email.Equals(pseudo))
+                                    .FirstOrDefault();
+            return selectQuery;
         }
-        public Professional SelectProfessional(string FirstName, string LastName)
+        public Professional SelectProfessional(string firstName, string lastName)
         {
-            using (ArchiViteContext context = new ArchiViteContext())
-            {
-                var selectQuery = context.Professional
-                                        .Include(c => c.User)
-                                        .Where(t => t.User.FirstName.Equals(FirstName) && t.User.LastName.Equals(LastName))
-                                        .FirstOrDefault();
-                return selectQuery;
-            }
+            var selectQuery = _context.Professional
+                                    .Include(c => c.User)
+                                    .Where(t => t.User.FirstName.Equals(firstName) && t.User.LastName.Equals(lastName))
+                                    .FirstOrDefault();
+           return selectQuery;
         }
         public Follower SelectOneFollow(int IDPatient, int IDPro)
         {
-            using (ArchiViteContext context = new ArchiViteContext())
-            {
-                var senderFollow = context.Follower
-                                            .Include(c => c.Patient)
-                                            .Include(c => c.Professionnal)
-                                            .Include(c => c.Professionnal.User)
-                                            .Include(c => c.Patient.User)
-                                            .Include(c => c.Patient.Referent)
-                                            .Where(t => t.Patient.PatientId.Equals(IDPatient) && t.ProfessionnalId.Equals(IDPro))
-                                            .FirstOrDefault();
-                return senderFollow;
-            }
+            var senderFollow = _context.Follower
+                                        .Include(c => c.Patient)
+                                        .Include(c => c.Professionnal)
+                                        .Include(c => c.Professionnal.User)
+                                        .Include(c => c.Patient.User)
+                                        .Include(c => c.Patient.Referent)
+                                        .Where(t => t.Patient.PatientId.Equals(IDPatient) && t.ProfessionnalId.Equals(IDPro))
+                                        .FirstOrDefault();
+            return senderFollow;
         }
         public List<Follower> SelectFollowForPro(int IDPro)
         {
-            using (ArchiViteContext context = new ArchiViteContext())
-            {
-                var senderFollow = context.Follower
-                                            .Include(c => c.Patient)
-                                            .Include(c => c.Professionnal)
-                                            .Include(c => c.Professionnal.User)
-                                            .Include(c => c.Patient.User)
-                                            .Include(c => c.Patient.Referent)
-                                            .Where(t => t.ProfessionnalId.Equals(IDPro))
-                                            .ToList();
-                return senderFollow;
-            }
+            var senderFollow = _context.Follower
+                                        .Include(c => c.Patient)
+                                        .Include(c => c.Professionnal)
+                                        .Include(c => c.Professionnal.User)
+                                        .Include(c => c.Patient.User)
+                                        .Include(c => c.Patient.Referent)
+                                        .Where(t => t.ProfessionnalId.Equals(IDPro))
+                                        .ToList();
+            return senderFollow;
         }
-        public List<Follower> SelectFollowForPro(string Pseudo)
+        public List<Follower> SelectFollowForPro(string pseudo)
         {
-            using (ArchiViteContext context = new ArchiViteContext())
-            {
-                var senderFollow = context.Follower
-                                            .Include(c => c.Patient)
-                                            .Include(c => c.Professionnal)
-                                            .Include(c => c.Professionnal.User)
-                                            .Include(c => c.Patient.User)
-                                            .Include(c => c.Patient.Referent)
-                                            .Where(t => t.Professionnal.User.Email.Equals(Pseudo))
-                                            .ToList();
-                return senderFollow;
-            }
+            var senderFollow = _context.Follower
+                                        .Include(c => c.Patient)
+                                        .Include(c => c.Professionnal)
+                                        .Include(c => c.Professionnal.User)
+                                        .Include(c => c.Patient.User)
+                                        .Include(c => c.Patient.Referent)
+                                        .Where(t => t.Professionnal.User.Email.Equals(pseudo))
+                                        .ToList();
+            return senderFollow;
         }
-        public List<Follower> SelectFollowForPro(string FirstName, string LastName)
+        public List<Follower> SelectFollowForPro(string firstName, string lastName)
         {
-            using (ArchiViteContext context = new ArchiViteContext())
-            {
-                var senderFollow = context.Follower
-                                            .Include(c => c.Patient)
-                                            .Include(c => c.Professionnal)
-                                            .Include(c => c.Professionnal.User)
-                                            .Include(c => c.Patient.User)
-                                            .Include(c => c.Patient.Referent)
-                                            .Where(t => t.Professionnal.User.FirstName.Equals(FirstName) && t.Professionnal.User.LastName.Equals(LastName))
-                                            .ToList();
-                return senderFollow;
-            }
+            var senderFollow = _context.Follower
+                                        .Include(c => c.Patient)
+                                        .Include(c => c.Professionnal)
+                                        .Include(c => c.Professionnal.User)
+                                        .Include(c => c.Patient.User)
+                                        .Include(c => c.Patient.Referent)
+                                        .Where(t => t.Professionnal.User.FirstName.Equals(firstName) && t.Professionnal.User.LastName.Equals(lastName))
+                                        .ToList();
+            return senderFollow;
+        }
+        public List<Follower> SelectFollowForPatient(int IDPatient)
+        {
+            var senderFollow = _context.Follower
+                                        .Include(c => c.Patient)
+                                        .Include(c => c.Professionnal)
+                                        .Include(c => c.Professionnal.User)
+                                        .Include(c => c.Patient.User)
+                                        .Include(c => c.Patient.Referent)
+                                        .Where(t => t.PatientId.Equals(IDPatient))
+                                        .ToList();
+            return senderFollow;
+        }
+        public List<Follower> SelectFollowForPatient(string pseudo)
+        {
+            var senderFollow = _context.Follower
+                                        .Include(c => c.Patient)
+                                        .Include(c => c.Professionnal)
+                                        .Include(c => c.Professionnal.User)
+                                        .Include(c => c.Patient.User)
+                                        .Include(c => c.Patient.Referent)
+                                        .Where(t => t.Patient.User.Email.Equals(pseudo))
+                                        .ToList();
+            return senderFollow;
+        }
+        public List<Follower> SelectFollowForPatient(string firstName, string lastName)
+        {
+            var senderFollow = _context.Follower
+                                        .Include(c => c.Patient)
+                                        .Include(c => c.Professionnal)
+                                        .Include(c => c.Professionnal.User)
+                                        .Include(c => c.Patient.User)
+                                        .Include(c => c.Patient.Referent)
+                                        .Where(t => t.Patient.User.FirstName.Equals(firstName) && t.Professionnal.User.LastName.Equals(lastName))
+                                        .ToList();
+            return senderFollow;
         }
     }
 }

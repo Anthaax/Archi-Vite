@@ -10,6 +10,11 @@ namespace ITI.Archi_Vite.DataBase
 {
     public class UpdateRequest
     {
+        ArchiViteContext _context;
+        public UpdateRequest(ArchiViteContext context)
+        {
+            _context = context;
+        }
         /// <summary>
         /// Methode use for update an user if just one thing change one gonna change
         /// </summary>
@@ -24,25 +29,21 @@ namespace ITI.Archi_Vite.DataBase
         /// <param name="User"> User to modifie </param>
         public void CheckUserInfo(string FirstName, string LastName, string Adress, DateTime Birthdate, string City, string Email, int PostCode, int PhoneNumber, string Photo, User User)
         {
-            using (ArchiViteContext context = new ArchiViteContext())
+            var selectQuery = _context.User.Where(s => s.UserId.Equals(User.UserId)).FirstOrDefault();
+            if (selectQuery != null)
             {
-                var selectQuery = context.User.Where(s => s.UserId.Equals(User.UserId)).FirstOrDefault();
-                if (selectQuery != null)
-                {
-                    if (selectQuery.FirstName != FirstName) UpdateFirstName(FirstName, selectQuery);
-                    if (selectQuery.LastName != LastName) UpdateLastName(LastName, selectQuery);
-                    if (selectQuery.Adress != Adress) UpdateAdress(Adress, selectQuery);
-                    if (selectQuery.Birthdate != Birthdate) UpdateBirthDate(Birthdate, selectQuery);
-                    if (selectQuery.City != City) UpdateCity(City, selectQuery);
-                    if (selectQuery.Email != Email) UpdateEmail(Email, selectQuery);
-                    if (selectQuery.Postcode != PostCode) UpdatePostcode(PostCode, selectQuery);
-                    if (selectQuery.PhoneNumber != PhoneNumber) UpdatePhoneNumber(PhoneNumber, selectQuery);
-                    if (selectQuery.Photo != Photo) UpdatePhoto(Photo, selectQuery);
-                }
-                context.Entry(selectQuery).State = System.Data.Entity.EntityState.Modified;
-                context.SaveChanges();
-            }
-            
+                if (selectQuery.FirstName != FirstName) UpdateFirstName(FirstName, selectQuery);
+                if (selectQuery.LastName != LastName) UpdateLastName(LastName, selectQuery);
+                if (selectQuery.Adress != Adress) UpdateAdress(Adress, selectQuery);
+                if (selectQuery.Birthdate != Birthdate) UpdateBirthDate(Birthdate, selectQuery);
+                if (selectQuery.City != City) UpdateCity(City, selectQuery);
+                if (selectQuery.Email != Email) UpdateEmail(Email, selectQuery);
+                if (selectQuery.Postcode != PostCode) UpdatePostcode(PostCode, selectQuery);
+                if (selectQuery.PhoneNumber != PhoneNumber) UpdatePhoneNumber(PhoneNumber, selectQuery);
+                if (selectQuery.Photo != Photo) UpdatePhoto(Photo, selectQuery);
+            _context.Entry(selectQuery).State = System.Data.Entity.EntityState.Modified;
+            _context.SaveChanges();
+            }            
         }
         /// <summary>
         /// Change Role of an professional
@@ -51,16 +52,13 @@ namespace ITI.Archi_Vite.DataBase
         /// <param name="Pro"> Professional to modifie </param>
         public void UpdateProInfo(string Role, Professional Pro)
         {
-            using (ArchiViteContext context = new ArchiViteContext())
+            var professional = _context.Professional.Include("User").Where(s => s.ProfessionalId.Equals(Pro.ProfessionalId)).FirstOrDefault();
+            if (professional != null)
             {
-                var professional = context.Professional.Include("User").Where(s => s.ProfessionalId.Equals(Pro.ProfessionalId)).FirstOrDefault();
-                if (professional != null)
-                {
-                    if (professional.Role != Role) UpdateRole(Role, professional);   
-                }
-                context.Entry(professional).State = System.Data.Entity.EntityState.Modified;
-                context.SaveChanges();
+                if (professional.Role != Role) UpdateRole(Role, professional);   
             }
+            _context.Entry(professional).State = System.Data.Entity.EntityState.Modified;
+            _context.SaveChanges();
         }
         /// <summary>
         /// Change Referent of a Patient
@@ -69,22 +67,19 @@ namespace ITI.Archi_Vite.DataBase
         /// <param name="Patient"> Patient to modifie not null</param>
         public void CheckPatientInfo(Professional Pro, Patient Patient)
         {
-            if (Patient == null || Pro == null) throw new ArgumentNullException("All value need to be not null");
-            using (ArchiViteContext context = new ArchiViteContext())
-            {
-                var patient = context.Patient
-                                .Include(c => c.User)
-                                .Include(c => c.Referent)
-                                .Include(c => c.Referent.User)
-                                .Where(t => t.PatientId.Equals(Patient.PatientId))
-                                .FirstOrDefault();
-                if (patient.Referent != Pro)
-                {
-                    UpdateReferent(Pro, patient);
-                    context.Entry(patient).State = System.Data.Entity.EntityState.Modified;
-                    context.SaveChanges();
-                }
-            } 
+        if (Patient == null || Pro == null) throw new ArgumentNullException("All value need to be not null");
+        var patient = _context.Patient
+                        .Include(c => c.User)
+                        .Include(c => c.Referent)
+                        .Include(c => c.Referent.User)
+                        .Where(t => t.PatientId.Equals(Patient.PatientId))
+                        .FirstOrDefault();
+        if (patient.Referent != Pro)
+        {
+            UpdateReferent(Pro, patient);
+            _context.Entry(patient).State = System.Data.Entity.EntityState.Modified;
+            _context.SaveChanges();
+        }
         }
 
         private void UpdatePhoto(string Photo, User User)

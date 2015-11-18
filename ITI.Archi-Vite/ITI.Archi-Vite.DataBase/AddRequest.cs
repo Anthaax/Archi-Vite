@@ -9,13 +9,13 @@ namespace ITI.Archi_Vite.DataBase
 {
     public class AddRequest
     {
-        static ArchiViteContext _context;
+        readonly ArchiViteContext _context;
+
         public AddRequest(ArchiViteContext context)
         {
             _context = context;
         }
 
-        public static ArchiViteContext Context
         {
             get
             {
@@ -43,9 +43,11 @@ namespace ITI.Archi_Vite.DataBase
                 Referent = referent,
                 User = u
             };
-            Context.User.Add(u);
-            Context.Patient.Add(p);
-            AddFollow(p, referent);
+
+            _context.User.Add(u);
+            _context.Patient.Add(p);
+            _context.SaveChanges();
+            AddFollow(p, Referent);
             
             return p;
         }
@@ -68,8 +70,10 @@ namespace ITI.Archi_Vite.DataBase
                 Role = role,
                 User = u
             };
-            Context.User.Add(u);
-            Context.Professional.Add(p);
+
+            _context.User.Add(u);
+            _context.Professional.Add(p);
+            _context.SaveChanges();
 
             return p;
         }
@@ -82,7 +86,8 @@ namespace ITI.Archi_Vite.DataBase
                 FilePath = filePath,
                 Professionnal = Professional
             };
-            Context.Follower.Add(f);
+            _context.Follower.Add(f);
+            _context.SaveChanges();
         }
     }
 }
