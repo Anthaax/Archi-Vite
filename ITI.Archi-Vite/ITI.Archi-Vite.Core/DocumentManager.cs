@@ -13,6 +13,11 @@ namespace ITI.Archi_Vite.Core
 {
     public class DocumentManager
     {
+        ArchiViteContext _context;
+        public DocumentManager(ArchiViteContext context)
+        {
+            _context = context;
+        }
         public void CreateMessage(List<Professional> Receivers, Professional Sender, string Title, string Contents, Patient Patient)
         {
             Message m = new Message(Title, Contents, Sender, Receivers, Patient);
@@ -37,34 +42,31 @@ namespace ITI.Archi_Vite.Core
         }
         private void CreateDoc(Document d)
         {
-            using (ArchiViteContext context = new ArchiViteContext())
+            var senderFollow = _context.Follower
+                                    .Include(c => c.Patient)
+                                    .Include(c => c.Professionnal)
+                                    .Include(c => c.Professionnal.User)
+                                    .Include(c => c.Patient.User)
+                                    .Include(c => c.Patient.Referent)
+                                    .Where(t => t.Patient.PatientId.Equals(d.Patient.PatientId) && t.ProfessionnalId.Equals(d.Sender.ProfessionalId))
+                                    .FirstOrDefault();
+            if (senderFollow != null)
             {
-                var senderFollow = context.Follower
-                                        .Include(c => c.Patient)
-                                        .Include(c => c.Professionnal)
-                                        .Include(c => c.Professionnal.User)
-                                        .Include(c => c.Patient.User)
-                                        .Include(c => c.Patient.Referent)
-                                        .Where(t => t.Patient.PatientId.Equals(d.Patient.PatientId) && t.ProfessionnalId.Equals(d.Sender.ProfessionalId))
-                                        .FirstOrDefault();
-                if (senderFollow != null)
+                AddDoc(d, senderFollow.FilePath);
+            }
+            foreach (var receiver in d.Receivers)
+            {
+                var follow = _context.Follower
+                                    .Include(c => c.Patient)
+                                    .Include(c => c.Professionnal)
+                                    .Include(c => c.Professionnal.User)
+                                    .Include(c => c.Patient.User)
+                                    .Include(c => c.Patient.Referent)
+                                    .Where(t => t.Patient.PatientId.Equals(d.Patient.PatientId) && t.ProfessionnalId.Equals(receiver.ProfessionalId))
+                                    .FirstOrDefault();
+                if (follow != null && follow != senderFollow)
                 {
-                    AddDoc(d, senderFollow.FilePath);
-                }
-                foreach (var receiver in d.Receivers)
-                {
-                    var follow = context.Follower
-                                        .Include(c => c.Patient)
-                                        .Include(c => c.Professionnal)
-                                        .Include(c => c.Professionnal.User)
-                                        .Include(c => c.Patient.User)
-                                        .Include(c => c.Patient.Referent)
-                                        .Where(t => t.Patient.PatientId.Equals(d.Patient.PatientId) && t.ProfessionnalId.Equals(receiver.ProfessionalId))
-                                        .FirstOrDefault();
-                    if (follow != null && follow != senderFollow)
-                    {
-                        AddDoc(d, follow.FilePath);
-                    }
+                    AddDoc(d, follow.FilePath);
                 }
             }
         }

@@ -9,6 +9,13 @@ namespace ITI.Archi_Vite.DataBase
 {
     public class AddRequest
     {
+        readonly ArchiViteContext _context;
+
+        public AddRequest(ArchiViteContext context)
+        {
+            _context = context;
+        }
+
         public Patient AddPatient(string FirstName, string LastName, DateTime BirthDate, string Adress, string City, int PostCode, int PhoneNumber, string Email, string Photo, Professional Referent, string PathFile )
         {
             User u = new User()
@@ -29,14 +36,11 @@ namespace ITI.Archi_Vite.DataBase
                 Referent = Referent,
                 User = u
             };
-            using (ArchiViteContext context = new ArchiViteContext())
-            {
-                context.User.Add(u);
-                context.SaveChanges();
-                context.Patient.Add(p);
-                context.SaveChanges();
-                AddFollow(p, Referent, context);
-            }
+
+            _context.User.Add(u);
+            _context.Patient.Add(p);
+            _context.SaveChanges();
+            AddFollow(p, Referent);
             
             return p;
         }
@@ -59,12 +63,11 @@ namespace ITI.Archi_Vite.DataBase
                 Role = Role,
                 User = u
             };
-            using (ArchiViteContext context = new ArchiViteContext())
-            {
-                context.User.Add(u);
-                context.Professional.Add(p);
-                context.SaveChanges();
-            }
+
+            _context.User.Add(u);
+            _context.Professional.Add(p);
+            _context.SaveChanges();
+
             return p;
         }
         public void AddFollow(Patient Patient, Professional Professional)
@@ -76,28 +79,8 @@ namespace ITI.Archi_Vite.DataBase
                 FilePath = filePath,
                 Professionnal = Professional
             };
-            using (ArchiViteContext context = new ArchiViteContext())
-            {
-                context.Follower.Add(f);
-                context.SaveChanges();
-            }
-
-        }
-        public void AddFollow(Patient Patient, Professional Professional, ArchiViteContext ctx)
-        {
-            string filePath = Patient.PatientId + "$" + Professional.ProfessionalId;
-            Follower f = new Follower()
-            {
-                Patient = Patient,
-                FilePath = filePath,
-                Professionnal = Professional
-            };
-            using (ArchiViteContext context = ctx)
-            {
-                context.Follower.Add(f);
-                context.SaveChanges();
-            }
-
+            _context.Follower.Add(f);
+            _context.SaveChanges();
         }
     }
 }

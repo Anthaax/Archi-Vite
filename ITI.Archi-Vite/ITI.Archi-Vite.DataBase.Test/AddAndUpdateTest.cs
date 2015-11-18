@@ -13,103 +13,133 @@ namespace ITI.Archi_Vite.DataBase.Test
     [TestFixture]
     public class AddAndUpdateTest
     {
+        DatabaseManager _archiVite;
+        public AddAndUpdateTest()
+        {
+            _archiVite = new DatabaseManager();
+        }
         [Test]
-        //[SetUp]
         public void CreatePatientAndPro()
         {
-            AddRequest a = new AddRequest();
-            SelectRequest s = new SelectRequest();
-            Professional pro = a.AddProfessional("Antoine", "Raquillet", DateTime.Now, "72 avenue maurice thorez", "Ivry-sur-Seine", 12452, 0606066606, "sfavraud@intechinfo.fr", "yolo", "Medecin");
-            Professional pro1 = a.AddProfessional("Simon", "Favraud", DateTime.Now, "72 avenue maurice thorez", "Ivry-sur-Seine", 12452, 0606066606, "sfavraud@intechinfo.fr", "yolo", "Infirmier");
-            Professional pro2 = a.AddProfessional("Clement", "Rousseau", DateTime.Now, "72 avenue maurice thorez", "Ivry-sur-Seine", 12452, 0606066606, "sfavraud@intechinfo.fr", "yolo", "Medecin");
-            Professional pro3 = a.AddProfessional("Olivier", "Spinelli", DateTime.Now, "72 avenue maurice thorez", "Ivry-sur-Seine", 12452, 0606066606, "sfavraud@intechinfo.fr", "yolo", "Medecin");
-            Patient patient = a.AddPatient("Guillaume", "Fimes", DateTime.Now, "72 avenue maurice thorez", "Ivry-sur-Seine", 12452, 0606066606, "sfavraud@intechinfo.fr", "yolo", pro, "yolo");
-            Patient patient1 = a.AddPatient("Maxime", "Coucou", DateTime.Now, "72 avenue maurice thorez", "Ivry-sur-Seine", 12452, 0606066606, "sfavraud@intechinfo.fr", "yolo", pro2, "yolo");
+            using (ArchiViteContext context = _archiVite.Context)
+            {
+                AddRequest a = new AddRequest(context);
+                DocumentManager dm = new DocumentManager(context);
+                SelectRequest s = new SelectRequest(context);
+                Professional pro = a.AddProfessional("Antoine", "Raquillet", DateTime.Now, "72 avenue maurice thorez", "Ivry-sur-Seine", 12452, 0606066606, "sfavraud@intechinfo.fr", "yolo", "Medecin");
+                Professional pro1 = a.AddProfessional("Simon", "Favraud", DateTime.Now, "72 avenue maurice thorez", "Ivry-sur-Seine", 12452, 0606066606, "sfavraud@intechinfo.fr", "yolo", "Infirmier");
+                Professional pro2 = a.AddProfessional("Clement", "Rousseau", DateTime.Now, "72 avenue maurice thorez", "Ivry-sur-Seine", 12452, 0606066606, "sfavraud@intechinfo.fr", "yolo", "Medecin");
+                Professional pro3 = a.AddProfessional("Olivier", "Spinelli", DateTime.Now, "72 avenue maurice thorez", "Ivry-sur-Seine", 12452, 0606066606, "sfavraud@intechinfo.fr", "yolo", "Medecin");
+                Patient patient = a.AddPatient("Guillaume", "Fimes", DateTime.Now, "72 avenue maurice thorez", "Ivry-sur-Seine", 12452, 0606066606, "sfavraud@intechinfo.fr", "yolo", pro, "yolo");
+                dm.CreateEmptyFile(s.SelectOneFollow(patient.PatientId, patient.Referent.ProfessionalId).FilePath);
+                Patient patient1 = a.AddPatient("Maxime", "Coucou", DateTime.Now, "72 avenue maurice thorez", "Ivry-sur-Seine", 12452, 0606066606, "sfavraud@intechinfo.fr", "yolo", pro2, "yolo");
+                dm.CreateEmptyFile(s.SelectOneFollow(patient1.PatientId, patient1.Referent.ProfessionalId).FilePath);
 
-            Patient p = s.SelectPatient(patient.PatientId);
-            Console.WriteLine("Nom : {0}   Prénom : {1}   Nom du Referent : {2}   Prenom du Referent : {3}", p.User.LastName, p.User.FirstName, p.Referent.User.LastName, p.Referent.User.FirstName);
-            Assert.AreEqual(p.PatientId, patient.PatientId);
-            Patient p1 = s.SelectPatient(patient1.PatientId);
-            Console.WriteLine("Nom : {0}   Prénom : {1}   Nom du Referent : {2}   Prenom du Referent : {3}", p1.User.LastName, p1.User.FirstName, p1.Referent.User.LastName, p1.Referent.User.FirstName);
-            Assert.AreEqual(p1.PatientId, patient1.PatientId);
+                a.AddFollow(patient, pro1);
+                dm.CreateEmptyFile(s.SelectOneFollow(patient.PatientId, pro1.ProfessionalId).FilePath);
 
-            Professional Pro = s.SelectProfessional(pro.ProfessionalId);
-            Console.WriteLine("Nom : {0}   Prénom : {1}", Pro.User.LastName, Pro.User.FirstName);
-            Assert.AreEqual(Pro.ProfessionalId, pro.ProfessionalId);
-            Professional Pro1 = s.SelectProfessional(pro1.ProfessionalId);
-            Console.WriteLine("Nom : {0}   Prénom : {1}", Pro1.User.LastName, Pro1.User.FirstName);
-            Assert.AreEqual(Pro1.ProfessionalId, pro1.ProfessionalId);
-            Professional Pro2 = s.SelectProfessional(pro2.ProfessionalId);
-            Console.WriteLine("Nom : {0}   Prénom : {1}", Pro2.User.LastName, Pro2.User.FirstName);
-            Assert.AreEqual(Pro2.ProfessionalId, pro2.ProfessionalId);
-            Professional Pro3 = s.SelectProfessional(pro3.ProfessionalId);
-            Console.WriteLine("Nom : {0}   Prénom : {1}", Pro3.User.LastName, Pro3.User.FirstName);
-            Assert.AreEqual(Pro3.ProfessionalId, pro3.ProfessionalId);
+                a.AddFollow(patient, pro2);
+                dm.CreateEmptyFile(s.SelectOneFollow(patient.PatientId, pro2.ProfessionalId).FilePath);
 
-            Follower f = s.SelectOneFollow(patient.PatientId, patient.Referent.ProfessionalId);
-            Console.WriteLine("PathFile : {0}", f.FilePath);
-            Assert.AreEqual(f.FilePath, f.PatientId + "$" + f.ProfessionnalId);
-            Follower f1 = s.SelectOneFollow(patient1.PatientId, patient1.Referent.ProfessionalId);
-            Console.WriteLine("PathFile : {0}", f1.FilePath);
-            Assert.AreEqual(f1.FilePath, f1.PatientId + "$" + f1.ProfessionnalId);
+                a.AddFollow(patient, pro3);
+                dm.CreateEmptyFile(s.SelectOneFollow(patient.PatientId, pro3.ProfessionalId).FilePath);
 
+                Patient p = s.SelectPatient(patient.PatientId);
+                Console.WriteLine("Nom : {0}   Prénom : {1}   Nom du Referent : {2}   Prenom du Referent : {3}", p.User.LastName, p.User.FirstName, p.Referent.User.LastName, p.Referent.User.FirstName);
+                Assert.AreEqual(p.PatientId, patient.PatientId);
+                Patient p1 = s.SelectPatient(patient1.PatientId);
+                Console.WriteLine("Nom : {0}   Prénom : {1}   Nom du Referent : {2}   Prenom du Referent : {3}", p1.User.LastName, p1.User.FirstName, p1.Referent.User.LastName, p1.Referent.User.FirstName);
+                Assert.AreEqual(p1.PatientId, patient1.PatientId);
+
+                Professional Pro = s.SelectProfessional(pro.ProfessionalId);
+                Console.WriteLine("Nom : {0}   Prénom : {1}", Pro.User.LastName, Pro.User.FirstName);
+                Assert.AreEqual(Pro.ProfessionalId, pro.ProfessionalId);
+                Professional Pro1 = s.SelectProfessional(pro1.ProfessionalId);
+                Console.WriteLine("Nom : {0}   Prénom : {1}", Pro1.User.LastName, Pro1.User.FirstName);
+                Assert.AreEqual(Pro1.ProfessionalId, pro1.ProfessionalId);
+                Professional Pro2 = s.SelectProfessional(pro2.ProfessionalId);
+                Console.WriteLine("Nom : {0}   Prénom : {1}", Pro2.User.LastName, Pro2.User.FirstName);
+                Assert.AreEqual(Pro2.ProfessionalId, pro2.ProfessionalId);
+                Professional Pro3 = s.SelectProfessional(pro3.ProfessionalId);
+                Console.WriteLine("Nom : {0}   Prénom : {1}", Pro3.User.LastName, Pro3.User.FirstName);
+                Assert.AreEqual(Pro3.ProfessionalId, pro3.ProfessionalId);
+
+                Follower f = s.SelectOneFollow(patient.PatientId, patient.Referent.ProfessionalId);
+                Console.WriteLine("PathFile : {0}", f.FilePath);
+                Assert.AreEqual(f.FilePath, f.PatientId + "$" + f.ProfessionnalId);
+                Follower f1 = s.SelectOneFollow(patient1.PatientId, patient1.Referent.ProfessionalId);
+                Console.WriteLine("PathFile : {0}", f1.FilePath);
+                Assert.AreEqual(f1.FilePath, f1.PatientId + "$" + f1.ProfessionnalId);
+                context.SaveChanges();
+            }
         }
         [Test]
         public void CreateFollow()
         {
-            AddRequest a = new AddRequest();
-            DocumentManager dm = new DocumentManager();
-            SelectRequest s = new SelectRequest();
+            using (ArchiViteContext context = _archiVite.Context)
+            {
+                AddRequest a = new AddRequest(context);
+                DocumentManager dm = new DocumentManager(context);
+                SelectRequest s = new SelectRequest(context);
 
-            Patient patient = s.SelectPatient("Guillaume", "Fimes");
-            Professional pro = s.SelectProfessional("Clement", "Rousseau");
-            a.AddFollow(patient, pro);
+                Patient patient = s.SelectPatient("Guillaume", "Fimes");
+                Professional pro = s.SelectProfessional("Clement", "Rousseau");
+                a.AddFollow(patient, pro);
 
-            Follower follow = s.SelectOneFollow(patient.PatientId, pro.ProfessionalId);
-            Assert.AreEqual(follow.PatientId, patient.PatientId);
-            Assert.AreEqual(follow.ProfessionnalId, pro.ProfessionalId);
-            dm.CreateEmptyFile(follow.FilePath);
+                Follower follow = s.SelectOneFollow(patient.PatientId, pro.ProfessionalId);
+                Assert.AreEqual(follow.PatientId, patient.PatientId);
+                Assert.AreEqual(follow.ProfessionnalId, pro.ProfessionalId);
+                dm.CreateEmptyFile(follow.FilePath);
+            }
         }
         [Test]
         public void UpdateUser()
         {
-            UpdateRequest ur = new UpdateRequest();
-            SelectRequest s = new SelectRequest();
+            using (ArchiViteContext context = _archiVite.Context)
+            {
+                UpdateRequest ur = new UpdateRequest(context);
+                SelectRequest s = new SelectRequest(context);
 
-            User user = s.SelectUser("Guillaume", "Fimes");
-            ur.CheckUserInfo(user.FirstName, user.LastName, user.Adress, user.Birthdate, "Paris", user.Email, user.Postcode, user.PhoneNumber, user.Photo, user);
+                User user = s.SelectUser("Guillaume", "Fimes");
+                ur.CheckUserInfo(user.FirstName, user.LastName, user.Adress, user.Birthdate, "Paris", user.Email, user.Postcode, user.PhoneNumber, user.Photo, user);
 
-            User NewUser = s.SelectUser(user.UserId);
-            Assert.AreEqual(NewUser.City, "Paris");
-            Assert.AreEqual(NewUser.LastName, "Fimes");
+                User NewUser = s.SelectUser(user.UserId);
+                Assert.AreEqual(NewUser.City, "Paris");
+                Assert.AreEqual(NewUser.LastName, "Fimes");
+            }
         }
         [Test]
         public void UpdatePatient()
         {
-            UpdateRequest ur = new UpdateRequest();
-            SelectRequest s = new SelectRequest();
-            Patient patient = s.SelectPatient("Guillaume", "Fimes");
-            Professional pro = s.SelectProfessional("Olivier", "Spinelli");
+            using (ArchiViteContext context = _archiVite.Context)
+            {
+                UpdateRequest ur = new UpdateRequest(context);
+                SelectRequest s = new SelectRequest(context);
+                Patient patient = s.SelectPatient("Guillaume", "Fimes");
+                Professional pro = s.SelectProfessional("Olivier", "Spinelli");
 
-            ur.CheckPatientInfo(pro, patient);
+                ur.CheckPatientInfo(pro, patient);
 
-            Patient newPatient = s.SelectPatient(patient.PatientId);
-            Assert.AreEqual(newPatient.Referent.ProfessionalId, pro.ProfessionalId);
-
+                Patient newPatient = s.SelectPatient(patient.PatientId);
+                Assert.AreEqual(newPatient.Referent.ProfessionalId, pro.ProfessionalId);
+            }
         }
         [Test]
         public void UpdatePro()
         {
-            UpdateRequest ur = new UpdateRequest();
-            SelectRequest s = new SelectRequest();
-            Professional pro = s.SelectProfessional("Simon", "Favraud");
-            
-            ur.UpdateProInfo("Archi'Mède", pro);
-            Professional newPro = s.SelectProfessional(pro.ProfessionalId);
-            Assert.AreEqual(newPro.Role, "Archi'Mède");
+            using (ArchiViteContext context = _archiVite.Context)
+            {
+                UpdateRequest ur = new UpdateRequest(context);
+                SelectRequest s = new SelectRequest(context);
+                Professional pro = s.SelectProfessional("Simon", "Favraud");
+
+                ur.UpdateProInfo("Archi'Mède", pro);
+                Professional newPro = s.SelectProfessional(pro.ProfessionalId);
+                Assert.AreEqual(newPro.Role, "Archi'Mède");
+            }
         }
 
-        [Test]//[TearDown]
+        [Test]
         public void DeleteData()
         {
             using (ArchiViteContext context = new ArchiViteContext())
