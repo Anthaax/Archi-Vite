@@ -17,39 +17,50 @@ namespace ITI.Archi_Vite.DataBase.Test
         //[SetUp]
         public void CreatePatientAndPro()
         {
-            AddRequest a = new AddRequest();
-            SelectRequest s = new SelectRequest();
+            AddRequest a = InitializeAddRequest();
             Professional pro = a.AddProfessional("Antoine", "Raquillet", DateTime.Now, "72 avenue maurice thorez", "Ivry-sur-Seine", 12452, 0606066606, "sfavraud@intechinfo.fr", "yolo", "Medecin");
             Professional pro1 = a.AddProfessional("Simon", "Favraud", DateTime.Now, "72 avenue maurice thorez", "Ivry-sur-Seine", 12452, 0606066606, "sfavraud@intechinfo.fr", "yolo", "Infirmier");
             Professional pro2 = a.AddProfessional("Clement", "Rousseau", DateTime.Now, "72 avenue maurice thorez", "Ivry-sur-Seine", 12452, 0606066606, "sfavraud@intechinfo.fr", "yolo", "Medecin");
             Professional pro3 = a.AddProfessional("Olivier", "Spinelli", DateTime.Now, "72 avenue maurice thorez", "Ivry-sur-Seine", 12452, 0606066606, "sfavraud@intechinfo.fr", "yolo", "Medecin");
             Patient patient = a.AddPatient("Guillaume", "Fimes", DateTime.Now, "72 avenue maurice thorez", "Ivry-sur-Seine", 12452, 0606066606, "sfavraud@intechinfo.fr", "yolo", pro, "yolo");
             Patient patient1 = a.AddPatient("Maxime", "Coucou", DateTime.Now, "72 avenue maurice thorez", "Ivry-sur-Seine", 12452, 0606066606, "sfavraud@intechinfo.fr", "yolo", pro2, "yolo");
+            AddRequest.Context.SaveChanges();
 
-            Patient p = s.SelectPatient(patient.PatientId);
+                
+            SelectRequest s = new SelectRequest();
+
+            Professional antoine = s.SelectProfessional("Antoine", "Raquillet");
+            Professional simon = s.SelectProfessional("Simon", "Favraud");
+            Professional clement = s.SelectProfessional("Clement", "Rousseau");
+            Professional olivier = s.SelectProfessional("Olivier", "Spinelli");
+
+            Patient guillaume = s.SelectPatient("Guillaume", "Fimes");
+            Patient maxime = s.SelectPatient("Maxime", "Coucou");
+
+            Patient p = s.SelectPatient(guillaume.PatientId);
             Console.WriteLine("Nom : {0}   Prénom : {1}   Nom du Referent : {2}   Prenom du Referent : {3}", p.User.LastName, p.User.FirstName, p.Referent.User.LastName, p.Referent.User.FirstName);
-            Assert.AreEqual(p.PatientId, patient.PatientId);
-            Patient p1 = s.SelectPatient(patient1.PatientId);
+            Assert.AreEqual(p.PatientId, guillaume.PatientId);
+            Patient p1 = s.SelectPatient(maxime.PatientId);
             Console.WriteLine("Nom : {0}   Prénom : {1}   Nom du Referent : {2}   Prenom du Referent : {3}", p1.User.LastName, p1.User.FirstName, p1.Referent.User.LastName, p1.Referent.User.FirstName);
-            Assert.AreEqual(p1.PatientId, patient1.PatientId);
+            Assert.AreEqual(p1.PatientId, maxime.PatientId);
 
-            Professional Pro = s.SelectProfessional(pro.ProfessionalId);
+            Professional Pro = s.SelectProfessional(antoine.ProfessionalId);
             Console.WriteLine("Nom : {0}   Prénom : {1}", Pro.User.LastName, Pro.User.FirstName);
-            Assert.AreEqual(Pro.ProfessionalId, pro.ProfessionalId);
-            Professional Pro1 = s.SelectProfessional(pro1.ProfessionalId);
+            Assert.AreEqual(Pro.ProfessionalId, antoine.ProfessionalId);
+            Professional Pro1 = s.SelectProfessional(simon.ProfessionalId);
             Console.WriteLine("Nom : {0}   Prénom : {1}", Pro1.User.LastName, Pro1.User.FirstName);
-            Assert.AreEqual(Pro1.ProfessionalId, pro1.ProfessionalId);
-            Professional Pro2 = s.SelectProfessional(pro2.ProfessionalId);
+            Assert.AreEqual(Pro1.ProfessionalId, simon.ProfessionalId);
+            Professional Pro2 = s.SelectProfessional(clement.ProfessionalId);
             Console.WriteLine("Nom : {0}   Prénom : {1}", Pro2.User.LastName, Pro2.User.FirstName);
-            Assert.AreEqual(Pro2.ProfessionalId, pro2.ProfessionalId);
-            Professional Pro3 = s.SelectProfessional(pro3.ProfessionalId);
+            Assert.AreEqual(Pro2.ProfessionalId, clement.ProfessionalId);
+            Professional Pro3 = s.SelectProfessional(olivier.ProfessionalId);
             Console.WriteLine("Nom : {0}   Prénom : {1}", Pro3.User.LastName, Pro3.User.FirstName);
-            Assert.AreEqual(Pro3.ProfessionalId, pro3.ProfessionalId);
+            Assert.AreEqual(Pro3.ProfessionalId, olivier.ProfessionalId);
 
-            Follower f = s.SelectOneFollow(patient.PatientId, patient.Referent.ProfessionalId);
+            Follower f = s.SelectOneFollow(guillaume.PatientId, guillaume.Referent.ProfessionalId);
             Console.WriteLine("PathFile : {0}", f.FilePath);
             Assert.AreEqual(f.FilePath, f.PatientId + "$" + f.ProfessionnalId);
-            Follower f1 = s.SelectOneFollow(patient1.PatientId, patient1.Referent.ProfessionalId);
+            Follower f1 = s.SelectOneFollow(maxime.PatientId, maxime.Referent.ProfessionalId);
             Console.WriteLine("PathFile : {0}", f1.FilePath);
             Assert.AreEqual(f1.FilePath, f1.PatientId + "$" + f1.ProfessionnalId);
 
@@ -57,13 +68,14 @@ namespace ITI.Archi_Vite.DataBase.Test
         [Test]
         public void CreateFollow()
         {
-            AddRequest a = new AddRequest();
+            var context = AddRequest.Context;
+            Assert.IsNotNull(context);
             DocumentManager dm = new DocumentManager();
             SelectRequest s = new SelectRequest();
 
             Patient patient = s.SelectPatient("Guillaume", "Fimes");
             Professional pro = s.SelectProfessional("Clement", "Rousseau");
-            a.AddFollow(patient, pro);
+            //a.AddFollow(patient, pro);
 
             Follower follow = s.SelectOneFollow(patient.PatientId, pro.ProfessionalId);
             Assert.AreEqual(follow.PatientId, patient.PatientId);
@@ -142,6 +154,14 @@ namespace ITI.Archi_Vite.DataBase.Test
                 Assert.AreEqual(context.Patient.ToList().Count(), 0);
                 Assert.AreEqual(context.Professional.ToList().Count(), 0);
                 Assert.AreEqual(context.User.ToList().Count(), 0);
+            }
+        }
+        public AddRequest InitializeAddRequest()
+        {
+            using (ArchiViteContext context = new ArchiViteContext())
+            {
+                AddRequest a = new AddRequest(context);
+                return a;
             }
         }
     }
