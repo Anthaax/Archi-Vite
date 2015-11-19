@@ -14,9 +14,11 @@ namespace ITI.Archi_Vite.Core
     public class DocumentManager
     {
         ArchiViteContext _context;
+        SuppressionRequest _supp;
         public DocumentManager(ArchiViteContext context)
         {
             _context = context;
+            _supp = new SuppressionRequest(context);
         }
         public void CreateMessage(List<Professional> Receivers, Professional Sender, string Title, string Contents, Patient Patient)
         {
@@ -59,8 +61,7 @@ namespace ITI.Archi_Vite.Core
             if (senderFollow != null)
             {
                 DeleteFile(GetPathFile(patient.PatientId + "$" + pro.ProfessionalId));
-                _context.Follower.Remove(senderFollow);
-                _context.SaveChanges();
+                _supp.FollowerSuppression(senderFollow);
             }
         }
         private void DeleteFile(string path)
