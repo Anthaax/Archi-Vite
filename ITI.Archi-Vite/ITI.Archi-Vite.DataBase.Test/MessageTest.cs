@@ -79,15 +79,17 @@ namespace ITI.Archi_Vite.DataBase.Test
                 DocumentManager dm = new DocumentManager(context);
                 SelectRequest s = new SelectRequest(context);
                 List<Professional> receivers = new List<Professional>();
-                foreach(var f in s.SelectFollowForPatient(s.SelectPatient("Guillaume", "Fimes").PatientId))
+                foreach (var f in s.SelectFollowForPatient(s.SelectPatient("Guillaume", "Fimes").PatientId))
                 {
                     receivers.Add(f.Professionnal);
                 }
                 dm.CreateMessage(receivers, s.SelectProfessional("Antoine", "Raquillet"), "Coucou", "J'ai un pb", s.SelectPatient("Guillaume", "Fimes"));
-                dm.CreateMessage(receivers, s.SelectProfessional("Antoine", "Raquillet"), "Salut", "Hey", s.SelectPatient("Guillaume", "Fimes"));
                 DocumentSerializable document = dm.SeeDocument(s.SelectProfessional(s.SelectPatient("Guillaume", "Fimes").Referent.ProfessionalId), s.SelectPatient("Guillaume", "Fimes"));
-                Assert.AreEqual(document.Messages.Count, 2);
-                foreach( var message in document.Messages)
+                Assert.AreEqual(document.Messages.Count, 1);
+                dm.CreateMessage(receivers, s.SelectProfessional("Antoine", "Raquillet"), "Salut", "Hey", s.SelectPatient("Guillaume", "Fimes"));
+                DocumentSerializable documents = dm.SeeDocument(s.SelectProfessional(s.SelectPatient("Guillaume", "Fimes").Referent.ProfessionalId), s.SelectPatient("Guillaume", "Fimes"));
+                Assert.AreEqual(documents.Messages.Count, 2);
+                foreach (var message in document.Messages)
                 {
                     //Assert.AreEqual("Coucou", message.Title);
                     //Assert.AreEqual("J'ai un pb", message.Contents);
@@ -97,29 +99,16 @@ namespace ITI.Archi_Vite.DataBase.Test
                 }
             }
         }
-        //[Test]
-        //public void GetMessage()
-        //{
-        //    DocumentManager dm = new DocumentManager();
-        //    Patient patient;
-        //    using (ArchiViteContext context = new ArchiViteContext())
-        //    {
-        //        patient = context.Patient
-        //                        .Include(c => c.User)
-        //                        .Include(c => c.Referent)
-        //                        .Include(c => c.Referent.User)
-        //                        .Where(t => t.User.FirstName.Equals("Guillaume"))
-        //                        .FirstOrDefault();
-        //        var follower = context.Follower
-        //                            .Include(c => c.Patient)
-        //                            .Include(c => c.Professionnal)
-        //                            .Include(c => c.Professionnal.User)
-        //                            .Include(c => c.Patient.User)
-        //                            .Include(c => c.Patient.Referent)
-        //                            .Where(t => t.PatientId.Equals(patient.PatientId))
-        //                            .ToList();
-
-        //    }
-        //}
+        [Test]
+        public void DeleteMessage()
+        {
+            using (ArchiViteContext context = _archiVite.Context)
+            {
+                DocumentManager dm = new DocumentManager(context);
+                SelectRequest s = new SelectRequest(context);
+                dm.DeleteFollow(s.SelectProfessional("Simon", "Favraud"), s.SelectPatient("Guillaume", "Fimes"));
+                Assert.IsNull(s.SelectOneFollow(s.SelectPatient("Guillaume", "Fimes").PatientId, s.SelectProfessional("Simon", "Favraud").ProfessionalId));
+            }
+        }
     }
 }

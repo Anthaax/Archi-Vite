@@ -38,8 +38,45 @@ namespace ITI.Archi_Vite.Core
         }
         public DocumentSerializable SeeDocument(Professional pro, Patient patient)
         {
-            DocumentSerializable Documents = DeserializeListDoc(patient.PatientId + "$" + pro.ProfessionalId);
+            DocumentSerializable Documents = DeserializeListDoc(GetPathFile(patient.PatientId + "$" + pro.ProfessionalId));
             return Documents;
+        }
+        public DocumentSerializable SeeDocument(string path)
+        {
+            DocumentSerializable Documents = DeserializeListDoc(GetPathFile(path));
+            return Documents;
+        }
+        public void DeleteFollow(Professional pro, Patient patient)
+        {
+            var senderFollow = _context.Follower
+                                    .Include(c => c.Patient)
+                                    .Include(c => c.Professionnal)
+                                    .Include(c => c.Professionnal.User)
+                                    .Include(c => c.Patient.User)
+                                    .Include(c => c.Patient.Referent)
+                                    .Where(t => t.Patient.PatientId.Equals(patient.PatientId) && t.ProfessionnalId.Equals(pro.ProfessionalId))
+                                    .FirstOrDefault();
+            if (senderFollow != null)
+            {
+                DeleteFile(GetPathFile(patient.PatientId + "$" + pro.ProfessionalId));
+                _context.Follower.Remove(senderFollow);
+                _context.SaveChanges();
+            }
+        }
+        private void DeleteFile(string path)
+        {
+            if (File.Exists(GetPathFile(path)))
+            {
+                try
+                {
+                    File.Delete(GetPathFile(path));
+                }
+                catch (IOException e)
+                {
+                    Console.WriteLine(e.Message);
+                    return;
+                }
+            }
         }
         private void CreateDoc(Message message)
         {
@@ -53,7 +90,7 @@ namespace ITI.Archi_Vite.Core
                                     .FirstOrDefault();
             if (senderFollow != null)
             {
-                AddDoc(message, senderFollow.FilePath);
+                AddDoc(message, message.Patient.PatientId + "$" + message.Sender.ProfessionalId);
             }
             foreach (var receiver in message.Receivers)
             {
@@ -67,7 +104,7 @@ namespace ITI.Archi_Vite.Core
                                     .FirstOrDefault();
                 if (follow != null && follow != senderFollow)
                 {
-                    AddDoc(message, follow.FilePath);
+                    AddDoc(message, message.Patient.PatientId + "$" + receiver.ProfessionalId);
                 }
             }
         }
@@ -103,15 +140,15 @@ namespace ITI.Archi_Vite.Core
         }
         private void AddDoc(Message message, string FilePath)
         {
-            DocumentSerializable Documents = DeserializeListDoc(GetPathFile(FilePath));
+            DocumentSerializable Documents = SeeDocument(FilePath);
             Documents.Messages.Add(message);
-            SerializeListDoc(Documents, FilePath);
+            SerializeListDoc(Documents, GetPathFile(FilePath));
         }
         private void AddDoc(Prescription prescription, string FilePath)
         {
             DocumentSerializable Documents = DeserializeListDoc(GetPathFile(FilePath));
             Documents.Prescriptions.Add(prescription);
-            SerializeListDoc(Documents, FilePath);
+            SerializeListDoc(Documents, GetPathFile(FilePath));
         }
 
         private void SerializeListDoc(DocumentSerializable Documents, string FilePath)
@@ -164,7 +201,7 @@ namespace ITI.Archi_Vite.Core
             }
             return d;
         }
-
+        
         private string GetPathFile(string fileName)
         {
             string folderName = @"C:\ArchiFile";
