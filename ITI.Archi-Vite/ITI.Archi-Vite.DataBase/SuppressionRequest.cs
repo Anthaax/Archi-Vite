@@ -31,7 +31,7 @@ namespace ITI.Archi_Vite.DataBase
         public void ProfessionnalSuppression( Professional professional )
         {
             _context.Professional.Remove(professional);
-            _context.SaveChanges()
+            _context.SaveChanges();
         }
     }
 }

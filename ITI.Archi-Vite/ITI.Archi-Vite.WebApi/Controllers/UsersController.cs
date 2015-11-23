@@ -10,25 +10,36 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 using ITI.Archi_Vite.DataBase;
-using ITI.Archi_Vite.WebApi.Models;
 
 namespace ITI.Archi_Vite.WebApi.Controllers
 {
     public class UsersController : ApiController
     {
-        private UserServiceContext db = new UserServiceContext();
+        private ArchiViteContext _db = new ArchiViteContext();
 
         // GET: api/Users
         public IQueryable<User> GetUsers()
         {
-            return db.Users;
+            return _db.User;
         }
 
         // GET: api/Users/5
         [ResponseType(typeof(User))]
         public async Task<IHttpActionResult> GetUser(int id)
         {
-            User user = await db.Users.FindAsync(id);
+            User user = await _db.User.FindAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(user);
+        }
+
+        [ResponseType(typeof(User))]
+        public async Task<IHttpActionResult> GetUser(UserConnection User)
+        {
+            User user = await _db.Users.FindAsync(User.Pseudo, User.Password);
             if (user == null)
             {
                 return NotFound();
@@ -51,11 +62,11 @@ namespace ITI.Archi_Vite.WebApi.Controllers
                 return BadRequest();
             }
 
-            db.Entry(user).State = EntityState.Modified;
+            _db.Entry(user).State = EntityState.Modified;
 
             try
             {
-                await db.SaveChangesAsync();
+                await _db.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -81,8 +92,8 @@ namespace ITI.Archi_Vite.WebApi.Controllers
                 return BadRequest(ModelState);
             }
 
-            db.Users.Add(user);
-            await db.SaveChangesAsync();
+            _db.User.Add(user);
+            await _db.SaveChangesAsync();
 
             return CreatedAtRoute("DefaultApi", new { id = user.UserId }, user);
         }
@@ -91,14 +102,14 @@ namespace ITI.Archi_Vite.WebApi.Controllers
         [ResponseType(typeof(User))]
         public async Task<IHttpActionResult> DeleteUser(int id)
         {
-            User user = await db.Users.FindAsync(id);
+            User user = await _db.User.FindAsync(id);
             if (user == null)
             {
                 return NotFound();
             }
 
-            db.Users.Remove(user);
-            await db.SaveChangesAsync();
+            _db.Users.Remove(user);
+            await _db.SaveChangesAsync();
 
             return Ok(user);
         }
@@ -107,14 +118,14 @@ namespace ITI.Archi_Vite.WebApi.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                _db.Dispose();
             }
             base.Dispose(disposing);
         }
 
         private bool UserExists(int id)
         {
-            return db.Users.Count(e => e.UserId == id) > 0;
+            return _db.User.Count(e => e.UserId == id) > 0;
         }
     }
 }
