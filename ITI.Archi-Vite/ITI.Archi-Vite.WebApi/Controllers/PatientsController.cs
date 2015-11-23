@@ -38,19 +38,19 @@ namespace ITI.Archi_Vite.WebApi.Controllers
 
         // PUT: api/Patients/5
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutPatient(int id, Patient patient)
+        public async Task<IHttpActionResult> PutPatient(int id, PatientCreation newPatient)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != patient.PatientId)
+            if (id != newPatient.User.UserId)
             {
                 return BadRequest();
             }
 
-            _db.Entry(patient).State = EntityState.Modified;
+            _db.Ar.AddPatient(newPatient.User.FirstName, newPatient.User.LastName, newPatient.User.Birthdate, newPatient.User.Adress, newPatient.User.City, newPatient.User.Postcode, newPatient.User.PhoneNumber, newPatient.User.Email, newPatient.User.Photo, newPatient.Referent, newPatient.PathFile);
 
             try
             {

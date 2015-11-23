@@ -10,10 +10,12 @@ namespace ITI.Archi_Vite.DataBase
     public class AddRequest
     {
         readonly ArchiViteContext _context;
+        readonly SelectRequest _sr;
 
         public AddRequest(ArchiViteContext context)
         {
             _context = context;
+            _sr = new SelectRequest(context);            
         }
         public ArchiViteContext Context
         {
@@ -40,7 +42,7 @@ namespace ITI.Archi_Vite.DataBase
             Patient p = new Patient()
             {
                 PathFiles = pathFile,
-                Referent = referent,
+                Referent = _sr.SelectProfessional(referent.ProfessionalId),
                 User = u
             };
 
@@ -84,7 +86,7 @@ namespace ITI.Archi_Vite.DataBase
             {
                 Patient = patient,
                 FilePath = filePath,
-                Professionnal = professional
+                Professionnal = _sr.SelectProfessional(professional.ProfessionalId)
             };
             _context.Follower.Add(f);
             _context.SaveChanges();

@@ -37,50 +37,15 @@ namespace ITI.Archi_Vite.WebApi.Controllers
         }
 
         [ResponseType(typeof(User))]
-        public async Task<IHttpActionResult> GetUser(UserConnection User)
+        public async Task<IHttpActionResult> GetUser(UserConnection user)
         {
-            User user = await _db.Users.FindAsync(User.Pseudo, User.Password);
-            if (user == null)
+            User User = await _db.User.FindAsync(user.Pseudo, user.Password);
+            if (User == null)
             {
                 return NotFound();
             }
 
-            return Ok(user);
-        }
-
-        // PUT: api/Users/5
-        [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutUser(int id, User user)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (id != user.UserId)
-            {
-                return BadRequest();
-            }
-
-            _db.Entry(user).State = EntityState.Modified;
-
-            try
-            {
-                await _db.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UserExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return StatusCode(HttpStatusCode.NoContent);
+            return Ok(User);
         }
 
         // POST: api/Users
@@ -108,7 +73,7 @@ namespace ITI.Archi_Vite.WebApi.Controllers
                 return NotFound();
             }
 
-            _db.Users.Remove(user);
+            _db.User.Remove(user);
             await _db.SaveChangesAsync();
 
             return Ok(user);

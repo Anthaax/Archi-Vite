@@ -38,19 +38,19 @@ namespace ITI.Archi_Vite.WebApi.Controllers
 
         // PUT: api/Professionals/5
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutProfessional(int id, Professional professional)
+        public async Task<IHttpActionResult> PutProfessional(int id, ProfessionalCreation newProfessional)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != professional.ProfessionalId)
+            if (id != newProfessional.User.UserId)
             {
                 return BadRequest();
             }
 
-            _db.Entry(professional).State = EntityState.Modified;
+            _db.Ar.AddProfessional(newProfessional.User.FirstName, newProfessional.User.LastName, newProfessional.User.Birthdate, newProfessional.User.Adress, newProfessional.User.City, newProfessional.User.Postcode, newProfessional.User.PhoneNumber, newProfessional.User.Email, newProfessional.User.Photo, newProfessional.Role);
 
             try
             {

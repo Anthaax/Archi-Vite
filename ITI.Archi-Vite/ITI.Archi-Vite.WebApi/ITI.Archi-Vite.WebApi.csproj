@@ -91,7 +91,9 @@
     <Compile Include="Controllers\FollowersController.cs" />
     <Compile Include="Controllers\PatientsController.cs" />
     <Compile Include="Controllers\ProfessionalsController.cs" />
+    <Compile Include="Odata\FollowerCreation.cs" />
     <Compile Include="Odata\PatientCreation.cs" />
+    <Compile Include="Odata\ProfessionalCreation.cs" />
     <Compile Include="Odata\UserConnection.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Global.asax.cs">
