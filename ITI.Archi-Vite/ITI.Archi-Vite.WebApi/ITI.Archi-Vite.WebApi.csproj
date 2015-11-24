@@ -69,9 +69,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="System.Net.Http.Formatting">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
@@ -89,6 +86,8 @@
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\FollowersController.cs" />
+    <Compile Include="Controllers\MessageController.cs" />
+    <Compile Include="Odata\MesssageCreator.cs" />
     <Compile Include="Controllers\PatientsController.cs" />
     <Compile Include="Controllers\ProfessionalsController.cs" />
     <Compile Include="Odata\FollowerCreation.cs" />

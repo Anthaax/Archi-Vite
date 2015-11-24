@@ -45,6 +45,16 @@ namespace ITI.Archi_Vite.DataBase
                                     .FirstOrDefault();
             return selectQuery;
         }
+        public Patient SelectPatient(Professional referent)
+        {
+            var selectQuery = _context.Patient
+                                    .Include(c => c.User)
+                                    .Include(c => c.Referent)
+                                    .Include(c => c.Referent.User)
+                                    .Where(t => t.Referent.ProfessionalId.Equals(referent.ProfessionalId))
+                                    .FirstOrDefault();
+            return selectQuery;
+        }
         public Patient SelectPatient(string Pseudo)
         {
             var selectQuery = _context.Patient
@@ -89,6 +99,7 @@ namespace ITI.Archi_Vite.DataBase
                                     .FirstOrDefault();
            return selectQuery;
         }
+
         public Follower SelectOneFollow(int IDPatient, int IDPro)
         {
             var senderFollow = _context.Follower

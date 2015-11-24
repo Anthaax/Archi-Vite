@@ -10,12 +10,14 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 using ITI.Archi_Vite.DataBase;
+using ITI.Archi_Vite.Core;
 
 namespace ITI.Archi_Vite.WebApi.Controllers
 {
     public class FollowersController : ApiController
     {
         private ArchiViteContext _db = new ArchiViteContext();
+        DocumentManager _doc;
 
         // GET: api/Followers
         public IQueryable<Follower> GetFollowers()
@@ -25,9 +27,9 @@ namespace ITI.Archi_Vite.WebApi.Controllers
 
         // GET: api/Followers/5
         [ResponseType(typeof(Follower))]
-        public async Task<IHttpActionResult> GetFollower(int id)
+        public async Task<IHttpActionResult> GetFollower(int id, int proId)
         {
-            Follower follower = await _db.Follower.FindAsync(id);
+            Follower follower = _db.SelectRequest.SelectOneFollow(id, proId);
             if (follower == null)
             {
                 return NotFound();
@@ -38,19 +40,14 @@ namespace ITI.Archi_Vite.WebApi.Controllers
 
         // PUT: api/Followers/5
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutFollower(int id, Follower follower)
+        public async Task<IHttpActionResult> PutFollower(Follower follower)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != follower.PatientId)
-            {
-                return BadRequest();
-            }
-
-            _db.Entry(follower).State = EntityState.Modified;
+            _db.AddRequest.AddFollow(follower.Patient, follower.Professionnal);
 
             try
             {
@@ -58,63 +55,52 @@ namespace ITI.Archi_Vite.WebApi.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!FollowerExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                throw;
             }
 
             return StatusCode(HttpStatusCode.NoContent);
-        }
-
-        // POST: api/Followers
-        [ResponseType(typeof(Follower))]
-        public async Task<IHttpActionResult> PostFollower(Follower follower)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            _db.Follower.Add(follower);
-
-            try
-            {
-                await _db.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (FollowerExists(follower.PatientId))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return CreatedAtRoute("DefaultApi", new { id = follower.PatientId }, follower);
         }
 
         // DELETE: api/Followers/5
         [ResponseType(typeof(Follower))]
         public async Task<IHttpActionResult> DeleteFollower(int id)
         {
+            _doc = new DocumentManager(_db);
             Follower follower = await _db.Follower.FindAsync(id);
             if (follower == null)
             {
                 return NotFound();
             }
-
+            _doc.DeleteFile(follower.Professionnal, follower.Patient);
             _db.Follower.Remove(follower);
             await _db.SaveChangesAsync();
 
             return Ok(follower);
+        }
+
+
+
+        [ResponseType(typeof(void))]
+        public async Task<IHttpActionResult> PutMessage(MesssageCreator message)
+        {
+            _doc = new DocumentManager(_db);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            _doc.CreateMessage(message.Receivers, message.Sender, message.Title, message.Contents, message.Patient);
+
+            try
+            {
+                await _db.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
+
+            return StatusCode(HttpStatusCode.NoContent);
         }
 
         protected override void Dispose(bool disposing)

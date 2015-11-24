@@ -31,9 +31,12 @@ namespace ITI.Archi_Vite.DataBase.Test
                 Professional pro2 = a.AddProfessional("Clement", "Rousseau", DateTime.Now, "72 avenue maurice thorez", "Ivry-sur-Seine", 12452, 0606066606, "sfavraud@intechinfo.fr", "yolo", "Medecin");
                 Professional pro3 = a.AddProfessional("Olivier", "Spinelli", DateTime.Now, "72 avenue maurice thorez", "Ivry-sur-Seine", 12452, 0606066606, "sfavraud@intechinfo.fr", "yolo", "Medecin");
                 Patient patient = a.AddPatient("Guillaume", "Fimes", DateTime.Now, "72 avenue maurice thorez", "Ivry-sur-Seine", 12452, 0606066606, "sfavraud@intechinfo.fr", "yolo", pro, "yolo");
+                dm.CreateEmptyFile(patient.PatientId.ToString());
                 dm.CreateEmptyFile(s.SelectOneFollow(patient.PatientId, patient.Referent.ProfessionalId).FilePath);
                 Patient patient1 = a.AddPatient("Maxime", "Coucou", DateTime.Now, "72 avenue maurice thorez", "Ivry-sur-Seine", 12452, 0606066606, "sfavraud@intechinfo.fr", "yolo", pro2, "yolo");
                 dm.CreateEmptyFile(s.SelectOneFollow(patient1.PatientId, patient1.Referent.ProfessionalId).FilePath);
+                dm.CreateEmptyFile(patient1.PatientId.ToString());
+
 
                 a.AddFollow(patient, pro1);
                 dm.CreateEmptyFile(s.SelectOneFollow(patient.PatientId, pro1.ProfessionalId).FilePath);

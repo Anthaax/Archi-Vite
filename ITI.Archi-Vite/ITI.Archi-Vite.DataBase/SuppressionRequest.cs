@@ -20,6 +20,11 @@ namespace ITI.Archi_Vite.DataBase
         }
         public void PatientSuppression( Patient patient )
         {
+            List<Follower> followPatient = _context.SelectRequest.SelectFollowForPatient(patient.PatientId);
+            foreach(var follow in followPatient)
+            {
+                FollowerSuppression(follow);
+            }
             _context.Patient.Remove(patient);
             _context.SaveChanges();
         }
@@ -30,6 +35,11 @@ namespace ITI.Archi_Vite.DataBase
         }
         public void ProfessionnalSuppression( Professional professional )
         {
+            List<Follower> followPro = _context.SelectRequest.SelectFollowForPro(professional.ProfessionalId);
+            foreach (var follow in followPro)
+            {
+                FollowerSuppression(follow);
+            }
             _context.Professional.Remove(professional);
             _context.SaveChanges();
         }

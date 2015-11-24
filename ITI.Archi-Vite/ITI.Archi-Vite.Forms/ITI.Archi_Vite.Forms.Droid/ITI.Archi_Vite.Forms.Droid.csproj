@@ -99,7 +99,7 @@
     <AndroidResource Include="Resources\drawable-xxhdpi\icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\Archi%27Vite Logo.png" />
+    <Content Include="Resources\drawable\Archi%27Vite Logo.png" />
     <Content Include="Properties\AndroidManifest.xml" />
   </ItemGroup>
   <ItemGroup>

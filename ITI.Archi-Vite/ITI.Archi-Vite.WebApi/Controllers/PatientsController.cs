@@ -10,12 +10,14 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 using ITI.Archi_Vite.DataBase;
+using ITI.Archi_Vite.Core;
 
 namespace ITI.Archi_Vite.WebApi.Controllers
 {
     public class PatientsController : ApiController
     {
         private ArchiViteContext _db = new ArchiViteContext();
+        private DocumentManager _doc ;
 
         // GET: api/Patients
         public IQueryable<Patient> GetPatients()
@@ -27,7 +29,7 @@ namespace ITI.Archi_Vite.WebApi.Controllers
         [ResponseType(typeof(Patient))]
         public async Task<IHttpActionResult> GetPatient(int id)
         {
-            Patient patient = await _db.Patient.FindAsync(id);
+            Patient patient = _db.SelectRequest.SelectPatient(id);
             if (patient == null)
             {
                 return NotFound();
@@ -38,19 +40,16 @@ namespace ITI.Archi_Vite.WebApi.Controllers
 
         // PUT: api/Patients/5
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutPatient(int id, PatientCreation newPatient)
+        public async Task<IHttpActionResult> PutPatient(PatientCreation newPatient)
         {
+            _doc = new DocumentManager(_db);
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != newPatient.User.UserId)
-            {
-                return BadRequest();
-            }
-
-            _db.Ar.AddPatient(newPatient.User.FirstName, newPatient.User.LastName, newPatient.User.Birthdate, newPatient.User.Adress, newPatient.User.City, newPatient.User.Postcode, newPatient.User.PhoneNumber, newPatient.User.Email, newPatient.User.Photo, newPatient.Referent, newPatient.PathFile);
+            _db.AddRequest.AddPatient(newPatient.User.FirstName, newPatient.User.LastName, newPatient.User.Birthdate, newPatient.User.Adress, newPatient.User.City, newPatient.User.Postcode, newPatient.User.PhoneNumber, newPatient.User.Email, newPatient.User.Photo, newPatient.Referent, newPatient.PathFile);
+            _doc.CreateEmptyFile(newPatient.User.UserId.ToString());
 
             try
             {
@@ -58,59 +57,28 @@ namespace ITI.Archi_Vite.WebApi.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!PatientExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                throw;
             }
 
             return StatusCode(HttpStatusCode.NoContent);
-        }
-
-        // POST: api/Patients
-        [ResponseType(typeof(Patient))]
-        public async Task<IHttpActionResult> PostPatient(Patient patient)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            _db.Patient.Add(patient);
-
-            try
-            {
-                await _db.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (PatientExists(patient.PatientId))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return CreatedAtRoute("DefaultApi", new { id = patient.PatientId }, patient);
         }
 
         // DELETE: api/Patients/5
         [ResponseType(typeof(Patient))]
         public async Task<IHttpActionResult> DeletePatient(int id)
         {
+            _doc = new DocumentManager(_db);
             Patient patient = await _db.Patient.FindAsync(id);
             if (patient == null)
             {
                 return NotFound();
             }
-
+            List<Follower> follow = _db.SelectRequest.SelectFollowForPatient(id);
+            foreach(var f in follow)
+            {
+                _doc.DeleteFile(f.Professionnal, patient);
+            }
+            _db.SuppressionRequest.PatientSuppression(patient);
             _db.Patient.Remove(patient);
             await _db.SaveChangesAsync();
 

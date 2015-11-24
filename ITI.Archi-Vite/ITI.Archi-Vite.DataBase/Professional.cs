@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace ITI.Archi_Vite.DataBase
 {
@@ -21,7 +22,9 @@ namespace ITI.Archi_Vite.DataBase
         public string Role { get; set; }
         [ForeignKey("ProfessionalId")]
         public User User { get; set; }
+        [NotMapped]
         public ICollection<Patient> Patients { get; set; }
+        [NotMapped]
         public ICollection<Follower> Followers { get; set; }
     }
 }

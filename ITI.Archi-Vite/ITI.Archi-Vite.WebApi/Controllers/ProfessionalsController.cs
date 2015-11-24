@@ -10,12 +10,15 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 using ITI.Archi_Vite.DataBase;
+using ITI.Archi_Vite.Core;
 
 namespace ITI.Archi_Vite.WebApi.Controllers
 {
     public class ProfessionalsController : ApiController
     {
         private ArchiViteContext _db = new ArchiViteContext();
+        private DocumentManager _doc;
+
 
         // GET: api/Professionals
         public IQueryable<Professional> GetProfessionals()
@@ -27,7 +30,7 @@ namespace ITI.Archi_Vite.WebApi.Controllers
         [ResponseType(typeof(Professional))]
         public async Task<IHttpActionResult> GetProfessional(int id)
         {
-            Professional professional = await _db.Professional.FindAsync(id);
+            Professional professional = _db.SelectRequest.SelectProfessional(id);
             if (professional == null)
             {
                 return NotFound();
@@ -50,7 +53,7 @@ namespace ITI.Archi_Vite.WebApi.Controllers
                 return BadRequest();
             }
 
-            _db.Ar.AddProfessional(newProfessional.User.FirstName, newProfessional.User.LastName, newProfessional.User.Birthdate, newProfessional.User.Adress, newProfessional.User.City, newProfessional.User.Postcode, newProfessional.User.PhoneNumber, newProfessional.User.Email, newProfessional.User.Photo, newProfessional.Role);
+            _db.AddRequest.AddProfessional(newProfessional.User.FirstName, newProfessional.User.LastName, newProfessional.User.Birthdate, newProfessional.User.Adress, newProfessional.User.City, newProfessional.User.Postcode, newProfessional.User.PhoneNumber, newProfessional.User.Email, newProfessional.User.Photo, newProfessional.Role);
 
             try
             {
@@ -71,35 +74,6 @@ namespace ITI.Archi_Vite.WebApi.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/Professionals
-        [ResponseType(typeof(Professional))]
-        public async Task<IHttpActionResult> PostProfessional(Professional professional)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            _db.Professional.Add(professional);
-
-            try
-            {
-                await _db.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (ProfessionalExists(professional.ProfessionalId))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return CreatedAtRoute("DefaultApi", new { id = professional.ProfessionalId }, professional);
-        }
 
         // DELETE: api/Professionals/5
         [ResponseType(typeof(Professional))]
@@ -110,8 +84,13 @@ namespace ITI.Archi_Vite.WebApi.Controllers
             {
                 return NotFound();
             }
-
-            _db.Professional.Remove(professional);
+            _doc = new DocumentManager(_db);
+            List<Follower> follow = _db.SelectRequest.SelectFollowForPro(id);
+            foreach (var f in follow)
+            {
+                _doc.DeleteFile(professional, f.Patient);
+            }
+            _db.SuppressionRequest.ProfessionnalSuppression(professional);
             await _db.SaveChangesAsync();
 
             return Ok(professional);

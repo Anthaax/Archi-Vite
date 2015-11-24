@@ -48,37 +48,6 @@ namespace ITI.Archi_Vite.WebApi.Controllers
             return Ok(User);
         }
 
-        // POST: api/Users
-        [ResponseType(typeof(User))]
-        public async Task<IHttpActionResult> PostUser(User user)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            _db.User.Add(user);
-            await _db.SaveChangesAsync();
-
-            return CreatedAtRoute("DefaultApi", new { id = user.UserId }, user);
-        }
-
-        // DELETE: api/Users/5
-        [ResponseType(typeof(User))]
-        public async Task<IHttpActionResult> DeleteUser(int id)
-        {
-            User user = await _db.User.FindAsync(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            _db.User.Remove(user);
-            await _db.SaveChangesAsync();
-
-            return Ok(user);
-        }
-
         protected override void Dispose(bool disposing)
         {
             if (disposing)

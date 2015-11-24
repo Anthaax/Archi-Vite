@@ -48,7 +48,7 @@ namespace ITI.Archi_Vite.Core
             DocumentSerializable Documents = DeserializeListDoc(GetPathFile(path));
             return Documents;
         }
-        public void DeleteFollow(Professional pro, Patient patient)
+        public void DeleteFile(Professional pro, Patient patient)
         {
             var senderFollow = _context.Follower
                                     .Include(c => c.Patient)
@@ -61,7 +61,6 @@ namespace ITI.Archi_Vite.Core
             if (senderFollow != null)
             {
                 DeleteFile(GetPathFile(patient.PatientId + "$" + pro.ProfessionalId));
-                _supp.FollowerSuppression(senderFollow);
             }
         }
         private void DeleteFile(string path)
@@ -108,6 +107,7 @@ namespace ITI.Archi_Vite.Core
                     AddDoc(message, message.Patient.PatientId + "$" + receiver.ProfessionalId);
                 }
             }
+            AddDoc(message, GetPathFile(message.Patient.PatientId.ToString()));
         }
         private void CreateDoc(Prescription prescription)
         {
@@ -138,6 +138,7 @@ namespace ITI.Archi_Vite.Core
                     AddDoc(prescription, follow.FilePath);
                 }
             }
+            AddDoc(prescription, GetPathFile(prescription.Patient.PatientId.ToString()));
         }
         private void AddDoc(Message message, string FilePath)
         {
@@ -205,7 +206,10 @@ namespace ITI.Archi_Vite.Core
         
         private string GetPathFile(string fileName)
         {
-            string folderName = @"C:\ArchiFile";
+            string folderName;
+            if (fileName.Contains("$")) folderName = @"C:\ArchiFile\Professional";
+            else folderName = @"C:\ArchiFile\Patient";
+            if (!Directory.Exists(folderName)) Directory.CreateDirectory(folderName);
             string pathString = Path.Combine(folderName, fileName);
             return pathString;
         }
