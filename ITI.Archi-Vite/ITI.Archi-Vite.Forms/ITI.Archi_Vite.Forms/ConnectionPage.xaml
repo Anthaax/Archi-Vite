@@ -5,14 +5,15 @@
   <StackLayout>
     <Image Source="Archi'Vite Logo.png"
            HorizontalOptions="CenterAndExpand"
-           VerticalOptions="Start"
+           VerticalOptions="CenterAndExpand"
            />
     <Entry Text="Pseudo"
            HorizontalOptions="CenterAndExpand"
-           VerticalOptions="CenterAndExpand"
+           VerticalOptions="End"
            />
     <Entry Text="Password"
            IsPassword="True"
+
            HorizontalOptions="CenterAndExpand"
            VerticalOptions="End"/>
   </StackLayout>
