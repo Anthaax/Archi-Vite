@@ -93,7 +93,6 @@
     <Compile Include="Odata\FollowerCreation.cs" />
     <Compile Include="Odata\PatientCreation.cs" />
     <Compile Include="Odata\ProfessionalCreation.cs" />
-    <Compile Include="Odata\UserConnection.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

@@ -68,7 +68,7 @@ namespace ITI.Archi_Vite.WebApi.Controllers
         public async Task<IHttpActionResult> DeletePatient(int id)
         {
             _doc = new DocumentManager(_db);
-            Patient patient = await _db.Patient.FindAsync(id);
+            Patient patient = _db.SelectRequest.SelectPatient(id);
             if (patient == null)
             {
                 return NotFound();

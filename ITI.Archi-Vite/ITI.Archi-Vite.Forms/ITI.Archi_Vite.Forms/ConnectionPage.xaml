@@ -4,17 +4,16 @@
              x:Class="ITI.Archi_Vite.Forms.ConnectionPage">
   <StackLayout>
     <Image Source="Archi'Vite Logo.png"
-           HorizontalOptions="Center"
+           HorizontalOptions="CenterAndExpand"
            VerticalOptions="Center"
            />
     <Entry Text="Pseudo"
-           HorizontalOptions="Center"
+           HorizontalOptions="CenterAndExpand"
            VerticalOptions="End"
            />
     <Entry Text="Password"
            IsPassword="True"
-
-           HorizontalOptions="Center"
+           HorizontalOptions="CenterAndExpand"
            VerticalOptions="End"/>
   </StackLayout>
 </ContentPage>

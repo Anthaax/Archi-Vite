@@ -26,21 +26,21 @@ namespace ITI.Archi_Vite.DataBase
         /// <param name="Email"> new Email </param>
         /// <param name="PostCode"> new PostCode </param>
         /// <param name="PhoneNumber"> new PhoneNumber </param>
-        /// <param name="User"> User to modifie </param>
-        public void CheckUserInfo(string FirstName, string LastName, string Adress, DateTime Birthdate, string City, string Email, int PostCode, int PhoneNumber, string Photo, User User)
+        /// <param name="user"> User to modifie </param>
+        public void CheckUserInfo(User user)
         {
-            var selectQuery = _context.User.Where(s => s.UserId.Equals(User.UserId)).FirstOrDefault();
+            var selectQuery = _context.User.Where(s => s.UserId.Equals(user.UserId)).FirstOrDefault();
             if (selectQuery != null)
             {
-                if (selectQuery.FirstName != FirstName) UpdateFirstName(FirstName, selectQuery);
-                if (selectQuery.LastName != LastName) UpdateLastName(LastName, selectQuery);
-                if (selectQuery.Adress != Adress) UpdateAdress(Adress, selectQuery);
-                if (selectQuery.Birthdate != Birthdate) UpdateBirthDate(Birthdate, selectQuery);
-                if (selectQuery.City != City) UpdateCity(City, selectQuery);
-                if (selectQuery.Email != Email) UpdateEmail(Email, selectQuery);
-                if (selectQuery.Postcode != PostCode) UpdatePostcode(PostCode, selectQuery);
-                if (selectQuery.PhoneNumber != PhoneNumber) UpdatePhoneNumber(PhoneNumber, selectQuery);
-                if (selectQuery.Photo != Photo) UpdatePhoto(Photo, selectQuery);
+                if (selectQuery.FirstName != user.FirstName) UpdateFirstName(user.FirstName, selectQuery);
+                if (selectQuery.LastName != user.LastName) UpdateLastName(user.LastName, selectQuery);
+                if (selectQuery.Adress != user.Adress) UpdateAdress(user.Adress, selectQuery);
+                if (selectQuery.Birthdate != user.Birthdate) UpdateBirthDate(user.Birthdate, selectQuery);
+                if (selectQuery.City != user.City) UpdateCity(user.City, selectQuery);
+                if (selectQuery.Email != user.Email) UpdateEmail(user.Email, selectQuery);
+                if (selectQuery.Postcode != user.Postcode) UpdatePostcode(user.Postcode, selectQuery);
+                if (selectQuery.PhoneNumber != user.PhoneNumber) UpdatePhoneNumber(user.PhoneNumber, selectQuery);
+                if (selectQuery.Photo != user.Photo) UpdatePhoto(user.Photo, selectQuery);
             _context.Entry(selectQuery).State = System.Data.Entity.EntityState.Modified;
             _context.SaveChanges();
             }            

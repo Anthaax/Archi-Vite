@@ -104,7 +104,7 @@ namespace ITI.Archi_Vite.DataBase.Test
                 SelectRequest s = new SelectRequest(context);
 
                 User user = s.SelectUser("Guillaume", "Fimes");
-                ur.CheckUserInfo(user.FirstName, user.LastName, user.Adress, user.Birthdate, "Paris", user.Email, user.Postcode, user.PhoneNumber, user.Photo, user);
+                ur.CheckUserInfo(user);
 
                 User NewUser = s.SelectUser(user.UserId);
                 Assert.AreEqual(NewUser.City, "Paris");
