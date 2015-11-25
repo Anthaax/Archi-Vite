@@ -76,7 +76,7 @@ namespace ITI.Archi_Vite.WebApi.Controllers
             List<Follower> follow = _db.SelectRequest.SelectFollowForPatient(id);
             foreach(var f in follow)
             {
-                _doc.DeleteFile(f.Professionnal, patient);
+                _doc.DeleteFollowerFile(f.Professionnal, patient);
             }
             _db.SuppressionRequest.PatientSuppression(patient);
             _db.Patient.Remove(patient);

@@ -88,7 +88,7 @@ namespace ITI.Archi_Vite.WebApi.Controllers
             List<Follower> follow = _db.SelectRequest.SelectFollowForPro(id);
             foreach (var f in follow)
             {
-                _doc.DeleteFile(professional, f.Patient);
+                _doc.DeleteFollowerFile(professional, f.Patient);
             }
             _db.SuppressionRequest.ProfessionnalSuppression(professional);
             await _db.SaveChangesAsync();
