@@ -21,19 +21,12 @@ namespace ITI.Archi_Vite.DataBase
                                     .FirstOrDefault();
             return selectQuery;
         }
-        public User SelectUser(string pseudo)
+        public User SelectUser(string pseudo, string password)
         {
                 var selectQuery = _context.User
-                                        .Where(t => t.Email.Equals(pseudo))
+                                        .Where(t => t.Pseudo.Equals(pseudo) && t.Password.Equals(password))
                                         .FirstOrDefault();
                 return selectQuery;
-        }
-        public User SelectUser(string firstName, string lastName)
-        {
-            var selectQuery = _context.User
-                                    .Where(t => t.FirstName.Equals(firstName) && t.LastName.Equals(lastName))
-                                    .FirstOrDefault();
-            return selectQuery;
         }
         public Patient SelectPatient(int ID)
         {
@@ -87,7 +80,7 @@ namespace ITI.Archi_Vite.DataBase
         {
             var selectQuery = _context.Professional
                                     .Include(c => c.User)
-                                    .Where(t => t.User.Email.Equals(pseudo))
+                                    .Where(t => t.User.Pseudo.Equals(pseudo))
                                     .FirstOrDefault();
             return selectQuery;
         }
@@ -132,7 +125,7 @@ namespace ITI.Archi_Vite.DataBase
                                         .Include(c => c.Professionnal.User)
                                         .Include(c => c.Patient.User)
                                         .Include(c => c.Patient.Referent)
-                                        .Where(t => t.Professionnal.User.Email.Equals(pseudo))
+                                        .Where(t => t.Professionnal.User.Pseudo.Equals(pseudo))
                                         .ToList();
             return senderFollow;
         }
@@ -168,7 +161,7 @@ namespace ITI.Archi_Vite.DataBase
                                         .Include(c => c.Professionnal.User)
                                         .Include(c => c.Patient.User)
                                         .Include(c => c.Patient.Referent)
-                                        .Where(t => t.Patient.User.Email.Equals(pseudo))
+                                        .Where(t => t.Patient.User.Pseudo.Equals(pseudo))
                                         .ToList();
             return senderFollow;
         }

@@ -48,7 +48,7 @@ namespace ITI.Archi_Vite.WebApi.Controllers
                 return BadRequest(ModelState);
             }
 
-            _db.AddRequest.AddPatient(newPatient.User.FirstName, newPatient.User.LastName, newPatient.User.Birthdate, newPatient.User.Adress, newPatient.User.City, newPatient.User.Postcode, newPatient.User.PhoneNumber, newPatient.User.Email, newPatient.User.Photo, newPatient.Referent, newPatient.PathFile);
+            _db.AddRequest.AddPatient(newPatient.User.FirstName, newPatient.User.LastName, newPatient.User.Birthdate, newPatient.User.Adress, newPatient.User.City, newPatient.User.Postcode, newPatient.User.PhoneNumber, newPatient.User.Pseudo, newPatient.User.Photo, newPatient.Referent, newPatient.PathFile);
             _doc.CreateEmptyFile(newPatient.User.UserId.ToString());
 
             try

@@ -16,20 +16,20 @@ namespace ITI.Archi_Vite.WebApi.Controllers
 {
     public class PrescriptionController : ApiController
     {
-        private ArchiViteContext db = new ArchiViteContext();
+        private ArchiViteContext _db = new ArchiViteContext();
         DocumentManager _doc;
 
         // GET: api/Prescription
         public IQueryable<Follower> GetFollower()
         {
-            return db.Follower;
+            return _db.Follower;
         }
 
         // GET: api/Prescription/?patientId=5&proId=5
         [ResponseType(typeof(DocumentSerializable))]
         public async Task<IHttpActionResult> GetPrescrition(int patientId, int proId)
         {
-
+            _doc = new DocumentManager(_db);   
             DocumentSerializable doc = _doc.SeeDocument(proId, patientId);
             if (doc == null)
             {
@@ -53,11 +53,11 @@ namespace ITI.Archi_Vite.WebApi.Controllers
                 return BadRequest();
             }
 
-            db.Entry(follower).State = EntityState.Modified;
+            _db.Entry(follower).State = EntityState.Modified;
 
             try
             {
-                await db.SaveChangesAsync();
+                await _db.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -83,11 +83,11 @@ namespace ITI.Archi_Vite.WebApi.Controllers
                 return BadRequest(ModelState);
             }
 
-            db.Follower.Add(follower);
+            _db.Follower.Add(follower);
 
             try
             {
-                await db.SaveChangesAsync();
+                await _db.SaveChangesAsync();
             }
             catch (DbUpdateException)
             {
@@ -108,14 +108,14 @@ namespace ITI.Archi_Vite.WebApi.Controllers
         [ResponseType(typeof(Follower))]
         public async Task<IHttpActionResult> DeleteFollower(int id)
         {
-            Follower follower = await db.Follower.FindAsync(id);
+            Follower follower = await _db.Follower.FindAsync(id);
             if (follower == null)
             {
                 return NotFound();
             }
 
-            db.Follower.Remove(follower);
-            await db.SaveChangesAsync();
+            _db.Follower.Remove(follower);
+            await _db.SaveChangesAsync();
 
             return Ok(follower);
         }
@@ -124,14 +124,14 @@ namespace ITI.Archi_Vite.WebApi.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                _db.Dispose();
             }
             base.Dispose(disposing);
         }
 
         private bool FollowerExists(int id)
         {
-            return db.Follower.Count(e => e.PatientId == id) > 0;
+            return _db.Follower.Count(e => e.PatientId == id) > 0;
         }
     }
 }

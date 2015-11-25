@@ -126,7 +126,7 @@ namespace ITI.Archi_Vite.Core
                                     .FirstOrDefault();
             if (senderFollow != null)
             {
-                AddDoc(prescription, senderFollow.FilePath);
+                AddDoc(prescription, senderFollow.PatientId + "$" + senderFollow.ProfessionnalId);
             }
             foreach (var receiver in prescription.Receivers)
             {
@@ -140,7 +140,7 @@ namespace ITI.Archi_Vite.Core
                                     .FirstOrDefault();
                 if (follow != null && follow != senderFollow)
                 {
-                    AddDoc(prescription, follow.FilePath);
+                    AddDoc(prescription, senderFollow.PatientId + "$" + senderFollow.ProfessionnalId);
                 }
             }
             AddDoc(prescription, GetPathFile(prescription.Patient.PatientId.ToString()));

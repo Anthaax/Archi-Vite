@@ -28,7 +28,9 @@ namespace ITI.Archi_Vite.DataBase
         public int Postcode { get; set; }
         public int PhoneNumber { get; set; }
         [Required]
-        public string Email { get; set; }
+        public string Pseudo { get; set; }
+        [Required]
+        public string Password { get; set; }
         [Column(TypeName = "ntext")]
         [Required]
         public string Photo { get; set; }

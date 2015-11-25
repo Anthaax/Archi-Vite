@@ -18,8 +18,6 @@ namespace ITI.Archi_Vite.DataBase
         }
         public int PatientId { get; set; }
         [Required]
-        public string PathFiles { get; set; }
-        [Required]
         public Professional Referent { get; set; }
         
         [ForeignKey("PatientId")]

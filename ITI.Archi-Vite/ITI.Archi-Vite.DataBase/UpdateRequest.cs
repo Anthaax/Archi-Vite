@@ -37,7 +37,7 @@ namespace ITI.Archi_Vite.DataBase
                 if (selectQuery.Adress != user.Adress) UpdateAdress(user.Adress, selectQuery);
                 if (selectQuery.Birthdate != user.Birthdate) UpdateBirthDate(user.Birthdate, selectQuery);
                 if (selectQuery.City != user.City) UpdateCity(user.City, selectQuery);
-                if (selectQuery.Email != user.Email) UpdateEmail(user.Email, selectQuery);
+                if (selectQuery.Pseudo != user.Pseudo) UpdateEmail(user.Pseudo, selectQuery);
                 if (selectQuery.Postcode != user.Postcode) UpdatePostcode(user.Postcode, selectQuery);
                 if (selectQuery.PhoneNumber != user.PhoneNumber) UpdatePhoneNumber(user.PhoneNumber, selectQuery);
                 if (selectQuery.Photo != user.Photo) UpdatePhoto(user.Photo, selectQuery);
@@ -108,7 +108,7 @@ namespace ITI.Archi_Vite.DataBase
 
         private void UpdateEmail(string Email, User User)
         {
-            User.Email = Email;
+            User.Pseudo = Email;
         }
 
         private void UpdateCity(string City, User User)
