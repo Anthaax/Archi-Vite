@@ -43,6 +43,11 @@ namespace ITI.Archi_Vite.Core
             DocumentSerializable Documents = DeserializeListDoc(GetPathFile(patient.PatientId + "$" + pro.ProfessionalId));
             return Documents;
         }
+        public DocumentSerializable SeeDocument(int proId, int patientId)
+        {
+            DocumentSerializable Documents = DeserializeListDoc(GetPathFile(patientId + "$" + proId));
+            return Documents;
+        }
         public DocumentSerializable SeeDocument(string path)
         {
             DocumentSerializable Documents = DeserializeListDoc(GetPathFile(path));
