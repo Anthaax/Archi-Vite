@@ -37,15 +37,45 @@ namespace ITI.Archi_Vite.WebApi.Controllers
         }
 
         [ResponseType(typeof(User))]
-        public async Task<IHttpActionResult> GetUser(UserConnection user)
+        public async Task<IHttpActionResult> GetUser(string pseudo, string password)
         {
-            User User = await _db.User.FindAsync(user.Pseudo, user.Password);
+            User User = _db.SelectRequest.SelectUser(pseudo, password);
             if (User == null)
             {
                 return NotFound();
             }
 
             return Ok(User);
+        }
+
+        // POST: api/Message
+        [ResponseType(typeof(Follower))]
+        public async Task<IHttpActionResult> PostUser(User user)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            _db.UpdateRequest.CheckUserInfo(user);
+
+            try
+            {
+                await _db.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                if (_db.SelectRequest.SelectUser(user.UserId) == null)
+                {
+                    return Conflict();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return CreatedAtRoute("DefaultApi", new { id = user.UserId }, user);
         }
 
         protected override void Dispose(bool disposing)

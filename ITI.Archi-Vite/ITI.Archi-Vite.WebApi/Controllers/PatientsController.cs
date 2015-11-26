@@ -48,7 +48,7 @@ namespace ITI.Archi_Vite.WebApi.Controllers
                 return BadRequest(ModelState);
             }
 
-            _db.AddRequest.AddPatient(newPatient.User.FirstName, newPatient.User.LastName, newPatient.User.Birthdate, newPatient.User.Adress, newPatient.User.City, newPatient.User.Postcode, newPatient.User.PhoneNumber, newPatient.User.Email, newPatient.User.Photo, newPatient.Referent, newPatient.PathFile);
+            _db.AddRequest.AddPatient(newPatient.User.FirstName, newPatient.User.LastName, newPatient.User.Birthdate, newPatient.User.Adress, newPatient.User.City, newPatient.User.Postcode, newPatient.User.PhoneNumber, newPatient.User.Pseudo, newPatient.User.Photo, newPatient.Referent, newPatient.PathFile);
             _doc.CreateEmptyFile(newPatient.User.UserId.ToString());
 
             try
@@ -68,7 +68,7 @@ namespace ITI.Archi_Vite.WebApi.Controllers
         public async Task<IHttpActionResult> DeletePatient(int id)
         {
             _doc = new DocumentManager(_db);
-            Patient patient = await _db.Patient.FindAsync(id);
+            Patient patient = _db.SelectRequest.SelectPatient(id);
             if (patient == null)
             {
                 return NotFound();
@@ -76,7 +76,7 @@ namespace ITI.Archi_Vite.WebApi.Controllers
             List<Follower> follow = _db.SelectRequest.SelectFollowForPatient(id);
             foreach(var f in follow)
             {
-                _doc.DeleteFile(f.Professionnal, patient);
+                _doc.DeleteFollowerFile(f.Professionnal, patient);
             }
             _db.SuppressionRequest.PatientSuppression(patient);
             _db.Patient.Remove(patient);

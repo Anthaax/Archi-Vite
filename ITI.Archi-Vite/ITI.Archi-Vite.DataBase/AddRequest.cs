@@ -25,7 +25,7 @@ namespace ITI.Archi_Vite.DataBase
             }
         }
 
-        public Patient AddPatient(string firstName, string lastName, DateTime birthDate, string adress, string city, int postCode, int phoneNumber, string email, string photo, Professional referent, string pathFile )
+        public Patient AddPatient(string firstName, string lastName, DateTime birthDate, string adress, string city, int postCode, int phoneNumber, string pseudo, string password, string photo, Professional referent)
         {
             User u = new User()
             {
@@ -36,12 +36,12 @@ namespace ITI.Archi_Vite.DataBase
                 City = city,
                 Postcode = postCode,
                 PhoneNumber = phoneNumber,
-                Email = email,
+                Pseudo = pseudo,
+                Password = password,
                 Photo = photo
             };
             Patient p = new Patient()
             {
-                PathFiles = pathFile,
                 Referent = _sr.SelectProfessional(referent.ProfessionalId),
                 User = u
             };
@@ -53,7 +53,7 @@ namespace ITI.Archi_Vite.DataBase
             
             return p;
         }
-        public Professional AddProfessional(string firstName, string lastName, DateTime birthDate, string adress, string city, int postCode, int phoneNumber, string email, string photo, string role)
+        public Professional AddProfessional(string firstName, string lastName, DateTime birthDate, string adress, string city, int postCode, int phoneNumber, string pseudo, string password, string photo, string role)
         {
             User u = new User()
             {
@@ -64,7 +64,8 @@ namespace ITI.Archi_Vite.DataBase
                 City = city,
                 Postcode = postCode,
                 PhoneNumber = phoneNumber,
-                Email = email,
+                Pseudo = pseudo,
+                Password = password,
                 Photo = photo
             };
             Professional p = new Professional()
@@ -85,7 +86,6 @@ namespace ITI.Archi_Vite.DataBase
             Follower f = new Follower()
             {
                 Patient = patient,
-                FilePath = filePath,
                 Professionnal = _sr.SelectProfessional(professional.ProfessionalId)
             };
             _context.Follower.Add(f);

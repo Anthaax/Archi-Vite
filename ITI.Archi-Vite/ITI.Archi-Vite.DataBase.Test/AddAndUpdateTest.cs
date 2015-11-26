@@ -14,9 +14,11 @@ namespace ITI.Archi_Vite.DataBase.Test
     public class AddAndUpdateTest
     {
         ContextManager _archiVite;
+        DocumentManager _doc;
         public AddAndUpdateTest()
         {
             _archiVite = new ContextManager();
+            _doc = new DocumentManager(_archiVite.Context);
         }
         [Test]
         public void CreatePatientAndPro()
@@ -26,26 +28,26 @@ namespace ITI.Archi_Vite.DataBase.Test
                 AddRequest a = new AddRequest(context);
                 DocumentManager dm = new DocumentManager(context);
                 SelectRequest s = new SelectRequest(context);
-                Professional pro = a.AddProfessional("Antoine", "Raquillet", DateTime.Now, "72 avenue maurice thorez", "Ivry-sur-Seine", 12452, 0606066606, "sfavraud@intechinfo.fr", "yolo", "Medecin");
-                Professional pro1 = a.AddProfessional("Simon", "Favraud", DateTime.Now, "72 avenue maurice thorez", "Ivry-sur-Seine", 12452, 0606066606, "sfavraud@intechinfo.fr", "yolo", "Infirmier");
-                Professional pro2 = a.AddProfessional("Clement", "Rousseau", DateTime.Now, "72 avenue maurice thorez", "Ivry-sur-Seine", 12452, 0606066606, "sfavraud@intechinfo.fr", "yolo", "Medecin");
-                Professional pro3 = a.AddProfessional("Olivier", "Spinelli", DateTime.Now, "72 avenue maurice thorez", "Ivry-sur-Seine", 12452, 0606066606, "sfavraud@intechinfo.fr", "yolo", "Medecin");
-                Patient patient = a.AddPatient("Guillaume", "Fimes", DateTime.Now, "72 avenue maurice thorez", "Ivry-sur-Seine", 12452, 0606066606, "sfavraud@intechinfo.fr", "yolo", pro, "yolo");
+                Professional pro = a.AddProfessional("Antoine", "Raquillet", DateTime.Now, "72 avenue maurice thorez", "Ivry-sur-Seine", 12452, 0606066606, "AntoineR", "AntoineR", "yolo", "Medecin");
+                Professional pro1 = a.AddProfessional("Simon", "Favraud", DateTime.Now, "72 avenue maurice thorez", "Ivry-sur-Seine", 12452, 0606066606, "SimonF", "SimonF", "yolo", "Infirmier");
+                Professional pro2 = a.AddProfessional("Clement", "Rousseau", DateTime.Now, "72 avenue maurice thorez", "Ivry-sur-Seine", 12452, 0606066606, "ClementC", "ClementC", "yolo", "Medecin");
+                Professional pro3 = a.AddProfessional("Olivier", "Spinelli", DateTime.Now, "72 avenue maurice thorez", "Ivry-sur-Seine", 12452, 0606066606, "OlivierS", "OlivierS", "yolo", "Medecin");
+                Patient patient = a.AddPatient("Guillaume", "Fimes", DateTime.Now, "72 avenue maurice thorez", "Ivry-sur-Seine", 12452, 0606066606, "GuillaumeF", "GuillaumeF", "yolo", pro);
                 dm.CreateEmptyFile(patient.PatientId.ToString());
-                dm.CreateEmptyFile(s.SelectOneFollow(patient.PatientId, patient.Referent.ProfessionalId).FilePath);
-                Patient patient1 = a.AddPatient("Maxime", "Coucou", DateTime.Now, "72 avenue maurice thorez", "Ivry-sur-Seine", 12452, 0606066606, "sfavraud@intechinfo.fr", "yolo", pro2, "yolo");
-                dm.CreateEmptyFile(s.SelectOneFollow(patient1.PatientId, patient1.Referent.ProfessionalId).FilePath);
+                dm.CreateEmptyFile(patient.PatientId + "$" + patient.Referent.ProfessionalId);
+                Patient patient1 = a.AddPatient("Maxime", "Coucou", DateTime.Now, "72 avenue maurice thorez", "Ivry-sur-Seine", 12452, 0606066606, "MaximeD", "MaximeD", "yolo", pro2);
+                dm.CreateEmptyFile(patient1.PatientId + "$" + patient1.Referent.ProfessionalId);
                 dm.CreateEmptyFile(patient1.PatientId.ToString());
 
 
                 a.AddFollow(patient, pro1);
-                dm.CreateEmptyFile(s.SelectOneFollow(patient.PatientId, pro1.ProfessionalId).FilePath);
+                dm.CreateEmptyFile(patient.PatientId + "$" + pro1.ProfessionalId);
 
                 a.AddFollow(patient, pro2);
-                dm.CreateEmptyFile(s.SelectOneFollow(patient.PatientId, pro2.ProfessionalId).FilePath);
+                dm.CreateEmptyFile(patient.PatientId + "$" + pro2.ProfessionalId);
 
                 a.AddFollow(patient, pro3);
-                dm.CreateEmptyFile(s.SelectOneFollow(patient.PatientId, pro3.ProfessionalId).FilePath);
+                dm.CreateEmptyFile(patient.PatientId + "$" + pro3.ProfessionalId);
 
                 Patient p = s.SelectPatient(patient.PatientId);
                 Console.WriteLine("Nom : {0}   Prénom : {1}   Nom du Referent : {2}   Prenom du Referent : {3}", p.User.LastName, p.User.FirstName, p.Referent.User.LastName, p.Referent.User.FirstName);
@@ -66,14 +68,6 @@ namespace ITI.Archi_Vite.DataBase.Test
                 Professional Pro3 = s.SelectProfessional(pro3.ProfessionalId);
                 Console.WriteLine("Nom : {0}   Prénom : {1}", Pro3.User.LastName, Pro3.User.FirstName);
                 Assert.AreEqual(Pro3.ProfessionalId, pro3.ProfessionalId);
-
-                Follower f = s.SelectOneFollow(patient.PatientId, patient.Referent.ProfessionalId);
-                Console.WriteLine("PathFile : {0}", f.FilePath);
-                Assert.AreEqual(f.FilePath, f.PatientId + "$" + f.ProfessionnalId);
-                Follower f1 = s.SelectOneFollow(patient1.PatientId, patient1.Referent.ProfessionalId);
-                Console.WriteLine("PathFile : {0}", f1.FilePath);
-                Assert.AreEqual(f1.FilePath, f1.PatientId + "$" + f1.ProfessionnalId);
-                context.SaveChanges();
             }
         }
         [Test]
@@ -85,14 +79,14 @@ namespace ITI.Archi_Vite.DataBase.Test
                 DocumentManager dm = new DocumentManager(context);
                 SelectRequest s = new SelectRequest(context);
 
-                Patient patient = s.SelectPatient("Guillaume", "Fimes");
-                Professional pro = s.SelectProfessional("Clement", "Rousseau");
+                Patient patient = s.SelectPatient("GuillaumeF", "GuillaumeF");
+                Professional pro = s.SelectProfessional("ClementR", "ClementR");
                 a.AddFollow(patient, pro);
 
                 Follower follow = s.SelectOneFollow(patient.PatientId, pro.ProfessionalId);
                 Assert.AreEqual(follow.PatientId, patient.PatientId);
                 Assert.AreEqual(follow.ProfessionnalId, pro.ProfessionalId);
-                dm.CreateEmptyFile(follow.FilePath);
+                dm.CreateEmptyFile(patient.PatientId + "$" + pro.ProfessionalId);
             }
         }
         [Test]
@@ -103,8 +97,8 @@ namespace ITI.Archi_Vite.DataBase.Test
                 UpdateRequest ur = new UpdateRequest(context);
                 SelectRequest s = new SelectRequest(context);
 
-                User user = s.SelectUser("Guillaume", "Fimes");
-                ur.CheckUserInfo(user.FirstName, user.LastName, user.Adress, user.Birthdate, "Paris", user.Email, user.Postcode, user.PhoneNumber, user.Photo, user);
+                User user = s.SelectUser("GuillaumeF", "GuillaumeF");
+                ur.CheckUserInfo(user);
 
                 User NewUser = s.SelectUser(user.UserId);
                 Assert.AreEqual(NewUser.City, "Paris");
@@ -118,8 +112,8 @@ namespace ITI.Archi_Vite.DataBase.Test
             {
                 UpdateRequest ur = new UpdateRequest(context);
                 SelectRequest s = new SelectRequest(context);
-                Patient patient = s.SelectPatient("Guillaume", "Fimes");
-                Professional pro = s.SelectProfessional("Olivier", "Spinelli");
+                Patient patient = s.SelectPatient("GuillaumeF", "GuillaumeF");
+                Professional pro = s.SelectProfessional("OlivierS", "OlivierS");
 
                 ur.CheckPatientInfo(pro, patient);
 
@@ -134,7 +128,7 @@ namespace ITI.Archi_Vite.DataBase.Test
             {
                 UpdateRequest ur = new UpdateRequest(context);
                 SelectRequest s = new SelectRequest(context);
-                Professional pro = s.SelectProfessional("Simon", "Favraud");
+                Professional pro = s.SelectProfessional("SimonF", "SimonF");
 
                 ur.UpdateProInfo("Archi'Mède", pro);
                 Professional newPro = s.SelectProfessional(pro.ProfessionalId);
@@ -150,12 +144,14 @@ namespace ITI.Archi_Vite.DataBase.Test
                 var selectQuery1 = context.Follower.ToList();
                 foreach (var follow in selectQuery1)
                 {
-                    context.Follower.Remove(follow);
+                    _doc.DeleteFollowerFile(follow.ProfessionnalId, follow.PatientId);
+                    context.SuppressionRequest.FollowerSuppression(follow);
                     context.SaveChanges();
                 }
                 var selectQuery2 = context.Patient.ToList();
                 foreach (var patient in selectQuery2)
                 {
+                    _doc.DeletePatientFile(patient.PatientId);
                     context.Patient.Remove(patient);
                     context.SaveChanges();
                 }
@@ -171,18 +167,10 @@ namespace ITI.Archi_Vite.DataBase.Test
                     context.User.Remove(user);
                     context.SaveChanges();
                 }
-                Assert.AreEqual(context.Follower.ToList().Count(), 0);
-                Assert.AreEqual(context.Patient.ToList().Count(), 0);
-                Assert.AreEqual(context.Professional.ToList().Count(), 0);
-                Assert.AreEqual(context.User.ToList().Count(), 0);
-            }
-        }
-        public AddRequest InitializeAddRequest()
-        {
-            using (ArchiViteContext context = new ArchiViteContext())
-            {
-                AddRequest a = new AddRequest(context);
-                return a;
+                Assert.IsFalse(context.Follower.Any());
+                Assert.IsFalse(context.Patient.Any());
+                Assert.IsFalse(context.Professional.Any());
+                Assert.IsFalse(context.User.Any());
             }
         }
     }

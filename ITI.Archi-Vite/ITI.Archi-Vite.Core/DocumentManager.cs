@@ -53,7 +53,7 @@ namespace ITI.Archi_Vite.Core
             DocumentSerializable Documents = DeserializeListDoc(GetPathFile(path));
             return Documents;
         }
-        public void DeleteFile(Professional pro, Patient patient)
+        public void DeleteFollowerFile(Professional pro, Patient patient)
         {
             var senderFollow = _context.Follower
                                     .Include(c => c.Patient)
@@ -67,6 +67,25 @@ namespace ITI.Archi_Vite.Core
             {
                 DeleteFile(GetPathFile(patient.PatientId + "$" + pro.ProfessionalId));
             }
+        }
+        public void DeleteFollowerFile(int proId, int patientId)
+        {
+            var senderFollow = _context.Follower
+                                    .Include(c => c.Patient)
+                                    .Include(c => c.Professionnal)
+                                    .Include(c => c.Professionnal.User)
+                                    .Include(c => c.Patient.User)
+                                    .Include(c => c.Patient.Referent)
+                                    .Where(t => t.Patient.PatientId.Equals(patientId) && t.ProfessionnalId.Equals(proId))
+                                    .FirstOrDefault();
+            if (senderFollow != null)
+            {
+                DeleteFile(GetPathFile(patientId + "$" + proId));
+            }
+        }
+        public void DeletePatientFile(int patientId)
+        {
+            DeleteFile(GetPathFile(patientId.ToString()));
         }
         private void DeleteFile(string path)
         {
@@ -126,7 +145,7 @@ namespace ITI.Archi_Vite.Core
                                     .FirstOrDefault();
             if (senderFollow != null)
             {
-                AddDoc(prescription, senderFollow.FilePath);
+                AddDoc(prescription, senderFollow.PatientId + "$" + senderFollow.ProfessionnalId);
             }
             foreach (var receiver in prescription.Receivers)
             {
@@ -140,7 +159,7 @@ namespace ITI.Archi_Vite.Core
                                     .FirstOrDefault();
                 if (follow != null && follow != senderFollow)
                 {
-                    AddDoc(prescription, follow.FilePath);
+                    AddDoc(prescription, senderFollow.PatientId + "$" + senderFollow.ProfessionnalId);
                 }
             }
             AddDoc(prescription, GetPathFile(prescription.Patient.PatientId.ToString()));

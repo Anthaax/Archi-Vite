@@ -11,8 +11,6 @@ namespace ITI.Archi_Vite.DataBase
     [Serializable]
     public class Follower
     {
-        [Required]
-        public string FilePath { get; set; }
         [Key]
         [Column(Order = 1)]
         public int ProfessionnalId { get; set; }
