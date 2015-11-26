@@ -43,7 +43,7 @@ namespace ITI.Archi_Vite.WebApi.Controllers
         public async Task<IHttpActionResult> GetDocument(int patientId)
         {
             _doc = new DocumentManager(_db);
-            DocumentSerializable doc = _doc.SeeDocument(proId, patientId);
+            DocumentSerializable doc = _doc.SeeDocument(patientId);
             if (doc == null)
             {
                 return NotFound();
@@ -54,34 +54,26 @@ namespace ITI.Archi_Vite.WebApi.Controllers
 
         // PUT: api/Document/5
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutUser(int id, User user)
+        public async Task<IHttpActionResult> PutDoc(MessageCreator newMessage)
         {
+            _doc = new DocumentManager(_db);
+            List<Professional> pro = new List<Professional>();
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
-            if (id != user.UserId)
+            foreach (var proId in newMessage.ReceiverId)
             {
-                return BadRequest();
+                pro.Add(_db.SelectRequest.SelectProfessional(proId));
             }
-
-            _db.Entry(user).State = EntityState.Modified;
-
+            _doc.CreateMessage(pro, _db.SelectRequest.SelectProfessional(newMessage.SenderId), newMessage.Title, newMessage.Content, _db.SelectRequest.SelectPatient(newMessage.PatientId));
             try
             {
                 await _db.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!UserExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
                     throw;
-                }
             }
 
             return StatusCode(HttpStatusCode.NoContent);

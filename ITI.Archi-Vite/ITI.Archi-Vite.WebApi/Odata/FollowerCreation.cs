@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ITI.Archi_Vite.WebApi.Odata
+namespace ITI.Archi_Vite.WebApi.Controllers
 {
     public class FollowerCreation
     {
