@@ -114,6 +114,7 @@
     <Compile Include="Controllers\ProfessionalsController.cs" />
     <Compile Include="Odata\FollowerCreation.cs" />
     <Compile Include="Odata\PatientCreation.cs" />
+    <Compile Include="Odata\PrescriptionCreator.cs" />
     <Compile Include="Odata\ProfessionalCreation.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Global.asax.cs">
