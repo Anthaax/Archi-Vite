@@ -100,7 +100,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\drawable\Archi%27Vite Logo.png" />
-    <Content Include="Properties\AndroidManifest.xml" />
+    <Content Include="Properties\AndroidManifest.xml">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ITI.Archi_Vite.Forms\ITI.Archi_Vite.Forms.csproj">

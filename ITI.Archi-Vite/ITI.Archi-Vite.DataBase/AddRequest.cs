@@ -73,6 +73,7 @@ namespace ITI.Archi_Vite.DataBase
         /// <param name="professionalId"> Id of a pro </param>
         public void AddFollow(int patientId, int professionalId)
         {
+            if (patientId == 0 || professionalId == 0) throw new ArgumentNullException("Id can't be equal to 0");
             string filePath = patientId + "$" + professionalId;
             Follower f = new Follower()
             {
