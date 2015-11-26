@@ -37,13 +37,13 @@ namespace ITI.Archi_Vite.DataBase.Test
                 dm.CreateEmptyFile(patient1.PatientId.ToString());
 
 
-                context.AddRequest.AddFollow(patient, pro1);
+                context.AddRequest.AddFollow(patient.PatientId, pro1.ProfessionalId);
                 dm.CreateEmptyFile(patient.PatientId + "$" + pro1.ProfessionalId);
 
-                context.AddRequest.AddFollow(patient, pro2);
+                context.AddRequest.AddFollow(patient.PatientId, pro2.ProfessionalId);
                 dm.CreateEmptyFile(patient.PatientId + "$" + pro2.ProfessionalId);
 
-                context.AddRequest.AddFollow(patient, pro3);
+                context.AddRequest.AddFollow(patient.PatientId, pro3.ProfessionalId);
                 dm.CreateEmptyFile(patient.PatientId + "$" + pro3.ProfessionalId);
 
                 Patient p = context.SelectRequest.SelectPatient(patient.PatientId);
@@ -78,7 +78,7 @@ namespace ITI.Archi_Vite.DataBase.Test
 
                 Patient patient = s.SelectPatient("GuillaumeF", "GuillaumeF");
                 Professional pro = s.SelectProfessional("ClementR", "ClementR");
-                a.AddFollow(patient, pro);
+                a.AddFollow(patient.PatientId, pro.ProfessionalId);
 
                 Follower follow = s.SelectOneFollow(patient.PatientId, pro.ProfessionalId);
                 Assert.AreEqual(follow.PatientId, patient.PatientId);

@@ -9,28 +9,28 @@ namespace ITI.Archi_Vite.WebApi.Controllers
 {
     public class FollowerCreation
     {
-        readonly Patient _patient;
-        readonly Professional _professional;
+        readonly int _patientId;
+        readonly int _professionalId;
 
-        public FollowerCreation(Patient patient, Professional professional)
+        public FollowerCreation(int patient, int professionalId)
         {
-            _patient = patient;
-            _professional = professional;
+            _patientId = patient;
+            _professionalId = professionalId;
         }
 
-        public Patient Patient
+        public int PatientId
         {
             get
             {
-                return _patient;
+                return _patientId;
             }
         }
 
-        public Professional Professional
+        public int ProfessionalId
         {
             get
             {
-                return _professional;
+                return _professionalId;
             }
         }
     }

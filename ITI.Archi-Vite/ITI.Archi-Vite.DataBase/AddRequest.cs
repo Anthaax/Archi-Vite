@@ -10,12 +10,10 @@ namespace ITI.Archi_Vite.DataBase
     public class AddRequest
     {
         readonly ArchiViteContext _context;
-        readonly SelectRequest _sr;
 
         public AddRequest(ArchiViteContext context)
         {
-            _context = context;
-            _sr = new SelectRequest(context);            
+            _context = context;        
         }
         public ArchiViteContext Context
         {
@@ -25,32 +23,6 @@ namespace ITI.Archi_Vite.DataBase
             }
         }
 
-        public Patient AddPatient(string firstName, string lastName, DateTime birthDate, string adress, string city, int postCode, int phoneNumber, string pseudo, string password, string photo)
-        {
-            User u = new User()
-            {
-                FirstName = firstName,
-                LastName = lastName,
-                Birthdate = birthDate,
-                Adress = adress,
-                City = city,
-                Postcode = postCode,
-                PhoneNumber = phoneNumber,
-                Pseudo = pseudo,
-                Password = password,
-                Photo = photo
-            };
-            Patient p = new Patient()
-            {
-                User = u
-            };
-
-            _context.User.Add(u);
-            _context.Patient.Add(p);
-            _context.SaveChanges();
-            
-            return p;
-        }
         public Patient AddPatient(User user)
         {
             User u = new User()
@@ -104,13 +76,13 @@ namespace ITI.Archi_Vite.DataBase
 
             return p;
         }
-        public void AddFollow(Patient patient, Professional professional)
+        public void AddFollow(int patientId, int professionalId)
         {
-            string filePath = patient.PatientId + "$" + professional.ProfessionalId;
+            string filePath = patientId + "$" + professionalId;
             Follower f = new Follower()
             {
-                Patient = patient,
-                Professionnal = _sr.SelectProfessional(professional.ProfessionalId)
+                Patient = _context.SelectRequest.SelectPatient(patientId),
+                Professionnal = _context.SelectRequest.SelectProfessional(professionalId)
             };
             _context.Follower.Add(f);
             _context.SaveChanges();

@@ -9,10 +9,10 @@ namespace ITI.Archi_Vite.WebApi.Controllers
     public class PatientCreation
     {
         User _user;
-        Professional _referent;
+        int _referent;
         string _pathFile;
 
-        public PatientCreation(User user, Professional referent, string pathFile)
+        public PatientCreation(User user, int referent, string pathFile)
         {
             _user = user;
             _referent = referent;
@@ -32,7 +32,7 @@ namespace ITI.Archi_Vite.WebApi.Controllers
             }
         }
 
-        public Professional Referent
+        public int Referent
         {
             get
             {

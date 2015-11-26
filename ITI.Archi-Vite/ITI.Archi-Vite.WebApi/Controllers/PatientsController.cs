@@ -48,8 +48,8 @@ namespace ITI.Archi_Vite.WebApi.Controllers
                 return BadRequest(ModelState);
             }
 
-            _db.AddRequest.AddPatient(newPatient.User.FirstName, newPatient.User.LastName, newPatient.User.Birthdate, newPatient.User.Adress, newPatient.User.City, newPatient.User.Postcode, newPatient.User.PhoneNumber, newPatient.User.Pseudo, newPatient.User.Photo, newPatient.PathFile);
-            _doc.CreateEmptyFile(newPatient.User.UserId.ToString());
+            _db.AddRequest.AddPatient(newPatient.User);
+            _doc.CreateEmptyFile(_db.SelectRequest.SelectPatient(newPatient.User.Pseudo, newPatient.User.Password).PatientId.ToString());
 
             try
             {
