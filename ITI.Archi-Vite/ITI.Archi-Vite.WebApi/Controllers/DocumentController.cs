@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
+﻿using System.Collections.Generic;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
@@ -74,6 +70,32 @@ namespace ITI.Archi_Vite.WebApi.Controllers
             catch (DbUpdateConcurrencyException)
             {
                     throw;
+            }
+
+            return StatusCode(HttpStatusCode.NoContent);
+        }
+        // PUT: api/Document/5
+        [ResponseType(typeof(void))]
+        public async Task<IHttpActionResult> PutDoc(PrescriptionCreator newPrescription)
+        {
+            _doc = new DocumentManager(_db);
+            List<Professional> pro = new List<Professional>();
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            foreach (var proId in newPrescription.Receivers)
+            {
+                pro.Add(_db.SelectRequest.SelectProfessional(proId));
+            }
+            _doc.CreatePrescription(pro, _db.SelectRequest.SelectProfessional(newPrescription.Sender), _db.SelectRequest.SelectPatient(newPrescription.Patient), newPrescription.Title, newPrescription.DocPath);
+            try
+            {
+                await _db.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
             }
 
             return StatusCode(HttpStatusCode.NoContent);
