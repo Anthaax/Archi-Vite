@@ -17,8 +17,6 @@ namespace ITI.Archi_Vite.DataBase
             Followers = new List<Follower>();
         }
         public int PatientId { get; set; }
-        [Required]
-        public Professional Referent { get; set; }
         
         [ForeignKey("PatientId")]
         public User User { get; set; }
