@@ -25,7 +25,7 @@ namespace ITI.Archi_Vite.DataBase
             }
         }
 
-        public Patient AddPatient(string firstName, string lastName, DateTime birthDate, string adress, string city, int postCode, int phoneNumber, string pseudo, string password, string photo, Professional referent)
+        public Patient AddPatient(string firstName, string lastName, DateTime birthDate, string adress, string city, int postCode, int phoneNumber, string pseudo, string password, string photo)
         {
             User u = new User()
             {
@@ -42,31 +42,55 @@ namespace ITI.Archi_Vite.DataBase
             };
             Patient p = new Patient()
             {
-                Referent = _sr.SelectProfessional(referent.ProfessionalId),
                 User = u
             };
 
             _context.User.Add(u);
             _context.Patient.Add(p);
             _context.SaveChanges();
-            AddFollow(p, referent);
             
             return p;
         }
-        public Professional AddProfessional(string firstName, string lastName, DateTime birthDate, string adress, string city, int postCode, int phoneNumber, string pseudo, string password, string photo, string role)
+        public Patient AddPatient(User user)
         {
             User u = new User()
             {
-                FirstName = firstName,
-                LastName = lastName,
-                Birthdate = birthDate,
-                Adress = adress,
-                City = city,
-                Postcode = postCode,
-                PhoneNumber = phoneNumber,
-                Pseudo = pseudo,
-                Password = password,
-                Photo = photo
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Birthdate = user.Birthdate,
+                Adress = user.Adress,
+                City = user.City,
+                Postcode = user.Postcode,
+                PhoneNumber = user.PhoneNumber,
+                Pseudo = user.Pseudo,
+                Password = user.Password,
+                Photo = user.Photo
+            };
+            Patient p = new Patient()
+            {
+                User = u
+            };
+
+            _context.User.Add(u);
+            _context.Patient.Add(p);
+            _context.SaveChanges();
+
+            return p;
+        }
+        public Professional AddProfessional(User user, string role)
+        {
+            User u = new User()
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Birthdate = user.Birthdate,
+                Adress = user.Adress,
+                City = user.City,
+                Postcode = user.Postcode,
+                PhoneNumber = user.PhoneNumber,
+                Pseudo = user.Pseudo,
+                Password = user.Password,
+                Photo = user.Photo
             };
             Professional p = new Professional()
             {

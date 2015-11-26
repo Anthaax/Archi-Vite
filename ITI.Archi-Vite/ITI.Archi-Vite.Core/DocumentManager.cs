@@ -48,34 +48,21 @@ namespace ITI.Archi_Vite.Core
             DocumentSerializable Documents = DeserializeListDoc(GetPathFile(patientId + "$" + proId));
             return Documents;
         }
+        public DocumentSerializable SeeDocument(int patientId)
+        {
+            DocumentSerializable Documents = DeserializeListDoc(GetPathFile(patientId.ToString()));
+            return Documents;
+        }
         public DocumentSerializable SeeDocument(string path)
         {
             DocumentSerializable Documents = DeserializeListDoc(GetPathFile(path));
             return Documents;
-        }
-        public void DeleteFollowerFile(Professional pro, Patient patient)
-        {
-            var senderFollow = _context.Follower
-                                    .Include(c => c.Patient)
-                                    .Include(c => c.Professionnal)
-                                    .Include(c => c.Professionnal.User)
-                                    .Include(c => c.Patient.User)
-                                    .Include(c => c.Patient.Referent)
-                                    .Where(t => t.Patient.PatientId.Equals(patient.PatientId) && t.ProfessionnalId.Equals(pro.ProfessionalId))
-                                    .FirstOrDefault();
-            if (senderFollow != null)
-            {
-                DeleteFile(GetPathFile(patient.PatientId + "$" + pro.ProfessionalId));
-            }
         }
         public void DeleteFollowerFile(int proId, int patientId)
         {
             var senderFollow = _context.Follower
                                     .Include(c => c.Patient)
                                     .Include(c => c.Professionnal)
-                                    .Include(c => c.Professionnal.User)
-                                    .Include(c => c.Patient.User)
-                                    .Include(c => c.Patient.Referent)
                                     .Where(t => t.Patient.PatientId.Equals(patientId) && t.ProfessionnalId.Equals(proId))
                                     .FirstOrDefault();
             if (senderFollow != null)
@@ -107,9 +94,6 @@ namespace ITI.Archi_Vite.Core
             var senderFollow = _context.Follower
                                     .Include(c => c.Patient)
                                     .Include(c => c.Professionnal)
-                                    .Include(c => c.Professionnal.User)
-                                    .Include(c => c.Patient.User)
-                                    .Include(c => c.Patient.Referent)
                                     .Where(t => t.Patient.PatientId.Equals(message.Patient.PatientId) && t.ProfessionnalId.Equals(message.Sender.ProfessionalId))
                                     .FirstOrDefault();
             if (senderFollow != null)
@@ -121,9 +105,6 @@ namespace ITI.Archi_Vite.Core
                 var follow = _context.Follower
                                     .Include(c => c.Patient)
                                     .Include(c => c.Professionnal)
-                                    .Include(c => c.Professionnal.User)
-                                    .Include(c => c.Patient.User)
-                                    .Include(c => c.Patient.Referent)
                                     .Where(t => t.Patient.PatientId.Equals(message.Patient.PatientId) && t.ProfessionnalId.Equals(receiver.ProfessionalId))
                                     .FirstOrDefault();
                 if (follow != null && follow != senderFollow)
@@ -138,9 +119,6 @@ namespace ITI.Archi_Vite.Core
             var senderFollow = _context.Follower
                                     .Include(c => c.Patient)
                                     .Include(c => c.Professionnal)
-                                    .Include(c => c.Professionnal.User)
-                                    .Include(c => c.Patient.User)
-                                    .Include(c => c.Patient.Referent)
                                     .Where(t => t.Patient.PatientId.Equals(prescription.Patient.PatientId) && t.ProfessionnalId.Equals(prescription.Sender.ProfessionalId))
                                     .FirstOrDefault();
             if (senderFollow != null)
@@ -152,9 +130,6 @@ namespace ITI.Archi_Vite.Core
                 var follow = _context.Follower
                                     .Include(c => c.Patient)
                                     .Include(c => c.Professionnal)
-                                    .Include(c => c.Professionnal.User)
-                                    .Include(c => c.Patient.User)
-                                    .Include(c => c.Patient.Referent)
                                     .Where(t => t.Patient.PatientId.Equals(prescription.Patient.PatientId) && t.ProfessionnalId.Equals(receiver.ProfessionalId))
                                     .FirstOrDefault();
                 if (follow != null && follow != senderFollow)

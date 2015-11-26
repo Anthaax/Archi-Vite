@@ -32,19 +32,7 @@ namespace ITI.Archi_Vite.DataBase
         {
             var selectQuery = _context.Patient
                                     .Include(c => c.User)
-                                    .Include(c => c.Referent)
-                                    .Include(c => c.Referent.User)
                                     .Where(t => t.PatientId.Equals(ID))
-                                    .FirstOrDefault();
-            return selectQuery;
-        }
-        public Patient SelectPatient(Professional referent)
-        {
-            var selectQuery = _context.Patient
-                                    .Include(c => c.User)
-                                    .Include(c => c.Referent)
-                                    .Include(c => c.Referent.User)
-                                    .Where(t => t.Referent.ProfessionalId.Equals(referent.ProfessionalId))
                                     .FirstOrDefault();
             return selectQuery;
         }
@@ -52,8 +40,6 @@ namespace ITI.Archi_Vite.DataBase
         {
             var selectQuery = _context.Patient
                                     .Include(c => c.User)
-                                    .Include(c => c.Referent)
-                                    .Include(c => c.Referent.User)
                                     .Where(t => t.PatientId.Equals(Pseudo))
                                     .FirstOrDefault();
             return selectQuery;
@@ -62,8 +48,6 @@ namespace ITI.Archi_Vite.DataBase
         {
             var selectQuery = _context.Patient
                                     .Include(c => c.User)
-                                    .Include(c => c.Referent)
-                                    .Include(c => c.Referent.User)
                                     .Where(t => t.User.Pseudo.Equals(pseudo) && t.User.Password.Equals(password))
                                     .FirstOrDefault();
             return selectQuery;
@@ -100,7 +84,6 @@ namespace ITI.Archi_Vite.DataBase
                                         .Include(c => c.Professionnal)
                                         .Include(c => c.Professionnal.User)
                                         .Include(c => c.Patient.User)
-                                        .Include(c => c.Patient.Referent)
                                         .Where(t => t.Patient.PatientId.Equals(IDPatient) && t.ProfessionnalId.Equals(IDPro))
                                         .FirstOrDefault();
             return senderFollow;
@@ -112,7 +95,6 @@ namespace ITI.Archi_Vite.DataBase
                                         .Include(c => c.Professionnal)
                                         .Include(c => c.Professionnal.User)
                                         .Include(c => c.Patient.User)
-                                        .Include(c => c.Patient.Referent)
                                         .Where(t => t.ProfessionnalId.Equals(IDPro))
                                         .ToList();
             return senderFollow;
@@ -124,7 +106,6 @@ namespace ITI.Archi_Vite.DataBase
                                         .Include(c => c.Professionnal)
                                         .Include(c => c.Professionnal.User)
                                         .Include(c => c.Patient.User)
-                                        .Include(c => c.Patient.Referent)
                                         .Where(t => t.Professionnal.User.Pseudo.Equals(pseudo))
                                         .ToList();
             return senderFollow;
@@ -136,7 +117,6 @@ namespace ITI.Archi_Vite.DataBase
                                         .Include(c => c.Professionnal)
                                         .Include(c => c.Professionnal.User)
                                         .Include(c => c.Patient.User)
-                                        .Include(c => c.Patient.Referent)
                                         .Where(t => t.Professionnal.User.Pseudo.Equals(pseudo) && t.Professionnal.User.Password.Equals(password))
                                         .ToList();
             return senderFollow;
@@ -148,7 +128,6 @@ namespace ITI.Archi_Vite.DataBase
                                         .Include(c => c.Professionnal)
                                         .Include(c => c.Professionnal.User)
                                         .Include(c => c.Patient.User)
-                                        .Include(c => c.Patient.Referent)
                                         .Where(t => t.PatientId.Equals(IDPatient))
                                         .ToList();
             return senderFollow;
@@ -160,7 +139,6 @@ namespace ITI.Archi_Vite.DataBase
                                         .Include(c => c.Professionnal)
                                         .Include(c => c.Professionnal.User)
                                         .Include(c => c.Patient.User)
-                                        .Include(c => c.Patient.Referent)
                                         .Where(t => t.Patient.User.Pseudo.Equals(pseudo))
                                         .ToList();
             return senderFollow;
@@ -172,7 +150,6 @@ namespace ITI.Archi_Vite.DataBase
                                         .Include(c => c.Professionnal)
                                         .Include(c => c.Professionnal.User)
                                         .Include(c => c.Patient.User)
-                                        .Include(c => c.Patient.Referent)
                                         .Where(t => t.Patient.User.Pseudo.Equals(pseudo) && t.Professionnal.User.Password.Equals(password))
                                         .ToList();
             return senderFollow;

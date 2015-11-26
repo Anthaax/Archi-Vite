@@ -71,7 +71,7 @@ namespace ITI.Archi_Vite.WebApi.Controllers
             {
                 return NotFound();
             }
-            _doc.DeleteFollowerFile(follower.Professionnal, follower.Patient);
+            _doc.DeleteFollowerFile(follower.Professionnal.ProfessionalId, follower.Patient.PatientId);
             _db.Follower.Remove(follower);
             await _db.SaveChangesAsync();
 
