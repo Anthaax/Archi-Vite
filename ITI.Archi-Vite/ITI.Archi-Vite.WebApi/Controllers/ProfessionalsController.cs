@@ -53,7 +53,7 @@ namespace ITI.Archi_Vite.WebApi.Controllers
                 return BadRequest();
             }
 
-            _db.AddRequest.AddProfessional(newProfessional.User.FirstName, newProfessional.User.LastName, newProfessional.User.Birthdate, newProfessional.User.Adress, newProfessional.User.City, newProfessional.User.Postcode, newProfessional.User.PhoneNumber, newProfessional.User.Pseudo, newProfessional.User.Photo, newProfessional.Role);
+            _db.AddRequest.AddProfessional(newProfessional.User, newProfessional.Role);
 
             try
             {
@@ -88,7 +88,7 @@ namespace ITI.Archi_Vite.WebApi.Controllers
             List<Follower> follow = _db.SelectRequest.SelectFollowForPro(id);
             foreach (var f in follow)
             {
-                _doc.DeleteFollowerFile(professional, f.Patient);
+                _doc.DeleteFollowerFile(professional.ProfessionalId, f.Patient.PatientId);
             }
             _db.SuppressionRequest.ProfessionnalSuppression(professional);
             await _db.SaveChangesAsync();

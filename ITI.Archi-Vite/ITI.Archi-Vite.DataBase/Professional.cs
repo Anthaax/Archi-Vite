@@ -14,7 +14,6 @@ namespace ITI.Archi_Vite.DataBase
     {
         public Professional()
         {
-            Patients = new List<Patient>();
             Followers = new List<Follower>();
         }
         public int ProfessionalId { get; set; }
@@ -22,8 +21,6 @@ namespace ITI.Archi_Vite.DataBase
         public string Role { get; set; }
         [ForeignKey("ProfessionalId")]
         public User User { get; set; }
-        [NotMapped]
-        public ICollection<Patient> Patients { get; set; }
         [NotMapped]
         public ICollection<Follower> Followers { get; set; }
     }

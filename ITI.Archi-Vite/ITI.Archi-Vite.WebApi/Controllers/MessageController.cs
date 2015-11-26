@@ -30,7 +30,7 @@ namespace ITI.Archi_Vite.WebApi.Controllers
         public async Task<IHttpActionResult> GetFollower(int id)
         {
             Professional pro = _db.SelectRequest.SelectProfessional(id);
-            Patient patient = _db.SelectRequest.SelectPatient(pro);
+            Patient patient = _db.SelectRequest.SelectPatient(id);
             DocumentSerializable doc = _doc.SeeDocument(pro, patient);
             return Ok(doc);
         }

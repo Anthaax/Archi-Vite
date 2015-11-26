@@ -29,7 +29,7 @@ namespace ITI.Archi_Vite.WebApi.Controllers
         [ResponseType(typeof(DocumentSerializable))]
         public async Task<IHttpActionResult> GetPrescrition(int patientId, int proId)
         {
-            _doc = new DocumentManager(_db);   
+            _doc = new DocumentManager(_db);
             DocumentSerializable doc = _doc.SeeDocument(proId, patientId);
             if (doc == null)
             {

@@ -48,8 +48,8 @@ namespace ITI.Archi_Vite.WebApi.Controllers
                 return BadRequest(ModelState);
             }
 
-            _db.AddRequest.AddPatient(newPatient.User.FirstName, newPatient.User.LastName, newPatient.User.Birthdate, newPatient.User.Adress, newPatient.User.City, newPatient.User.Postcode, newPatient.User.PhoneNumber, newPatient.User.Pseudo, newPatient.User.Photo, newPatient.Referent, newPatient.PathFile);
-            _doc.CreateEmptyFile(newPatient.User.UserId.ToString());
+            _db.AddRequest.AddPatient(newPatient.User);
+            _doc.CreateEmptyFile(_db.SelectRequest.SelectPatient(newPatient.User.Pseudo, newPatient.User.Password).PatientId.ToString());
 
             try
             {
@@ -76,8 +76,9 @@ namespace ITI.Archi_Vite.WebApi.Controllers
             List<Follower> follow = _db.SelectRequest.SelectFollowForPatient(id);
             foreach(var f in follow)
             {
-                _doc.DeleteFollowerFile(f.Professionnal, patient);
+                _doc.DeleteFollowerFile(f.Professionnal.ProfessionalId, patient.PatientId);
             }
+            _doc.DeletePatientFile(patient.PatientId);
             _db.SuppressionRequest.PatientSuppression(patient);
             _db.Patient.Remove(patient);
             await _db.SaveChangesAsync();

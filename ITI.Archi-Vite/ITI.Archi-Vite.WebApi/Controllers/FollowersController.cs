@@ -40,14 +40,16 @@ namespace ITI.Archi_Vite.WebApi.Controllers
 
         // PUT: api/Followers/5
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutFollower(Follower follower)
+        public async Task<IHttpActionResult> PutFollower(FollowerCreation follower)
         {
+            _doc = new DocumentManager(_db);
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            _db.AddRequest.AddFollow(follower.Patient, follower.Professionnal);
+            _doc.CreateEmptyFile(follower.PatientId + "$" + follower.ProfessionalId);
+            _db.AddRequest.AddFollow(follower.PatientId, follower.ProfessionalId);
 
             try
             {
@@ -63,44 +65,20 @@ namespace ITI.Archi_Vite.WebApi.Controllers
 
         // DELETE: api/Followers/5
         [ResponseType(typeof(Follower))]
-        public async Task<IHttpActionResult> DeleteFollower(int id)
+        public async Task<IHttpActionResult> DeleteFollower(int patientId, int proId)
         {
             _doc = new DocumentManager(_db);
-            Follower follower = await _db.Follower.FindAsync(id);
+            Follower follower = _db.SelectRequest.SelectOneFollow(patientId, proId);
             if (follower == null)
             {
                 return NotFound();
             }
-            _doc.DeleteFollowerFile(follower.Professionnal, follower.Patient);
+            _db.SuppressionRequest.FollowerSuppression(follower);
+            _doc.DeleteFollowerFile(proId, patientId);
             _db.Follower.Remove(follower);
             await _db.SaveChangesAsync();
 
             return Ok(follower);
-        }
-
-
-
-        [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutMessage(MesssageCreator message)
-        {
-            _doc = new DocumentManager(_db);
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            _doc.CreateMessage(message.Receivers, message.Sender, message.Title, message.Contents, message.Patient);
-
-            try
-            {
-                await _db.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                throw;
-            }
-
-            return StatusCode(HttpStatusCode.NoContent);
         }
 
         protected override void Dispose(bool disposing)

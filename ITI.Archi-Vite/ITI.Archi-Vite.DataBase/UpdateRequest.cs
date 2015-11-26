@@ -60,35 +60,10 @@ namespace ITI.Archi_Vite.DataBase
             _context.Entry(professional).State = System.Data.Entity.EntityState.Modified;
             _context.SaveChanges();
         }
-        /// <summary>
-        /// Change Referent of a Patient
-        /// </summary>
-        /// <param name="Pro"> New Referent not null</param>
-        /// <param name="Patient"> Patient to modifie not null</param>
-        public void CheckPatientInfo(Professional Pro, Patient Patient)
-        {
-        if (Patient == null || Pro == null) throw new ArgumentNullException("All value need to be not null");
-        var patient = _context.Patient
-                        .Include(c => c.User)
-                        .Include(c => c.Referent)
-                        .Include(c => c.Referent.User)
-                        .Where(t => t.PatientId.Equals(Patient.PatientId))
-                        .FirstOrDefault();
-        if (patient.Referent != Pro)
-        {
-            UpdateReferent(Pro, patient);
-            _context.Entry(patient).State = System.Data.Entity.EntityState.Modified;
-            _context.SaveChanges();
-        }
-        }
 
         private void UpdatePhoto(string Photo, User User)
         {
             User.Photo = Photo;
-        }
-        private void UpdateReferent(Professional Pro, Patient Patient)
-        {
-            Patient.Referent = Pro;
         }
 
         private void UpdateRole(string Role, Professional Professional)
