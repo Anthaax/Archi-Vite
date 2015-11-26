@@ -22,60 +22,55 @@ namespace ITI.Archi_Vite.DataBase
                 return _context;
             }
         }
-
+        /// <summary>
+        /// Add a patient into the database 
+        /// </summary>
+        /// <param name="user"> user can't be null and all property of an user can be null exept userId who it must be null</param>
+        /// <returns></returns>
         public Patient AddPatient(User user)
         {
-            User u = new User()
-            {
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Birthdate = user.Birthdate,
-                Adress = user.Adress,
-                City = user.City,
-                Postcode = user.Postcode,
-                PhoneNumber = user.PhoneNumber,
-                Pseudo = user.Pseudo,
-                Password = user.Password,
-                Photo = user.Photo
-            };
+            if (user == null) throw new ArgumentNullException("user", "user can't be null");
+            if (user.Adress == null || user.Birthdate == null || user.City == null || user.FirstName == null || user.LastName == null || user.Password == null || user.PhoneNumber == 0 || user.Photo == null || user.Postcode == 0 || user.Pseudo == "null" || user.UserId != 0)
+                throw new ArgumentException("All property of an user can't be null exept userId who it must be null");
             Patient p = new Patient()
             {
-                User = u
+                User = user
             };
 
-            _context.User.Add(u);
+            _context.User.Add(user);
             _context.Patient.Add(p);
             _context.SaveChanges();
 
             return p;
         }
+        /// <summary>
+        /// Add a patient into the database 
+        /// </summary>
+        /// <param name="user"> User can't be null and all property of an user can be null exept userId who it must be null </param>
+        /// <param name="role"> Role can't be null and it's the role of the professional </param>
+        /// <returns></returns>
         public Professional AddProfessional(User user, string role)
         {
-            User u = new User()
-            {
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Birthdate = user.Birthdate,
-                Adress = user.Adress,
-                City = user.City,
-                Postcode = user.Postcode,
-                PhoneNumber = user.PhoneNumber,
-                Pseudo = user.Pseudo,
-                Password = user.Password,
-                Photo = user.Photo
-            };
+            if (user == null || role == null) throw new ArgumentNullException("user or ", "user can't be null");
+            if (user.Adress == null || user.Birthdate == null || user.City == null || user.FirstName == null || user.LastName == null || user.Password == null || user.PhoneNumber == 0 || user.Photo == null || user.Postcode == 0 || user.Pseudo == "null" || user.UserId != 0)
+                throw new ArgumentException("All property of an user can't be null exept userId who it must be null");
             Professional p = new Professional()
             {
                 Role = role,
-                User = u
+                User = user
             };
 
-            _context.User.Add(u);
+            _context.User.Add(user);
             _context.Professional.Add(p);
             _context.SaveChanges();
 
             return p;
         }
+        /// <summary>
+        /// Add a follow
+        /// </summary>
+        /// <param name="patientId"> Id of a patient </param>
+        /// <param name="professionalId"> Id of a pro </param>
         public void AddFollow(int patientId, int professionalId)
         {
             string filePath = patientId + "$" + professionalId;
