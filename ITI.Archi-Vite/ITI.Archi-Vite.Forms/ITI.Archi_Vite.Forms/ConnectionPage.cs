@@ -14,31 +14,40 @@ namespace ITI.Archi_Vite.Forms
         {
             Image logo = new Image
             {
-                Source = "Archi'Vite Logo.png",
+                Source = "Logo.png",
                 HorizontalOptions = LayoutOptions.FillAndExpand,
                 VerticalOptions = LayoutOptions.StartAndExpand
             };
             Entry pseudo = new Entry
             {
                 Placeholder = "Pseudo",
-                HorizontalOptions = LayoutOptions.CenterAndExpand,
+				FontSize = 40,
+				HorizontalTextAlignment = TextAlignment.Center,
+				HorizontalOptions = LayoutOptions.FillAndExpand,
                 VerticalOptions = LayoutOptions.CenterAndExpand
             };
             Entry password = new Entry
             {
                 Placeholder = "Password",
                 IsPassword = true,
-                HorizontalOptions = LayoutOptions.CenterAndExpand,
+				FontSize = 40,
+				HorizontalTextAlignment = TextAlignment.Center,
+				HorizontalOptions = LayoutOptions.FillAndExpand,
                 VerticalOptions = LayoutOptions.CenterAndExpand
             };
             Button send = new Button
             {
                 Text = "Se connecter",
-                TextColor = Color.Blue,
-                HorizontalOptions = LayoutOptions.CenterAndExpand,
+				FontSize = 40,
+				BackgroundColor = Color.FromHex("439DFE"),
+				HorizontalOptions = LayoutOptions.FillAndExpand,
                 VerticalOptions = LayoutOptions.End
             };
-            send.Clicked += OnButtonClicked;
+			send.Clicked += (sender, e) => 
+			{
+				throw new NotImplementedException();
+					
+			};
             Content = new StackLayout
             {
 
@@ -46,11 +55,15 @@ namespace ITI.Archi_Vite.Forms
                     logo,
                     pseudo,
                     password,
-                    send
+                    send,
                 }
             };
+			this.BackgroundColor = Color.White;
         }
-
+		private Entry Password
+		{
+			get{ return Content.R;}
+		}
         private void OnButtonClicked(object sender, EventArgs e)
         {
             throw new NotImplementedException();
