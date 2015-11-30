@@ -102,34 +102,33 @@ namespace ITI.Archi_Vite.WebApi.Controllers
         }
 
         // POST: api/Document
-        [ResponseType(typeof(User))]
-        public async Task<IHttpActionResult> PostUser(User user)
+        [ResponseType(typeof(void))]
+        public async Task<IHttpActionResult> PostDocument(ReciverModification newDoc)
         {
+            _doc = new DocumentManager(_db);
+            DocumentSerializable patientDoc = _doc.SeeDocument(newDoc.PatientId);
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            _db.User.Add(user);
+            _doc.AddReciver(newDoc.RecieverId, newDoc.PatientId, newDoc.Date);
+
             await _db.SaveChangesAsync();
 
-            return CreatedAtRoute("DefaultApi", new { id = user.UserId }, user);
+            return StatusCode(HttpStatusCode.NoContent);
         }
 
         // DELETE: api/Document/5
-        [ResponseType(typeof(User))]
-        public async Task<IHttpActionResult> DeleteUser(int id)
+        [ResponseType(typeof(void))]
+        public async Task<IHttpActionResult> DeleteDoc(ReciverModification doc)
         {
-            User user = await _db.User.FindAsync(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
+            _doc = new DocumentManager(_db);
+            DocumentSerializable patientDoc = _doc.SeeDocument(doc.PatientId);
 
-            _db.User.Remove(user);
-            await _db.SaveChangesAsync();
+            _doc.DeleteReciever(doc.RecieverId, doc.PatientId, doc.Date);
 
-            return Ok(user);
+            return StatusCode(HttpStatusCode.NoContent);
         }
 
         protected override void Dispose(bool disposing)

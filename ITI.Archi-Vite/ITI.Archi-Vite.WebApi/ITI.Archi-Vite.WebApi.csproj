@@ -108,6 +108,7 @@
     <Compile Include="Controllers\DocumentController.cs" />
     <Compile Include="Controllers\FollowersController.cs" />
     <Compile Include="Controllers\MessageController.cs" />
+    <Compile Include="Odata\ReciverModification.cs" />
     <Compile Include="Controllers\PrescriptionController.cs" />
     <Compile Include="Odata\MessageCreator.cs" />
     <Compile Include="Controllers\PatientsController.cs" />

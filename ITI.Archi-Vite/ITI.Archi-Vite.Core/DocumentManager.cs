@@ -147,6 +147,79 @@ namespace ITI.Archi_Vite.Core
             }
         }
 
+        public void DeleteReciever(int reciverId, int patientid, DateTime date)
+        {
+            DocumentSerializable doc = DeserializeListDoc(GetPathFile(patientid.ToString()));
+            foreach (var message in doc.Messages)
+            {
+                if (message.Date == date)
+                {
+                    message.Receivers.Remove(_context.SelectRequest.SelectProfessional(reciverId));
+                    DeleteDoc(message, patientid + "$" + reciverId);
+                    ModifyDoc(message, patientid.ToString());
+                    foreach (var reciver in message.Receivers)
+                    {
+                        ModifyDoc(message, patientid + "$" + reciver.ProfessionalId);
+                    }
+                }
+            }
+            foreach (var prescription in doc.Prescriptions)
+            {
+                if (prescription.Date == date)
+                {
+                    prescription.Receivers.Add(_context.SelectRequest.SelectProfessional(reciverId));
+                    DeleteDoc(prescription, patientid + "$" + reciverId);
+                    ModifyDoc(prescription, patientid.ToString());
+                    foreach (var reciver in prescription.Receivers)
+                    {
+                        ModifyDoc(prescription, patientid + "$" + reciver.ProfessionalId);
+                    }
+                }
+            }
+        }
+        public void DeleteReciever(List<int> reciversId, int patientid, DateTime date)
+        {
+            DocumentSerializable doc = DeserializeListDoc(GetPathFile(patientid.ToString()));
+            foreach (var message in doc.Messages)
+            {
+                if (message.Date == date)
+                {
+                    foreach (var receiverId in reciversId)
+                    {
+                        message.Receivers.Remove(_context.SelectRequest.SelectProfessional(receiverId));
+                    }
+                    foreach (var receiverId in reciversId)
+                    {
+                        DeleteDoc(message, patientid + "$" + receiverId);
+                    }
+                    ModifyDoc(message, patientid.ToString());
+                    foreach (var reciver in message.Receivers)
+                    {
+                        ModifyDoc(message, patientid + "$" + reciver.ProfessionalId);
+                    }
+                }
+            }
+            foreach (var prescription in doc.Prescriptions)
+            {
+                if (prescription.Date == date)
+                {
+                    foreach (var receiverId in reciversId)
+                    {
+                        prescription.Receivers.Remove(_context.SelectRequest.SelectProfessional(receiverId));
+                    }
+                    foreach (var receiverId in reciversId)
+                    {
+                        DeleteDoc(prescription, patientid + "$" + receiverId);
+                    }
+                    ModifyDoc(prescription, patientid.ToString());
+                    foreach (var reciver in prescription.Receivers)
+                    {
+                        ModifyDoc(prescription, patientid + "$" + reciver.ProfessionalId);
+                    }
+                }
+            }
+        }
+
         private void DeleteFile(string path)
         {
             if (File.Exists(GetPathFile(path)))
@@ -279,6 +352,7 @@ namespace ITI.Archi_Vite.Core
             }
             SerializeListDoc(Documents, GetPathFile(FilePath));
         }
+        
         private void SerializeListDoc(DocumentSerializable Documents, string FilePath)
         {
             Stream fileStream = new FileStream(FilePath, FileMode.Create, FileAccess.Write, FileShare.None);
