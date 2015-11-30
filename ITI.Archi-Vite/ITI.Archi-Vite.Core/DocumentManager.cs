@@ -74,6 +74,79 @@ namespace ITI.Archi_Vite.Core
         {
             DeleteFile(GetPathFile(patientId.ToString()));
         }
+        public void AddReciver(int reciverId, int patientid, DateTime date)
+        {
+            DocumentSerializable doc = DeserializeListDoc(GetPathFile(patientid.ToString()));
+            foreach (var message in doc.Messages)
+            {
+                if (message.Date == date)
+                {
+                    message.Receivers.Add(_context.SelectRequest.SelectProfessional(reciverId));
+                    AddDoc(message, patientid + "$" + reciverId);
+                    ModifyDoc(message, patientid.ToString());
+                    foreach( var reciver in message.Receivers)
+                    {
+                        ModifyDoc(message, patientid + "$" + reciver.ProfessionalId);
+                    }
+                }
+            }
+            foreach (var prescription in doc.Prescriptions)
+            {
+                if (prescription.Date == date)
+                {
+                    prescription.Receivers.Add(_context.SelectRequest.SelectProfessional(reciverId));
+                    AddDoc(prescription, patientid + "$" + reciverId);
+                    ModifyDoc(prescription, patientid.ToString());
+                    foreach (var reciver in prescription.Receivers)
+                    {
+                        ModifyDoc(prescription, patientid + "$" + reciver.ProfessionalId);
+                    }
+                }
+            }
+        }
+        public void AddReciver(List<int> reciversId, int patientid, DateTime date)
+        {
+            DocumentSerializable doc = DeserializeListDoc(GetPathFile(patientid.ToString()));
+            foreach (var message in doc.Messages)
+            {
+                if (message.Date == date)
+                {
+                    foreach(var receiverId in reciversId)
+                    {
+                        message.Receivers.Add(_context.SelectRequest.SelectProfessional(receiverId));
+                    }
+                    foreach(var receiverId in reciversId)
+                    {
+                        AddDoc(message, patientid + "$" + receiverId);
+                    }
+                    ModifyDoc(message, patientid.ToString());
+                    foreach (var reciver in message.Receivers)
+                    {
+                        ModifyDoc(message, patientid + "$" + reciver.ProfessionalId);
+                    }
+                }
+            }
+            foreach (var prescription in doc.Prescriptions)
+            {
+                if (prescription.Date == date)
+                {
+                    foreach (var receiverId in reciversId)
+                    {
+                        prescription.Receivers.Add(_context.SelectRequest.SelectProfessional(receiverId));
+                    }
+                    foreach (var receiverId in reciversId)
+                    {
+                        AddDoc(prescription, patientid + "$" + receiverId);
+                    }
+                    ModifyDoc(prescription, patientid.ToString());
+                    foreach (var reciver in prescription.Receivers)
+                    {
+                        ModifyDoc(prescription, patientid + "$" + reciver.ProfessionalId);
+                    }
+                }
+            }
+        }
+
         private void DeleteFile(string path)
         {
             if (File.Exists(GetPathFile(path)))
@@ -114,6 +187,7 @@ namespace ITI.Archi_Vite.Core
             }
             AddDoc(message, GetPathFile(message.Patient.PatientId.ToString()));
         }
+
         private void CreateDoc(Prescription prescription)
         {
             var senderFollow = _context.Follower
@@ -152,6 +226,59 @@ namespace ITI.Archi_Vite.Core
             SerializeListDoc(Documents, GetPathFile(FilePath));
         }
 
+        private void ModifyDoc(Message message, string FilePath)
+        {
+            DocumentSerializable Documents = DeserializeListDoc(GetPathFile(FilePath));
+            foreach(var mes in Documents.Messages)
+            {
+                if (mes.Date == message.Date && mes.Contents == message.Contents && mes.Patient == message.Patient)
+                {
+                    Documents.Messages.Remove(mes);
+                    Documents.Messages.Add(message);
+                }
+            }
+            SerializeListDoc(Documents, GetPathFile(FilePath));
+        }
+
+        private void ModifyDoc(Prescription prescription, string FilePath)
+        {
+            DocumentSerializable Documents = DeserializeListDoc(GetPathFile(FilePath));
+            foreach (var pres in Documents.Prescriptions)
+            {
+                if (pres.Date == prescription.Date && pres.DocPath == prescription.DocPath && pres.Patient == prescription.Patient)
+                {
+                    Documents.Prescriptions.Remove(pres);
+                    Documents.Prescriptions.Add(prescription);
+                }
+            }
+            SerializeListDoc(Documents, GetPathFile(FilePath));
+        }
+
+        private void DeleteDoc(Message message, string FilePath)
+        {
+            DocumentSerializable Documents = DeserializeListDoc(GetPathFile(FilePath));
+            foreach (var mes in Documents.Messages)
+            {
+                if (mes.Date == message.Date && mes.Contents == message.Contents && mes.Patient == message.Patient)
+                {
+                    Documents.Messages.Remove(mes);
+                }
+            }
+            SerializeListDoc(Documents, GetPathFile(FilePath));
+        }
+
+        private void DeleteDoc(Prescription prescription, string FilePath)
+        {
+            DocumentSerializable Documents = DeserializeListDoc(GetPathFile(FilePath));
+            foreach (var pres in Documents.Prescriptions)
+            {
+                if (pres.Date == prescription.Date && pres.DocPath == prescription.DocPath && pres.Patient == prescription.Patient)
+                {
+                    Documents.Prescriptions.Remove(pres);
+                }
+            }
+            SerializeListDoc(Documents, GetPathFile(FilePath));
+        }
         private void SerializeListDoc(DocumentSerializable Documents, string FilePath)
         {
             Stream fileStream = new FileStream(FilePath, FileMode.Create, FileAccess.Write, FileShare.None);
