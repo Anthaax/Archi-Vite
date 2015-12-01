@@ -60,10 +60,6 @@ namespace ITI.Archi_Vite.Forms
             };
 			this.BackgroundColor = Color.White;
         }
-		private Entry Password
-		{
-			get{ return Content.R;}
-		}
         private void OnButtonClicked(object sender, EventArgs e)
         {
             throw new NotImplementedException();
