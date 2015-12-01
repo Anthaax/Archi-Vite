@@ -79,7 +79,7 @@ namespace ITI.Archi_Vite.Forms
 			};
 			Label city = new Label
 			{
-				Text = "Ivry-Sur-Seine ",
+				Text = "Ivry-Sur-Seine",
 				FontSize = 30,
 				HorizontalOptions = LayoutOptions.Center
 			};
