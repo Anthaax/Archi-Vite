@@ -12,7 +12,7 @@ namespace ITI.Archi_Vite.Forms
         public App()
         {
             // The root page of your application
-            MainPage = new PatientPage();
+			MainPage = new NavigationPage(new ConnectionPage());
         }
 
         protected override void OnStart()

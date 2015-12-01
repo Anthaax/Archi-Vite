@@ -21,33 +21,38 @@ namespace ITI.Archi_Vite.Forms
             Entry pseudo = new Entry
             {
                 Placeholder = "Pseudo",
-				FontSize = 40,
-				HorizontalTextAlignment = TextAlignment.Center,
-				HorizontalOptions = LayoutOptions.FillAndExpand,
-                VerticalOptions = LayoutOptions.CenterAndExpand
+                FontSize = 40,
+                HorizontalTextAlignment = TextAlignment.Center,
+                HorizontalOptions = LayoutOptions.FillAndExpand,
+                VerticalOptions = LayoutOptions.CenterAndExpand,
+                TextColor = Color.Gray
             };
+            pseudo.TextChanged += EntryTextChanged;
             Entry password = new Entry
             {
                 Placeholder = "Password",
                 IsPassword = true,
-				FontSize = 40,
-				HorizontalTextAlignment = TextAlignment.Center,
-				HorizontalOptions = LayoutOptions.FillAndExpand,
-                VerticalOptions = LayoutOptions.CenterAndExpand
+                FontSize = 40,
+                HorizontalTextAlignment = TextAlignment.Center,
+                HorizontalOptions = LayoutOptions.FillAndExpand,
+                VerticalOptions = LayoutOptions.CenterAndExpand,
             };
+            password.TextChanged += EntryTextChanged;
             Button send = new Button
             {
                 Text = "Se connecter",
-				FontSize = 40,
-				BackgroundColor = Color.FromHex("439DFE"),
-				HorizontalOptions = LayoutOptions.FillAndExpand,
+                FontSize = 40,
+                BackgroundColor = Color.FromHex("439DFE"),
+                HorizontalOptions = LayoutOptions.FillAndExpand,
                 VerticalOptions = LayoutOptions.End
             };
-			send.Clicked += (sender, e) => 
-			{
-				throw new NotImplementedException();
-					
-			};
+            send.Clicked += async (sender, e) =>
+            {
+                if (pseudo.Text != null && password != null)
+					await Navigation.PushAsync(new ProfilPage());
+				else await DisplayAlert ("Error", "Les champ doivent etre valides", "Ok");
+
+            };
             Content = new StackLayout
             {
 
@@ -58,11 +63,16 @@ namespace ITI.Archi_Vite.Forms
                     send,
                 }
             };
-			this.BackgroundColor = Color.White;
+            this.BackgroundColor = Color.White;
         }
-        private void OnButtonClicked(object sender, EventArgs e)
+
+        private void EntryTextChanged(object sender, TextChangedEventArgs e)
         {
-            throw new NotImplementedException();
+            Entry entry = sender as Entry;
+            if (entry != null)
+            {
+                entry.TextColor = Color.Gray;
+            }
         }
     }
 }
