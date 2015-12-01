@@ -16,7 +16,7 @@ namespace ITI.Archi_Vite.Forms
 				Text = "Mon Profil",
 				BackgroundColor = Color.Gray,
 				BorderColor = Color.Black,
-				FontSize = 18,
+				FontSize = 30,
 				FontAttributes = FontAttributes.Bold,
 			};
 
@@ -24,7 +24,7 @@ namespace ITI.Archi_Vite.Forms
 				Text = "Mes Suivis",
 				BackgroundColor = Color.White,
 				BorderColor = Color.Black,
-				FontSize = 18,
+				FontSize = 30,
 				TextColor = Color.Black
 			};
 
@@ -32,7 +32,7 @@ namespace ITI.Archi_Vite.Forms
 				Text = "Mes Documents",
 				BackgroundColor = Color.White,
 				BorderColor = Color.Black,
-				FontSize = 18,
+				FontSize = 30,
 				TextColor = Color.Black
 			};
 
@@ -67,7 +67,7 @@ namespace ITI.Archi_Vite.Forms
             };
 			Label adresse = new Label
 			{
-				Text = "Adresse : 74 avenue morice thorez, 94200, Ivry-Sur-Seine ",
+				Text = "Adresse : 74 avenue morice thorez",
                 FontSize = 30,
                 HorizontalOptions = LayoutOptions.Center
 			};
@@ -87,7 +87,6 @@ namespace ITI.Archi_Vite.Forms
 			{
 				Source = "http://www.go-e-lan.info/vue/images/event/fimes.PNG",
 				HorizontalOptions = LayoutOptions.FillAndExpand,
-				VerticalOptions = LayoutOptions.StartAndExpand
 			};
 
             Button modify = new Button
@@ -97,6 +96,11 @@ namespace ITI.Archi_Vite.Forms
                 BackgroundColor = Color.FromHex("439DFE"),
 				VerticalOptions = LayoutOptions.EndAndExpand
             };
+			modify.Clicked += async (sender, e) => 
+			{
+				await Navigation.PushModalAsync(new ModifyProfil());
+				Navigation.RemovePage(this);
+			};
             Content = new StackLayout
             {
 
@@ -106,6 +110,8 @@ namespace ITI.Archi_Vite.Forms
 					name,
 					phonenumber,
 					adresse,
+					postCode,
+					city,
 					logo,
 					modify
                 },
