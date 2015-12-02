@@ -118,7 +118,7 @@ namespace ITI.Archi_Vite.Forms
 			};
 			modify.Clicked += async (sender, e) => 
 			{
-				await Navigation.InsertPageBefore();
+				await Navigation.PushAsync(new ProfilPage());
 			};
 			Content = new StackLayout
 			{
