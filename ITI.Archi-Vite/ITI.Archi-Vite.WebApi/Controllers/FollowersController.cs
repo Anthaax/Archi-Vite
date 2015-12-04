@@ -30,10 +30,6 @@ namespace ITI.Archi_Vite.WebApi.Controllers
         public async Task<IHttpActionResult> GetFollower(int id, int proId)
         {
             List<Follower> follower = _db.SelectRequest.SelectFollowForPro(id);
-            if (follower.)
-            {
-                return NotFound();
-            }
 
             return Ok(follower);
         }

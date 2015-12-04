@@ -8,6 +8,7 @@ using System.Net.Http;
 
 using Xamarin.Forms;
 using System.Net.Http.Headers;
+using System.Threading.Tasks;
 
 namespace ITI.Archi_Vite.Forms
 {
@@ -54,7 +55,9 @@ namespace ITI.Archi_Vite.Forms
             {
                 if (pseudo.Text != null && password.Text != null)
                 {
-                    ConnectionGestion(pseudo.Text, password.Text);
+                    User newUser = await ConnectionGestion(pseudo.Text, password.Text);
+                    Data _dataForUser = new Data(newUser);
+                    await DisplayAlert("Reussite", "Les champ sont valides", "Ok");
                 }
                 else await DisplayAlert ("Error", "Les champ doivent etre valides", "Ok");
 
@@ -80,17 +83,18 @@ namespace ITI.Archi_Vite.Forms
                 entry.TextColor = Color.Gray;
             }
         }
-        private async void ConnectionGestion(string pseudo, string password)
+        private async Task<User> ConnectionGestion(string pseudo, string password)
         {
             using (var client = new HttpClient())
             {
-                string url = "http://localhost:53407/api/Users/?pseudo={0}&password={1}";
-                string completeUrl = string.Format(url, pseudo, password);
-                string baseUrl = "http://localhost:53407";
-                client.BaseAddress = new Uri(string.Format(baseUrl));
-                client.DefaultRequestHeaders.Accept.Clear();
+				string baseUrl = "http://10.0.2.2";
+                client.BaseAddress = new Uri(baseUrl);
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                await HttpGetExtensions.GetAsync<User>(client, url);
+
+				string url = "api/Users/?pseudo=GuillaumeF&password=GuillaumeF";
+				string completeUrl = string.Format(url, pseudo, password);
+				string content = await client.GetStringAsync (url);
+				return null;
             }
                 
         }
