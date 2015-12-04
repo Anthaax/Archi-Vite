@@ -5,27 +5,18 @@ namespace ITI.Archi_Vite.Forms
 {
 	public class Data
 	{
-        readonly List<Patient> patients = new List<Patient>();
-        readonly List<Professional> pro = new List<Professional>();
-		readonly User user = new User();
-		public Data()
+        readonly Dictionary<Patient, List<Professional>> follow = new Dictionary<Patient, List<Professional>>();
+        readonly User _user;
+		public Data(User user)
 		{
-			
+            _user = user;
 		}
 
-        public List<Patient> Patients
+        public Dictionary<Patient, List<Professional>> Follow
         {
             get
             {
-                return patients;
-            }
-        }
-
-        public List<Professional> Pro
-        {
-            get
-            {
-                return pro;
+                return follow;
             }
         }
 
@@ -33,7 +24,7 @@ namespace ITI.Archi_Vite.Forms
         {
             get
             {
-                return user;
+                return _user;
             }
         }
     }

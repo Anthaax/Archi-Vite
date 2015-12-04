@@ -15,8 +15,9 @@ namespace ITI.Archi_Vite.Forms
             Image logo = new Image
             {
                 Source = "Logo.png",
+				Scale = 0.8,
                 HorizontalOptions = LayoutOptions.FillAndExpand,
-                VerticalOptions = LayoutOptions.StartAndExpand
+                VerticalOptions = LayoutOptions.Start
             };
             Entry pseudo = new Entry
             {
@@ -24,7 +25,7 @@ namespace ITI.Archi_Vite.Forms
                 FontSize = 40,
                 HorizontalTextAlignment = TextAlignment.Center,
                 HorizontalOptions = LayoutOptions.FillAndExpand,
-                VerticalOptions = LayoutOptions.CenterAndExpand,
+                VerticalOptions = LayoutOptions.Center,
                 TextColor = Color.Gray
             };
             pseudo.TextChanged += EntryTextChanged;
@@ -35,7 +36,7 @@ namespace ITI.Archi_Vite.Forms
                 FontSize = 40,
                 HorizontalTextAlignment = TextAlignment.Center,
                 HorizontalOptions = LayoutOptions.FillAndExpand,
-                VerticalOptions = LayoutOptions.CenterAndExpand,
+                VerticalOptions = LayoutOptions.Center,
             };
             password.TextChanged += EntryTextChanged;
             Button send = new Button
@@ -44,7 +45,7 @@ namespace ITI.Archi_Vite.Forms
                 FontSize = 40,
                 BackgroundColor = Color.FromHex("439DFE"),
                 HorizontalOptions = LayoutOptions.FillAndExpand,
-                VerticalOptions = LayoutOptions.End
+				VerticalOptions = LayoutOptions.Center,
             };
             send.Clicked += async (sender, e) =>
             {

@@ -26,11 +26,11 @@ namespace ITI.Archi_Vite.WebApi.Controllers
         }
 
         // GET: api/Followers/5
-        [ResponseType(typeof(Follower))]
+        [ResponseType(typeof(List<Follower>))]
         public async Task<IHttpActionResult> GetFollower(int id, int proId)
         {
-            Follower follower = _db.SelectRequest.SelectOneFollow(id, proId);
-            if (follower == null)
+            List<Follower> follower = _db.SelectRequest.SelectFollowForPro(id);
+            if (follower.)
             {
                 return NotFound();
             }

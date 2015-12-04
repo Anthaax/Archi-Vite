@@ -131,6 +131,7 @@ namespace ITI.Archi_Vite.DataBase
                                         .Include(c => c.Patient.User)
                                         .Where(t => t.Professionnal.User.Pseudo.Equals(pseudo))
                                         .ToList();
+
             return senderFollow;
         }
         public List<Follower> SelectFollowForPro(string pseudo, string password)

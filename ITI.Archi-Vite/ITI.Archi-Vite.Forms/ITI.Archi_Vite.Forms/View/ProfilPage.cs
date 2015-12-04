@@ -99,7 +99,6 @@ namespace ITI.Archi_Vite.Forms
 			modify.Clicked += async (sender, e) => 
 			{
 				await Navigation.PushModalAsync(new ModifyProfil());
-				Navigation.RemovePage(this);
 			};
             Content = new StackLayout
             {
