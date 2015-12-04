@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
 using System.Text;
+using System.Net.Http;
+
 
 using Xamarin.Forms;
+using System.Net.Http.Headers;
 
 namespace ITI.Archi_Vite.Forms
 {
@@ -48,9 +51,11 @@ namespace ITI.Archi_Vite.Forms
             };
             send.Clicked += async (sender, e) =>
             {
-                if (pseudo.Text != null && password != null)
-					await Navigation.PushAsync(new ProfilPage());
-				else await DisplayAlert ("Error", "Les champ doivent etre valides", "Ok");
+                if (pseudo.Text != null && password.Text != null)
+                {
+                    ConnectionGestion(pseudo.Text, password.Text);
+                }
+                else await DisplayAlert ("Error", "Les champ doivent etre valides", "Ok");
 
             };
             Content = new StackLayout
@@ -73,6 +78,20 @@ namespace ITI.Archi_Vite.Forms
             {
                 entry.TextColor = Color.Gray;
             }
+        }
+        private async void ConnectionGestion(string pseudo, string password)
+        {
+            using (var client = new HttpClient())
+            {
+                string url = "http://localhost:53407/api/Users/?pseudo={0}&password={1}";
+                string completeUrl = string.Format(url, pseudo, password);
+                string baseUrl = "http://localhost:53407";
+                client.BaseAddress = new Uri(string.Format(baseUrl));
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                await HttpGetExtensions.GetAsync<User>(client, url);
+            }
+                
         }
     }
 }
