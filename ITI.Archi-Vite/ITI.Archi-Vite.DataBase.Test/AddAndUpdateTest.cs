@@ -77,7 +77,7 @@ namespace ITI.Archi_Vite.DataBase.Test
                 SelectRequest s = new SelectRequest(context);
 
                 Patient patient = s.SelectPatient("GuillaumeF", "GuillaumeF");
-                Professional pro = s.SelectProfessional("ClementR", "ClementR");
+                Professional pro = s.SelectProfessional("AntoineR", "AntoineR");
                 a.AddFollow(patient.PatientId, pro.ProfessionalId);
 
                 Follower follow = s.SelectOneFollow(patient.PatientId, pro.ProfessionalId);
@@ -243,6 +243,39 @@ namespace ITI.Archi_Vite.DataBase.Test
             users[4] = u4;
             users[5] = u5;
             return users;
+        }
+
+        [Test]
+        
+        public void GetAllFollows()
+        {
+            string attemptedPatientName;
+            
+            using (ArchiViteContext context = _archiVite.Context)
+            {
+               
+                List<string> attemptedProNameList = new List<string>();
+                List<string> proListResult = new List<string>();
+                proListResult.Add("Simon");
+                proListResult.Add("Clement");
+                proListResult.Add("Olivier");
+
+                int proID = context.SelectRequest.SelectProfessional("ClementR", "ClementR").ProfessionalId;
+                var result = context.SelectRequest.SelectAllFollow(proID);
+
+                foreach (var attemptedResult in result)
+                {
+                    attemptedPatientName = attemptedResult.Key.User.FirstName;
+                    Assert.AreEqual(attemptedPatientName, "Guillaume");
+
+                    foreach (var attemptedPro in attemptedResult.Value)
+                    {
+                        attemptedProNameList.Add(attemptedPro.User.FirstName);
+                    }
+
+                }
+                Assert.AreEqual(attemptedProNameList, proListResult);
+            }
         }
     }
 }

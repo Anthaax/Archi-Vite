@@ -27,9 +27,9 @@ namespace ITI.Archi_Vite.WebApi.Controllers
 
         // GET: api/Followers/5
         [ResponseType(typeof(Follower))]
-        public async Task<IHttpActionResult> GetFollower(int id, int proId)
+        public async Task<IHttpActionResult> GetFollower(int id)
         {
-            Follower follower = _db.SelectRequest.SelectOneFollow(id, proId);
+            var follower = _db.SelectRequest.SelectAllFollow(id);
             if (follower == null)
             {
                 return NotFound();
@@ -37,6 +37,7 @@ namespace ITI.Archi_Vite.WebApi.Controllers
 
             return Ok(follower);
         }
+
 
         // PUT: api/Followers/5
         [ResponseType(typeof(void))]
