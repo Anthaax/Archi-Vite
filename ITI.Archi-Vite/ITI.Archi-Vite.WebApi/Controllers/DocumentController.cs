@@ -14,7 +14,7 @@ namespace ITI.Archi_Vite.WebApi.Controllers
     {
         private ArchiViteContext _db = new ArchiViteContext();
         DocumentManager _doc;
-        DocumentControllerDo Do = new DocumentControllerDo();
+        DocumentService Do = new DocumentService();
 
         // GET: api/Document
         public IQueryable<User> GetUser()

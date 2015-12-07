@@ -108,7 +108,8 @@
     <Compile Include="Controllers\DocumentController.cs" />
     <Compile Include="Controllers\FollowersController.cs" />
     <Compile Include="Controllers\MessageController.cs" />
-    <Compile Include="Odata\DocumentControllerDo.cs" />
+    <Compile Include="Odata\DocumentService.cs" />
+    <Compile Include="Odata\FollowerService.cs" />
     <Compile Include="Odata\ReciverModification.cs" />
     <Compile Include="Controllers\PrescriptionController.cs" />
     <Compile Include="Odata\MessageCreator.cs" />

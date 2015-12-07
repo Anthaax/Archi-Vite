@@ -112,9 +112,9 @@ namespace ITI.Archi_Vite.DataBase
             return senderFollow;
         }
 
-        public Dictionary<Patient, List<Professional>> SelectAllFollow(int id)
+        public Dictionary<Patient, Professional[]> SelectAllFollow(int id)
         {
-            Dictionary<Patient, List<Professional>> Follows = new Dictionary<Patient, List<Professional>>();
+            Dictionary<Patient, Professional[]> Follows = new Dictionary<Patient, Professional[]>();
             List<Patient> patientList = new List<Patient>();
             
 
@@ -136,9 +136,9 @@ namespace ITI.Archi_Vite.DataBase
             return Follows;
         }
             
-        private Dictionary<Patient, List<Professional>> PatientAdd (List<Patient> pp)
+        private Dictionary<Patient, Professional[]> PatientAdd (List<Patient> pp)
         {
-            Dictionary<Patient, List<Professional>> Follows = new Dictionary<Patient, List<Professional>>();
+            Dictionary<Patient, Professional[]> Follows = new Dictionary<Patient,Professional[]>();
 
             foreach (var Patient in pp)
             {
@@ -149,20 +149,22 @@ namespace ITI.Archi_Vite.DataBase
             return Follows;
         }
 
-        private Tuple<Patient, List<Professional>> ProAdd(List<Follower> result, Patient p)
+        private Tuple<Patient, Professional[]> ProAdd(List<Follower> result, Patient p)
         {
-            List<Professional> proList = new List<Professional>();
-            Tuple<Patient, List<Professional>> Follows;
+            Professional[] proArray = new Professional[10];
+            Tuple<Patient, Professional[]> Follows;
+            int x = 0;
 
             foreach (var follow in result)
             {
 
                 if (follow.PatientId == p.PatientId)
                 {
-                    proList.Add(follow.Professionnal);
+                    proArray.SetValue(follow.Professionnal, x);
+                    x++;
                 }
             }
-            Follows = Tuple.Create(p, proList);
+            Follows = Tuple.Create(p, proArray);
             return Follows;
         }
 

@@ -7,7 +7,7 @@ using System.Web;
 
 namespace ITI.Archi_Vite.WebApi.Controllers
 {
-    public class DocumentControllerDo
+    public class DocumentService
     {
         private ArchiViteContext _db = new ArchiViteContext();
         DocumentManager _doc;
