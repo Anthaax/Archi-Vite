@@ -29,5 +29,6 @@ namespace ITI.Archi_Vite.Forms
         {
             // Handle when your app resumes
         }
+        
     }
 }

@@ -26,6 +26,7 @@ namespace ITI.Archi_Vite.WebApi.Controllers
         }
 
         // GET: api/Followers/5
+        [ResponseType(typeof(List<Follower>))]
         [ResponseType(typeof(Follower))]
         public async Task<IHttpActionResult> GetFollower(int id)
         {
