@@ -122,12 +122,12 @@ namespace ITI.Archi_Vite.Forms
 				if (users[i].Password == password && users[i].Pseudo == pseudo)
 					_user = users[i];
 			}
-			_dataForUser = new Data (_user, CreateFollowerDictionnary(users));  
 			if (_user == null)
 				return false;
-			return true;
+            _dataForUser = new Data(_user, CreateFollowerDictionnary(users, _user));
+            return true;
 		}
-		private Dictionary<Patient, List<Professional>> CreateFollowerDictionnary(User[] users)
+		private Dictionary<Patient, List<Professional>> CreateFollowerDictionnary(User[] users, User curentUser)
 		{
 			Dictionary<Patient, List<Professional>> follows = new Dictionary<Patient, List<Professional>> ();
             List<Professional> proForGuillaume = new List<Professional>();
@@ -144,8 +144,8 @@ namespace ITI.Archi_Vite.Forms
                 Professional pro = new Professional(users[i], "Infirmier");
                 proForMaxime.Add(pro);
             }
-            follows.Add(guillaume, proForGuillaume);
-            follows.Add(maxime, proForMaxime);
+            if(curentUser != users[5] ) follows.Add(guillaume, proForGuillaume);
+            if (curentUser != users[4] && curentUser != users[3]) follows.Add(maxime, proForMaxime);
             return follows;
 		}
 	}

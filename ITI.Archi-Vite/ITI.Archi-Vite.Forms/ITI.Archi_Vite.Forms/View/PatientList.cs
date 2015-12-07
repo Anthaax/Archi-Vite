@@ -66,9 +66,16 @@ namespace ITI.Archi_Vite.Forms
 				RowHeight = 150,
                 ItemTemplate = new DataTemplate(() =>
                     {
-                        Label nameLabel = new Label();
-                        nameLabel.SetBinding(Label.TextProperty, "FirstName");
-						nameLabel.FontSize = 40;
+                        Label firstName = new Label();
+                        firstName.SetBinding(Label.TextProperty, "FirstName");
+						firstName.FontSize = 40;
+
+                        Label spaceLabel = new Label();
+                        spaceLabel.Text = "  ";
+
+                        Label lastName = new Label();
+                        lastName.SetBinding(Label.TextProperty, "LastName");
+                        lastName.FontSize = 40;
 
                         Image patientImage = new Image();
 						patientImage.SetBinding(Image.SourceProperty, "Photo");
@@ -88,7 +95,9 @@ namespace ITI.Archi_Vite.Forms
                                         Children =
                                         {
 											patientImage,
-                                            nameLabel
+                                            firstName,
+                                            spaceLabel,
+                                            lastName
                                         },
 										Orientation = StackOrientation.Horizontal,
 										VerticalOptions = LayoutOptions.Center,
