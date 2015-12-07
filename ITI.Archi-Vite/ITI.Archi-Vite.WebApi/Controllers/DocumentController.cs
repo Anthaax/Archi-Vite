@@ -14,6 +14,7 @@ namespace ITI.Archi_Vite.WebApi.Controllers
     {
         private ArchiViteContext _db = new ArchiViteContext();
         DocumentManager _doc;
+        DocumentControllerDo Do = new DocumentControllerDo();
 
         // GET: api/Document
         public IQueryable<User> GetUser()
@@ -25,8 +26,8 @@ namespace ITI.Archi_Vite.WebApi.Controllers
         [ResponseType(typeof(DocumentSerializable))]
             public async Task<IHttpActionResult> GetDocument(int patientId, int proId)
         {
-            _doc = new DocumentManager(_db);
-            DocumentSerializable doc = _doc.SeeDocument(proId, patientId);
+
+            DocumentSerializable doc = Do.SeeDocument(proId, patientId);
             if (doc == null)
             {
                 return NotFound();
@@ -38,8 +39,7 @@ namespace ITI.Archi_Vite.WebApi.Controllers
         [ResponseType(typeof(DocumentSerializable))]
         public async Task<IHttpActionResult> GetDocument(int patientId)
         {
-            _doc = new DocumentManager(_db);
-            DocumentSerializable doc = _doc.SeeDocument(patientId);
+            DocumentSerializable doc = Do.SeeDocument(patientId);
             if (doc == null)
             {
                 return NotFound();
@@ -52,17 +52,11 @@ namespace ITI.Archi_Vite.WebApi.Controllers
         [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> PutDoc(MessageCreator newMessage)
         {
-            _doc = new DocumentManager(_db);
-            List<Professional> pro = new List<Professional>();
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            foreach (var proId in newMessage.ReceiverId)
-            {
-                pro.Add(_db.SelectRequest.SelectProfessional(proId));
-            }
-            _doc.CreateMessage(pro, _db.SelectRequest.SelectProfessional(newMessage.SenderId), newMessage.Title, newMessage.Content, _db.SelectRequest.SelectPatient(newMessage.PatientId));
+            Do.putDoc(newMessage);
             try
             {
                 await _db.SaveChangesAsync();
@@ -74,21 +68,16 @@ namespace ITI.Archi_Vite.WebApi.Controllers
 
             return StatusCode(HttpStatusCode.NoContent);
         }
+
         // PUT: api/Document/5
         [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> PutDoc(PrescriptionCreator newPrescription)
         {
-            _doc = new DocumentManager(_db);
-            List<Professional> pro = new List<Professional>();
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            foreach (var proId in newPrescription.Receivers)
-            {
-                pro.Add(_db.SelectRequest.SelectProfessional(proId));
-            }
-            _doc.CreatePrescription(pro, _db.SelectRequest.SelectProfessional(newPrescription.Sender), _db.SelectRequest.SelectPatient(newPrescription.Patient), newPrescription.Title, newPrescription.DocPath);
+            Do.putDoc(newPrescription);
             try
             {
                 await _db.SaveChangesAsync();
@@ -105,17 +94,11 @@ namespace ITI.Archi_Vite.WebApi.Controllers
         [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> PostDocument(ReciverModification newDoc)
         {
-            _doc = new DocumentManager(_db);
-            DocumentSerializable patientDoc = _doc.SeeDocument(newDoc.PatientId);
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
-            _doc.AddReciver(newDoc.RecieverId, newDoc.PatientId, newDoc.Date);
-
-            await _db.SaveChangesAsync();
-
+            Do.postDocument(newDoc);
             return StatusCode(HttpStatusCode.NoContent);
         }
 
@@ -123,11 +106,7 @@ namespace ITI.Archi_Vite.WebApi.Controllers
         [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> DeleteDoc(ReciverModification doc)
         {
-            _doc = new DocumentManager(_db);
-            DocumentSerializable patientDoc = _doc.SeeDocument(doc.PatientId);
-
-            _doc.DeleteReciever(doc.RecieverId, doc.PatientId, doc.Date);
-
+            Do.deleteDocument(doc);
             return StatusCode(HttpStatusCode.NoContent);
         }
 
