@@ -14,6 +14,8 @@ namespace ITI.Archi_Vite.Forms
 {
     public class ConnectionPage : ContentPage
     {
+		User _user;
+		Data _dataForUser;
         public ConnectionPage()
         {
             Image logo = new Image
@@ -55,9 +57,10 @@ namespace ITI.Archi_Vite.Forms
             {
                 if (pseudo.Text != null && password.Text != null)
                 {
-                    User newUser = await ConnectionGestion(pseudo.Text, password.Text);
-                    Data _dataForUser = new Data(newUser);
-                    await DisplayAlert("Reussite", "Les champ sont valides", "Ok");
+                    //User newUser = await ConnectionGestion(pseudo.Text, password.Text);
+
+					if(CanPutUserData(pseudo.Text, password.Text)) await Navigation.PushAsync(new PatientList(_dataForUser));
+					else await DisplayAlert ("Error", "Les champ doivent etre valides", "Ok");
                 }
                 else await DisplayAlert ("Error", "Les champ doivent etre valides", "Ok");
 
@@ -98,5 +101,52 @@ namespace ITI.Archi_Vite.Forms
             }
                 
         }
-    }
+		private bool CanPutUserData(string pseudo, string password)
+		{
+			User[] users = new User[6];
+			User u0 = new User (1, "Antoine", "Raquillet", DateTime.Now, "72 avenue maurice thorez", "Ivry-sur-Seine", 12345, "AntoineR", "AntoineR",0606066606, "http://new.intechinfo.fr/wp-content/uploads/2015/10/RAQUILLET-Antoine.jpg");
+			User u1 = new User(2, "Simon", "Favraud", DateTime.Now, "72 avenue maurice thorez", "Ivry-sur-Seine", 12345, "SimonF", "SimonF", 0606066606, "http://www.go-e-lan.info/vue/images/event/simon.PNG");
+			User u2 = new User (3, "Clement", "Rousseau", DateTime.Now, "72 avenue maurice thorez", "Ivry-sur-Seine", 12345, "ClementR", "ClementR",0606066606, "http://www.go-e-lan.info/vue/images/event/clem.PNG");
+			User u3 = new User (4, "Olivier", "Spinelli", DateTime.Now, "72 avenue maurice thorez", "Ivry-sur-Seine", 12345, "OlivierS", "OlivierS",0606066606, "http://new.intechinfo.fr/wp-content/uploads/2015/10/olivier-spinelli_portrait.png");
+			User u4 = new User (5, "Guillaume", "Fimes", DateTime.Now, "72 avenue maurice thorez", "Ivry-sur-Seine", 12345, "GuillaumeF", "GuillaumeF", 0606066606, "http://www.go-e-lan.info/vue/images/event/fimes.PNG");
+			User u5 = new User (6, "Maxime", "De Vogelas", DateTime.Now, "72 avenue maurice thorez", "Ivry-sur-Seine", 12345, "MaximeD", "MaximeD", 0606066606, "http://www.go-e-lan.info/vue/images/event/max.PNG");
+			users[0] = u0;
+			users[1] = u1;
+			users[2] = u2;
+			users[3] = u3;
+			users[4] = u4;
+			users[5] = u5;
+
+			for (int i=0; i < users.Length; i++)
+			{
+				if (users[i].Password == password && users[i].Pseudo == pseudo)
+					_user = users[i];
+			}
+			_dataForUser = new Data (_user, CreateFollowerDictionnary(users));  
+			if (_user == null)
+				return false;
+			return true;
+		}
+		private Dictionary<Patient, List<Professional>> CreateFollowerDictionnary(User[] users)
+		{
+			Dictionary<Patient, List<Professional>> follows = new Dictionary<Patient, List<Professional>> ();
+            List<Professional> proForGuillaume = new List<Professional>();
+            List<Professional> proForMaxime = new List<Professional>();
+            Patient guillaume = new Patient(users[4]);
+            Patient maxime = new Patient(users[5]); 
+            for( int i = 0; i<4; i++)
+            {
+                Professional pro = new Professional(users[i], "Infirmier");
+                proForGuillaume.Add(pro);
+            }
+            for (int i = 0; i < 2; i++)
+            {
+                Professional pro = new Professional(users[i], "Infirmier");
+                proForMaxime.Add(pro);
+            }
+            follows.Add(guillaume, proForGuillaume);
+            follows.Add(maxime, proForMaxime);
+            return follows;
+		}
+	}
 }

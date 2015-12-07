@@ -41,10 +41,12 @@
     <Compile Include="Data\User.cs" />
     <Compile Include="View\ConnectionPage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="View\PatientList.cs" />
     <Compile Include="View\ProfilPage.cs" />
     <Compile Include="View\ModifyProfil.cs" />
     <Compile Include="Data\Data.cs" />
     <Compile Include="HttpClientExtensions.cs" />
+    <Compile Include="View\FollowPage.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="GettingStarted.Xamarin" />

@@ -10,8 +10,10 @@ namespace ITI.Archi_Vite.Forms
 {
     public class ProfilPage : ContentPage
     {
-		public ProfilPage()
+		Data _userData;
+		public ProfilPage(Data userData)
         {
+			_userData = userData;
 			Button profilButton = new Button {
 				Text = "Mon Profil",
 				BackgroundColor = Color.Gray,
@@ -36,7 +38,7 @@ namespace ITI.Archi_Vite.Forms
 				TextColor = Color.Black
 			};
 
-			StackLayout topStack = new StackLayout {
+			StackLayout buttonStack = new StackLayout {
 
 				Children = {
 					profilButton,
@@ -53,39 +55,39 @@ namespace ITI.Archi_Vite.Forms
 				HorizontalOptions = LayoutOptions.Center
 			};
 			Label name = new Label {
-				Text = "Guillaume Fimes",
+				Text = _userData.User.FirstName + "  " + _userData.User.LastName,
 				FontSize = 30,
 				HorizontalOptions = LayoutOptions.Center
 				
 			};
 			Label phonenumber = new Label
 			{
-				Text = "Numero : 0662147351",
+				Text = "Numero : " + _userData.User.PhoneNumber ,
 				FontSize = 30,
 				HorizontalOptions = LayoutOptions.Center
 
             };
 			Label adresse = new Label
 			{
-				Text = "Adresse : 74 avenue morice thorez",
+				Text = "Adresse : "+ _userData.User.Adress,
                 FontSize = 30,
                 HorizontalOptions = LayoutOptions.Center
 			};
 			Label postCode = new Label
 			{
-				Text = "94200",
+				Text = _userData.User.Postcode.ToString(),
 				FontSize = 30,
 				HorizontalOptions = LayoutOptions.Center
 			};
 			Label city = new Label
 			{
-				Text = "Ivry-Sur-Seine",
+				Text = _userData.User.City,
 				FontSize = 30,
 				HorizontalOptions = LayoutOptions.Center
 			};
 			Image logo = new Image
 			{
-				Source = "http://www.go-e-lan.info/vue/images/event/fimes.PNG",
+				Source = _userData.User.Photo,
 				HorizontalOptions = LayoutOptions.FillAndExpand,
 			};
 
@@ -98,13 +100,13 @@ namespace ITI.Archi_Vite.Forms
             };
 			modify.Clicked += async (sender, e) => 
 			{
-				await Navigation.PushModalAsync(new ModifyProfil());
+				await Navigation.PushAsync(new ModifyProfil(_userData));
 			};
             Content = new StackLayout
             {
 
                 Children = {
-					topStack,
+					buttonStack,
 					title,
 					name,
 					phonenumber,

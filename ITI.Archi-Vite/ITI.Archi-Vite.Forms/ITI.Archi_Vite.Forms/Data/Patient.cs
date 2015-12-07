@@ -10,8 +10,8 @@ namespace ITI.Archi_Vite.Forms
     {
         readonly int _patientId;
 		public Patient
-		(User user, string photoPath)
-			:base(user.UserId, user.FirstName, user.LastName, user.BirthDate, user.Adress, user.City, user.PostCode, user.Pseudo, user.Password, user.PhoneNumber, user.PhotoPath)
+		(User user)
+			:base(user.UserId, user.FirstName, user.LastName, user.Birthdate, user.Adress, user.City, user.Postcode, user.Pseudo, user.Password, user.PhoneNumber, user.Photo)
         {
 			_patientId = UserId;
         }

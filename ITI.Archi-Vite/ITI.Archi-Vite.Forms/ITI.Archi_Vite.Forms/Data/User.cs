@@ -70,7 +70,7 @@ namespace ITI.Archi_Vite.Forms
             }
         }
 
-        public DateTime BirthDate
+		public DateTime Birthdate
         {
             get
             {
@@ -109,7 +109,7 @@ namespace ITI.Archi_Vite.Forms
             }
         }
 
-        public int PostCode
+        public int Postcode
         {
             get
             {
@@ -161,7 +161,7 @@ namespace ITI.Archi_Vite.Forms
             }
         }
 
-        public string PhotoPath
+        public string Photo
         {
             get
             {

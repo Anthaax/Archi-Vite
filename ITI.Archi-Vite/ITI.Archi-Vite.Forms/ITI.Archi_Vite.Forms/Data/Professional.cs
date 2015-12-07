@@ -11,7 +11,7 @@ namespace ITI.Archi_Vite.Forms
 		readonly int _professionalId;
 		string _role;
 		public Professional(User user, string role)
-			:base(user.UserId, user.FirstName, user.LastName, user.BirthDate, user.Adress, user.City, user.PostCode, user.Pseudo, user.Password, user.PhoneNumber, user.PhotoPath)
+			:base(user.UserId, user.FirstName, user.LastName, user.Birthdate, user.Adress, user.City, user.Postcode, user.Pseudo, user.Password, user.PhoneNumber, user.Photo)
 		{
 			_professionalId = UserId;
 			_role = role;

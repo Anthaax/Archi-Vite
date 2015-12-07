@@ -7,8 +7,10 @@ namespace ITI.Archi_Vite.Forms
 	public class ModifyProfil : ContentPage
 	{
 		Image _profilPhoto;
-		public ModifyProfil ()
+		Data _userData;
+		public ModifyProfil (Data userData)
 		{
+			_userData = userData;
 			Button profilButton = new Button {
 				Text = "Mon Profil",
 				BackgroundColor = Color.Gray,
@@ -33,7 +35,7 @@ namespace ITI.Archi_Vite.Forms
 				TextColor = Color.Black
 			};
 
-			StackLayout topStack = new StackLayout {
+			StackLayout buttonStack = new StackLayout {
 
 				Children = {
 					profilButton,
@@ -46,7 +48,7 @@ namespace ITI.Archi_Vite.Forms
 			};
 			Entry firstName = new Entry
 			{
-				Text = "Guillaume",
+				Text = _userData.User.FirstName,
 				FontSize = 40,
 				HorizontalTextAlignment = TextAlignment.Center,
 				HorizontalOptions = LayoutOptions.FillAndExpand,
@@ -56,7 +58,7 @@ namespace ITI.Archi_Vite.Forms
 			firstName.TextChanged += EntryTextChanged;
 			Entry lastName = new Entry
 			{
-				Placeholder = "Fimes",
+				Text = _userData.User.LastName,
 				FontSize = 40,
 				HorizontalTextAlignment = TextAlignment.Center,
 				HorizontalOptions = LayoutOptions.FillAndExpand,
@@ -65,7 +67,7 @@ namespace ITI.Archi_Vite.Forms
 			};
 			Entry adress = new Entry
 			{
-				Placeholder = "74 avenue morice thorez",
+				Text = _userData.User.Adress,
 				FontSize = 40,
 				HorizontalTextAlignment = TextAlignment.Center,
 				HorizontalOptions = LayoutOptions.FillAndExpand,
@@ -74,7 +76,7 @@ namespace ITI.Archi_Vite.Forms
 			};
 			Entry postCode = new Entry
 			{
-				Placeholder = "94200",
+				Text = _userData.User.Postcode.ToString(),
 				FontSize = 40,
 				Keyboard = Keyboard.Numeric,
 				HorizontalTextAlignment = TextAlignment.Center,
@@ -84,7 +86,7 @@ namespace ITI.Archi_Vite.Forms
 			};
 			Entry city = new Entry
 			{
-				Placeholder = "Ivry",
+				Text = _userData.User.City,
 				FontSize = 40,
 				HorizontalTextAlignment = TextAlignment.Center,
 				HorizontalOptions = LayoutOptions.FillAndExpand,
@@ -93,7 +95,7 @@ namespace ITI.Archi_Vite.Forms
 			};
 			Entry phoneNumber = new Entry
 			{
-				Placeholder = "0662147351",
+				Text = _userData.User.PhoneNumber.ToString(),
 				FontSize = 40,
 				Keyboard = Keyboard.Telephone,
 				HorizontalTextAlignment = TextAlignment.Center,
@@ -102,13 +104,8 @@ namespace ITI.Archi_Vite.Forms
 				TextColor = Color.Gray
 			};
 			_profilPhoto = new Image {
-				Source = "http://www.go-e-lan.info/vue/images/event/fimes.PNG"
+				Source = _userData.User.Photo
 			};
-			var tapGestureRecognizer = new TapGestureRecognizer();
-			tapGestureRecognizer.Tapped += async (s, e) => {
-				await Navigation.PushAsync(new ConnectionPage());
-			};
-			_profilPhoto.GestureRecognizers.Add(tapGestureRecognizer);
 			Button modify = new Button
 			{
 				Text = "Sauvegarder",
@@ -118,13 +115,19 @@ namespace ITI.Archi_Vite.Forms
 			};
 			modify.Clicked += async (sender, e) => 
 			{
-				await Navigation.PushAsync(new ProfilPage());
+				_userData.User.Adress = adress.Text;
+				_userData.User.City = city.Text;
+				_userData.User.FirstName = firstName.Text;
+				_userData.User.LastName = lastName.Text;
+				_userData.User.PhoneNumber = Int32.Parse(phoneNumber.Text);
+				_userData.User.Postcode = Int32.Parse(postCode.Text);
+				await Navigation.PushAsync(new ProfilPage(_userData));
 			};
 			Content = new StackLayout
 			{
 
 				Children = {
-					topStack,
+					buttonStack,
 					firstName,
 					lastName,
 					adress,
