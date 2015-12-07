@@ -26,7 +26,6 @@ namespace ITI.Archi_Vite.WebApi.Controllers
         [ResponseType(typeof(DocumentSerializable))]
             public async Task<IHttpActionResult> GetDocument(int patientId, int proId)
         {
-
             DocumentSerializable doc = Do.SeeDocument(proId, patientId);
             if (doc == null)
             {
@@ -44,7 +43,6 @@ namespace ITI.Archi_Vite.WebApi.Controllers
             {
                 return NotFound();
             }
-
             return Ok(doc);
         }
 
