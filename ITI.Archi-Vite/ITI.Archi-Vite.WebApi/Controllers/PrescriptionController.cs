@@ -105,14 +105,11 @@ namespace ITI.Archi_Vite.WebApi.Controllers
         [ResponseType(typeof(Follower))]
         public async Task<IHttpActionResult> DeleteFollower(int id)
         {
-            if (Do.deleteFollowerCheck(id) == null)
+            if (Do.deleteFollower(id) == null)
             {
                 return NotFound();
             }
-
-            await _db.SaveChangesAsync();
-
-            return Ok(Do.deleteFollowerCheck(id).Item2);
+            return Ok(Do.deleteFollower(id));
         }
 
         protected override void Dispose(bool disposing)

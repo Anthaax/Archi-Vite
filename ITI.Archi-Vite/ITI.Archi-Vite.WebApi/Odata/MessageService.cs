@@ -32,5 +32,13 @@ namespace ITI.Archi_Vite.WebApi.Controllers
             _db.Follower.Add(follower);
         }
 
+        public async System.Threading.Tasks.Task<Follower> deleteFollower(int id)
+        {
+            Follower follower = await _db.Follower.FindAsync(id);
+            _db.Follower.Remove(follower);
+            await _db.SaveChangesAsync();
+
+            return follower;
+        }
     }
 }

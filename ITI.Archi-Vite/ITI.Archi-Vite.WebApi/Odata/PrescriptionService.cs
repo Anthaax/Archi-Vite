@@ -30,22 +30,15 @@ namespace ITI.Archi_Vite.WebApi.Controllers
             _db.Follower.Add(follower);
         }
 
-        public Tuple<bool , Follower> deleteFollowerCheck(int id)
+        public async System.Threading.Tasks.Task<Follower> deleteFollower(int id)
         {
-            bool check = false;
-            Follower follower = _db.Follower.Find(id);           
-            if (follower == null) check = true;
-            else
-            {
-                deleteFollower(follower);
-            }
-            return Tuple.Create(check, follower);
+            Follower follower = await _db.Follower.FindAsync(id);
+            _db.Follower.Remove(follower);
+            await _db.SaveChangesAsync();
+
+            return follower;
         }
 
-        private void deleteFollower(Follower follower)
-        {
-            _db.Follower.Remove(follower);
-        }
 
     }
 }

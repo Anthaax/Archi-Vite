@@ -18,6 +18,7 @@ namespace ITI.Archi_Vite.WebApi.Controllers
     {
         private ArchiViteContext _db = new ArchiViteContext();
         private DocumentManager _doc;
+        public ProfessionalService Do = new ProfessionalService();
 
 
         // GET: api/Professionals
@@ -30,7 +31,7 @@ namespace ITI.Archi_Vite.WebApi.Controllers
         [ResponseType(typeof(Professional))]
         public async Task<IHttpActionResult> GetProfessional(int id)
         {
-            Professional professional = _db.SelectRequest.SelectProfessional(id);
+            Professional professional = Do.getProfessional(id);
             if (professional == null)
             {
                 return NotFound();
@@ -53,7 +54,7 @@ namespace ITI.Archi_Vite.WebApi.Controllers
                 return BadRequest();
             }
 
-            _db.AddRequest.AddProfessional(newProfessional.User, newProfessional.Role);
+            Do.putProfessional(id, newProfessional);
 
             try
             {
@@ -79,21 +80,11 @@ namespace ITI.Archi_Vite.WebApi.Controllers
         [ResponseType(typeof(Professional))]
         public async Task<IHttpActionResult> DeleteProfessional(int id)
         {
-            Professional professional = await _db.Professional.FindAsync(id);
-            if (professional == null)
+            if (Do.DeleteProfessional(id) == null)
             {
                 return NotFound();
             }
-            _doc = new DocumentManager(_db);
-            List<Follower> follow = _db.SelectRequest.SelectFollowForPro(id);
-            foreach (var f in follow)
-            {
-                _doc.DeleteFollowerFile(professional.ProfessionalId, f.Patient.PatientId);
-            }
-            _db.SuppressionRequest.ProfessionnalSuppression(professional);
-            await _db.SaveChangesAsync();
-
-            return Ok(professional);
+            return Ok(Do.DeleteProfessional(id));
         }
 
         protected override void Dispose(bool disposing)
