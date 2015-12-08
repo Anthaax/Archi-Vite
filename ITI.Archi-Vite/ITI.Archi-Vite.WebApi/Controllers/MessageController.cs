@@ -18,6 +18,7 @@ namespace ITI.Archi_Vite.WebApi.Controllers
     {
         private ArchiViteContext _db = new ArchiViteContext();
         private DocumentManager _doc;
+        MessageService Do = new MessageService();
 
         // GET: api/Message
         public IQueryable<Follower> GetFollower()
@@ -29,9 +30,7 @@ namespace ITI.Archi_Vite.WebApi.Controllers
         [ResponseType(typeof(Follower))]
         public async Task<IHttpActionResult> GetFollower(int id)
         {
-            Professional pro = _db.SelectRequest.SelectProfessional(id);
-            Patient patient = _db.SelectRequest.SelectPatient(id);
-            DocumentSerializable doc = _doc.SeeDocument(pro, patient);
+            var doc = Do.getFollower(id);
             return Ok(doc);
         }
 
@@ -49,7 +48,7 @@ namespace ITI.Archi_Vite.WebApi.Controllers
                 return BadRequest();
             }
 
-            _db.Entry(follower).State = EntityState.Modified;
+            Do.putFollower(follower);
 
             try
             {
@@ -78,9 +77,7 @@ namespace ITI.Archi_Vite.WebApi.Controllers
             {
                 return BadRequest(ModelState);
             }
-
-            _db.Follower.Add(follower);
-
+            Do.postFollower(follower);
             try
             {
                 await _db.SaveChangesAsync();
