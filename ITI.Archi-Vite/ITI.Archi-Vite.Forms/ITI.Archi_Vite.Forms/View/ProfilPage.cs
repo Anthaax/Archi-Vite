@@ -29,8 +29,19 @@ namespace ITI.Archi_Vite.Forms
 				FontSize = 30,
 				TextColor = Color.Black
 			};
+            if (PageForPatient()) followButton.Text = "Mon Suivis";
 
-			Button documentsButton = new Button {
+            followButton.Clicked += async (sender, e) =>
+            {
+                if (PageForPatient())
+				{
+					Patient patient = new Patient(_userData.User);
+					await Navigation.PushAsync(new FollowPatientPage(_userData, patient));
+				}
+					else await Navigation.PushAsync(new PatientList(_userData));
+            };
+
+            Button documentsButton = new Button {
 				Text = "Mes Documents",
 				BackgroundColor = Color.White,
 				BorderColor = Color.Black,
@@ -120,6 +131,11 @@ namespace ITI.Archi_Vite.Forms
             this.BackgroundColor = Color.White;
         }
 
+        private void FollowButton_Clicked(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
         private void EntryTextChanged(object sender, TextChangedEventArgs e)
         {
             Entry entry = sender as Entry;
@@ -127,6 +143,15 @@ namespace ITI.Archi_Vite.Forms
             {
                 entry.TextColor = Color.Gray;
             }
+        }
+
+        private bool PageForPatient()
+        {
+            foreach(var patient in _userData.Follow.Keys )
+            {
+                if (patient.UserId == _userData.User.UserId) return true;
+            }
+            return false;
         }
 
         private void OnLabelClicked()

@@ -46,7 +46,7 @@
     <Compile Include="View\ModifyProfil.cs" />
     <Compile Include="Data\Data.cs" />
     <Compile Include="HttpClientExtensions.cs" />
-    <Compile Include="View\FollowPage.cs" />
+    <Compile Include="View\FollowPatientPage.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="GettingStarted.Xamarin" />

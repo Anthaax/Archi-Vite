@@ -59,8 +59,12 @@ namespace ITI.Archi_Vite.Forms
                 {
                     //User newUser = await ConnectionGestion(pseudo.Text, password.Text);
 
-					if(CanPutUserData(pseudo.Text, password.Text)) await Navigation.PushAsync(new PatientList(_dataForUser));
-					else await DisplayAlert ("Error", "Les champ doivent etre valides", "Ok");
+                    if (CanPutUserData(pseudo.Text, password.Text))
+                    {
+                        Patient patient = new Patient(_user);
+                        await Navigation.PushAsync(new FollowPatientPage(_dataForUser, patient));
+                    }
+                    else await DisplayAlert("Error", "Les champ doivent etre valides", "Ok");
                 }
                 else await DisplayAlert ("Error", "Les champ doivent etre valides", "Ok");
 
