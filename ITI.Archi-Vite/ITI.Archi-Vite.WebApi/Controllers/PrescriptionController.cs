@@ -18,6 +18,7 @@ namespace ITI.Archi_Vite.WebApi.Controllers
     {
         private ArchiViteContext _db = new ArchiViteContext();
         DocumentManager _doc;
+        PrescriptionService Do = new PrescriptionService();
 
         // GET: api/Prescription
         public IQueryable<Follower> GetFollower()
@@ -29,14 +30,12 @@ namespace ITI.Archi_Vite.WebApi.Controllers
         [ResponseType(typeof(DocumentSerializable))]
         public async Task<IHttpActionResult> GetPrescrition(int patientId, int proId)
         {
-            _doc = new DocumentManager(_db);
-            DocumentSerializable doc = _doc.SeeDocument(proId, patientId);
-            if (doc == null)
+            if (Do.getPrescription(patientId, proId) == null)
             {
                 return NotFound();
             }
 
-            return Ok(doc);
+            return Ok(Do.getPrescription(patientId, proId));
         }
 
         // PUT: api/Prescription/5
@@ -53,7 +52,7 @@ namespace ITI.Archi_Vite.WebApi.Controllers
                 return BadRequest();
             }
 
-            _db.Entry(follower).State = EntityState.Modified;
+            Do.putPrescription(id, follower);
 
             try
             {
@@ -82,9 +81,7 @@ namespace ITI.Archi_Vite.WebApi.Controllers
             {
                 return BadRequest(ModelState);
             }
-
-            _db.Follower.Add(follower);
-
+            Do.postFollower(follower);
             try
             {
                 await _db.SaveChangesAsync();
@@ -108,16 +105,14 @@ namespace ITI.Archi_Vite.WebApi.Controllers
         [ResponseType(typeof(Follower))]
         public async Task<IHttpActionResult> DeleteFollower(int id)
         {
-            Follower follower = await _db.Follower.FindAsync(id);
-            if (follower == null)
+            if (Do.deleteFollowerCheck(id) == null)
             {
                 return NotFound();
             }
 
-            _db.Follower.Remove(follower);
             await _db.SaveChangesAsync();
 
-            return Ok(follower);
+            return Ok(Do.deleteFollowerCheck(id).Item2);
         }
 
         protected override void Dispose(bool disposing)

@@ -18,6 +18,7 @@ namespace ITI.Archi_Vite.WebApi.Controllers
     {
         private ArchiViteContext _db = new ArchiViteContext();
         private DocumentManager _doc ;
+        PatientService Do = new PatientService();
 
         // GET: api/Patients
         public IQueryable<Patient> GetPatients()
@@ -29,28 +30,25 @@ namespace ITI.Archi_Vite.WebApi.Controllers
         [ResponseType(typeof(Patient))]
         public async Task<IHttpActionResult> GetPatient(int id)
         {
-            Patient patient = _db.SelectRequest.SelectPatient(id);
-            if (patient == null)
+
+            if ( Do.getPatient(id) == null)
             {
                 return NotFound();
             }
 
-            return Ok(patient);
+            return Ok(Do.getPatient(id));
         }
 
         // PUT: api/Patients/5
         [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> PutPatient(PatientCreation newPatient)
         {
-            _doc = new DocumentManager(_db);
+            
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
-            _db.AddRequest.AddPatient(newPatient.User);
-            _doc.CreateEmptyFile(_db.SelectRequest.SelectPatient(newPatient.User.Pseudo, newPatient.User.Password).PatientId.ToString());
-
+            Do.putPatient(newPatient);
             try
             {
                 await _db.SaveChangesAsync();
@@ -67,23 +65,13 @@ namespace ITI.Archi_Vite.WebApi.Controllers
         [ResponseType(typeof(Patient))]
         public async Task<IHttpActionResult> DeletePatient(int id)
         {
-            _doc = new DocumentManager(_db);
-            Patient patient = _db.SelectRequest.SelectPatient(id);
-            if (patient == null)
+            var result = Do.deletePatientCheck(id);
+            if (result.Item1)
             {
                 return NotFound();
             }
-            List<Follower> follow = _db.SelectRequest.SelectFollowForPatient(id);
-            foreach(var f in follow)
-            {
-                _doc.DeleteFollowerFile(f.Professionnal.ProfessionalId, patient.PatientId);
-            }
-            _doc.DeletePatientFile(patient.PatientId);
-            _db.SuppressionRequest.PatientSuppression(patient);
-            _db.Patient.Remove(patient);
-            await _db.SaveChangesAsync();
 
-            return Ok(patient);
+            return Ok(result.Item2);
         }
 
         protected override void Dispose(bool disposing)
