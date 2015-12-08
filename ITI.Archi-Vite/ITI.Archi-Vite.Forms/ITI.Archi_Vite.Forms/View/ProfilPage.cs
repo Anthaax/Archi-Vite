@@ -11,9 +11,11 @@ namespace ITI.Archi_Vite.Forms
     public class ProfilPage : ContentPage
     {
 		Data _userData;
-		public ProfilPage(Data userData)
+        User _user;
+		public ProfilPage(Data userData, User user)
         {
 			_userData = userData;
+            _user = user;
 			Button profilButton = new Button {
 				Text = "Mon Profil",
 				BackgroundColor = Color.Gray,
@@ -31,15 +33,7 @@ namespace ITI.Archi_Vite.Forms
 			};
             if (PageForPatient()) followButton.Text = "Mon Suivis";
 
-            followButton.Clicked += async (sender, e) =>
-            {
-                if (PageForPatient())
-				{
-					Patient patient = new Patient(_userData.User);
-					await Navigation.PushAsync(new FollowPatientPage(_userData, patient));
-				}
-					else await Navigation.PushAsync(new PatientList(_userData));
-            };
+            followButton.Clicked += FollowButtonClicked;
 
             Button documentsButton = new Button {
 				Text = "Mes Documents",
@@ -66,41 +60,51 @@ namespace ITI.Archi_Vite.Forms
 				HorizontalOptions = LayoutOptions.Center
 			};
 			Label name = new Label {
-				Text = _userData.User.FirstName + "  " + _userData.User.LastName,
+				Text = _user.FirstName + "  " + _user.LastName,
 				FontSize = 30,
 				HorizontalOptions = LayoutOptions.Center
 				
 			};
 			Label phonenumber = new Label
 			{
-				Text = "Numero : " + _userData.User.PhoneNumber ,
+				Text = "Numero : " + _user.PhoneNumber ,
 				FontSize = 30,
 				HorizontalOptions = LayoutOptions.Center
 
             };
 			Label adresse = new Label
 			{
-				Text = "Adresse : "+ _userData.User.Adress,
+				Text = "Adresse : "+ _user.Adress,
                 FontSize = 30,
                 HorizontalOptions = LayoutOptions.Center
 			};
 			Label postCode = new Label
 			{
-				Text = _userData.User.Postcode.ToString(),
+				Text = _user.Postcode.ToString(),
 				FontSize = 30,
 				HorizontalOptions = LayoutOptions.Center
 			};
 			Label city = new Label
 			{
-				Text = _userData.User.City,
+				Text = _user.City,
 				FontSize = 30,
 				HorizontalOptions = LayoutOptions.Center
 			};
 			Image logo = new Image
 			{
-				Source = _userData.User.Photo,
+				Source = _user.Photo,
 				HorizontalOptions = LayoutOptions.FillAndExpand,
 			};
+
+            Button Suivis = new Button
+			{
+				Text = "Voir mes suivi",
+				FontSize = 40,
+				BackgroundColor = Color.FromHex("439DFE"),
+				VerticalOptions = LayoutOptions.End
+			};
+			Suivis.Clicked += FollowButtonClicked;
+			if (PageForPatient()) Suivis.Text = "Voir mon Suivis";
 
             Button modify = new Button
             {
@@ -113,6 +117,9 @@ namespace ITI.Archi_Vite.Forms
 			{
 				await Navigation.PushAsync(new ModifyProfil(_userData));
 			};
+
+            if (!UserAccount()) modify.IsVisible = false;
+
             Content = new StackLayout
             {
 
@@ -125,38 +132,39 @@ namespace ITI.Archi_Vite.Forms
 					postCode,
 					city,
 					logo,
-					modify
+                    Suivis,
+                    modify
                 },
             };
             this.BackgroundColor = Color.White;
         }
 
-        private void FollowButton_Clicked(object sender, EventArgs e)
-        {
-            throw new NotImplementedException();
-        }
+		private async void FollowButtonClicked (object sender, EventArgs e)
+		{
+			if (PageForPatient())
+			{
+				Patient patient = new Patient(_userData.User);
+				await Navigation.PushAsync(new FollowPatientPage(_userData, patient));
+			}
+			else await Navigation.PushAsync(new PatientList(_userData));
+		}
 
-        private void EntryTextChanged(object sender, TextChangedEventArgs e)
+        private bool UserAccount()
         {
-            Entry entry = sender as Entry;
-            if (entry != null)
+            if(_userData.User.PhoneNumber == _user.PhoneNumber)
             {
-                entry.TextColor = Color.Gray;
+                return true;
             }
+			return false;
         }
 
-        private bool PageForPatient()
+         private bool PageForPatient()
         {
             foreach(var patient in _userData.Follow.Keys )
             {
                 if (patient.UserId == _userData.User.UserId) return true;
             }
             return false;
-        }
-
-        private void OnLabelClicked()
-        {
-            throw new NotImplementedException();
         }
     }
 }
