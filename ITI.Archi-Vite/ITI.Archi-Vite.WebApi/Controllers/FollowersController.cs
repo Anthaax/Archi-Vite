@@ -18,6 +18,7 @@ namespace ITI.Archi_Vite.WebApi.Controllers
     {
         private ArchiViteContext _db = new ArchiViteContext();
         DocumentManager _doc;
+        FollowerService Do = new FollowerService();
 
         // GET: api/Followers
         public IQueryable<Follower> GetFollowers()
@@ -27,26 +28,28 @@ namespace ITI.Archi_Vite.WebApi.Controllers
 
         // GET: api/Followers/5
         [ResponseType(typeof(List<Follower>))]
-        public async Task<IHttpActionResult> GetFollower(int id, int proId)
+        [ResponseType(typeof(Follower))]
+        public async Task<IHttpActionResult> GetFollower(int id)
         {
-            List<Follower> follower = _db.SelectRequest.SelectFollowForPro(id);
+            var follower = Do.getDocument(id);
+            if (follower == null)
+            {
+                return NotFound();
+            }
 
             return Ok(follower);
         }
+
 
         // PUT: api/Followers/5
         [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> PutFollower(FollowerCreation follower)
         {
-            _doc = new DocumentManager(_db);
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
-            _doc.CreateEmptyFile(follower.PatientId + "$" + follower.ProfessionalId);
-            _db.AddRequest.AddFollow(follower.PatientId, follower.ProfessionalId);
-
+            Do.PutFollower(follower);
             try
             {
                 await _db.SaveChangesAsync();
@@ -63,15 +66,12 @@ namespace ITI.Archi_Vite.WebApi.Controllers
         [ResponseType(typeof(Follower))]
         public async Task<IHttpActionResult> DeleteFollower(int patientId, int proId)
         {
-            _doc = new DocumentManager(_db);
             Follower follower = _db.SelectRequest.SelectOneFollow(patientId, proId);
             if (follower == null)
             {
                 return NotFound();
             }
-            _db.SuppressionRequest.FollowerSuppression(follower);
-            _doc.DeleteFollowerFile(proId, patientId);
-            _db.Follower.Remove(follower);
+            Do.DeleteFollower(patientId, proId);
             await _db.SaveChangesAsync();
 
             return Ok(follower);

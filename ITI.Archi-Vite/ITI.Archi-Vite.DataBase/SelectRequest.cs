@@ -111,6 +111,63 @@ namespace ITI.Archi_Vite.DataBase
                                         .FirstOrDefault();
             return senderFollow;
         }
+
+        public Dictionary<Patient, Professional[]> SelectAllFollow(int id)
+        {
+            Dictionary<Patient, Professional[]> Follows = new Dictionary<Patient, Professional[]>();
+            List<Patient> patientList = new List<Patient>();
+            
+
+            var senderFollow = _context.Follower
+                                        .Include(c => c.Patient)
+                                        .Include(c => c.Professionnal)
+                                        .Include(c => c.Professionnal.User)
+                                        .Include(c => c.Patient.User)
+                                        .Where(t => t.ProfessionnalId.Equals(id))
+                                        .ToList();
+                foreach (var follow in senderFollow)
+            {
+                if (follow.ProfessionnalId == id)
+                {
+                    patientList.Add(follow.Patient);
+                }
+            }
+            Follows = PatientAdd(patientList);            
+            return Follows;
+        }
+            
+        private Dictionary<Patient, Professional[]> PatientAdd (List<Patient> pp)
+        {
+            Dictionary<Patient, Professional[]> Follows = new Dictionary<Patient,Professional[]>();
+
+            foreach (var Patient in pp)
+            {
+                List<Follower> result = SelectFollowForPatient(Patient.PatientId);
+                var tupleResult = ProAdd(result, Patient);
+                Follows.Add(tupleResult.Item1, tupleResult.Item2);
+            }
+            return Follows;
+        }
+
+        private Tuple<Patient, Professional[]> ProAdd(List<Follower> result, Patient p)
+        {
+            Professional[] proArray = new Professional[10];
+            Tuple<Patient, Professional[]> Follows;
+            int x = 0;
+
+            foreach (var follow in result)
+            {
+
+                if (follow.PatientId == p.PatientId)
+                {
+                    proArray.SetValue(follow.Professionnal, x);
+                    x++;
+                }
+            }
+            Follows = Tuple.Create(p, proArray);
+            return Follows;
+        }
+
         public List<Follower> SelectFollowForPro(int IDPro)
         {
             var senderFollow = _context.Follower
