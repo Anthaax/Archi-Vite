@@ -131,26 +131,61 @@ namespace ITI.Archi_Vite.Forms
             _dataForUser = new Data(_user, CreateFollowerDictionnary(users, _user));
             return true;
 		}
-		private Dictionary<Patient, List<Professional>> CreateFollowerDictionnary(User[] users, User curentUser)
+		private Dictionary<Patient, Professional[]> CreateFollowerDictionnary(User[] users, User curentUser)
 		{
-			Dictionary<Patient, List<Professional>> follows = new Dictionary<Patient, List<Professional>> ();
-            List<Professional> proForGuillaume = new List<Professional>();
-            List<Professional> proForMaxime = new List<Professional>();
+            Dictionary<Patient, Professional[]> follows = new Dictionary<Patient, Professional[]>();
+            Professional[] proForGuillaume = new Professional[10];
+            Professional[] proForMaxime = new Professional[10];
             Patient guillaume = new Patient(users[4]);
             Patient maxime = new Patient(users[5]); 
             for( int i = 0; i<4; i++)
             {
                 Professional pro = new Professional(users[i], "Infirmier");
-                proForGuillaume.Add(pro);
+                proForGuillaume.SetValue(pro);
             }
             for (int i = 0; i < 2; i++)
             {
                 Professional pro = new Professional(users[i], "Infirmier");
-                proForMaxime.Add(pro);
+                proForMaxime.SetValue(pro);
             }
             if(curentUser != users[5] ) follows.Add(guillaume, proForGuillaume);
             if (curentUser != users[4] && curentUser != users[3]) follows.Add(maxime, proForMaxime);
             return follows;
 		}
-	}
+        private DocumentSerializable CreateSerializableDocument(Data userData, User patient)
+        {
+            List<Message> messages = new List<Message>();
+            List<Prescription> prescriptions = new List<Prescription>();
+            Patient p = new Patient(patient);
+            Professional[] pro = ProfessionalArray(userData, patient);
+            List<Professional> professional = new List<Professional>();
+            for (int i = 0; i < 2; i++)
+            {
+                professional.Add(pro[i]);
+            }
+            messages.Add(new Message("Coucou", "Il va bien", pro[0], professional, p));
+            messages.Add(new Message("Hey", "Il va bien", pro[1], professional, p));
+            DocumentSerializable doc = new DocumentSerializable(messages, prescriptions);
+            return doc;
+        }
+
+        private Professional[] ProfessionalArray(Data userData, User user)
+        {
+            Professional[] pro = new Professional[10];
+            Patient p = new Patient(user);
+            foreach (var patient in userData.Follow.Keys)
+            {
+                if (user.UserId == patient.UserId)
+                    p = patient;
+            }
+            userData.Follow.TryGetValue(p, out pro);
+            int count = 0;
+            foreach (var professional in pro)
+            {
+                pro.SetValue(professional, count);
+                count++;
+            }
+            return pro;
+        }
+    }
 }

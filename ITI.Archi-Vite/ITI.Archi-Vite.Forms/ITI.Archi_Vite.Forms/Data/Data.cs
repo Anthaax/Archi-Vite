@@ -5,15 +5,16 @@ namespace ITI.Archi_Vite.Forms
 {
 	public class Data
 	{
-        readonly Dictionary<Patient, List<Professional>> _follow;
+        readonly Dictionary<Patient, Professional[]> _follow;
         readonly User _user;
-		public Data(User user , Dictionary<Patient, List<Professional>> followers)
+        DocumentSerializable _documents;
+		public Data(User user , Dictionary<Patient, Professional[]> followers)
 		{
             _user = user;
             _follow = followers;
 		}
 
-        public Dictionary<Patient, List<Professional>> Follow
+        public Dictionary<Patient, Professional[]> Follow
         {
             get
             {

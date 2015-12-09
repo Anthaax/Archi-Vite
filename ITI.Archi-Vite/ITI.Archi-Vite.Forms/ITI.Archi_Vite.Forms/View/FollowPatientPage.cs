@@ -58,6 +58,28 @@ namespace ITI.Archi_Vite.Forms
 				HorizontalOptions = LayoutOptions.Start
 			};
 
+            Button messageButton = new Button
+            {
+                Text = "Messages",
+                FontSize = 40,
+                BackgroundColor = Color.FromHex("439DFE"),
+            };
+
+            AbsoluteLayout.SetLayoutFlags(messageButton, AbsoluteLayoutFlags.PositionProportional);
+            AbsoluteLayout.SetLayoutBounds(messageButton, new Rectangle(0, 1, AbsoluteLayout.AutoSize, AbsoluteLayout.AutoSize));
+            photoLayout.Children.Add(messageButton);
+
+            Button prescriptionButton = new Button
+            {
+                Text = "Prescriptions",
+                FontSize = 40,
+                BackgroundColor = Color.FromHex("439DFE"),
+            };
+
+            AbsoluteLayout.SetLayoutFlags(prescriptionButton, AbsoluteLayoutFlags.PositionProportional);
+            AbsoluteLayout.SetLayoutBounds(prescriptionButton, new Rectangle(1, 1, AbsoluteLayout.AutoSize, AbsoluteLayout.AutoSize));
+            photoLayout.Children.Add(prescriptionButton);
+
             Image patientImage = new Image
             {
                 Source = patient.Photo,
@@ -74,15 +96,17 @@ namespace ITI.Archi_Vite.Forms
             for (int i = 0; i < 3; i++)
             {
 				proImage[i] = new Image();
-				if (professionals [i] != null)
+				if (professionals [i] != null) 
+				{
+					proImage [i].GestureRecognizers.Add (tappedGesture);
 					proImage [i].Source = professionals [i].Photo;
+				}
 				else
 					proImage [i].Source = patient.Photo;
 				proImage [i].Scale = 0.75;
 				AbsoluteLayout.SetLayoutFlags(proImage[i], AbsoluteLayoutFlags.PositionProportional);
 				AbsoluteLayout.SetLayoutBounds(proImage[i], new Rectangle(X, Y, AbsoluteLayout.AutoSize, AbsoluteLayout.AutoSize));
 				photoLayout.Children.Add(proImage[i]);
-                proImage[i].GestureRecognizers.Add(tappedGesture);
 				X = X - 0.2;
 				Y = Y + 0.2;
 
@@ -91,15 +115,17 @@ namespace ITI.Archi_Vite.Forms
             {
 				X = X + 0.2;
 				proImage[i] = new Image();
-				if (professionals [i] != null)
+				if (professionals [i] != null) 
+				{
+					proImage [i].GestureRecognizers.Add (tappedGesture);
 					proImage [i].Source = professionals [i].Photo;
+				}
 				else
 					proImage [i].Source = patient.Photo;
 				proImage [i].Scale = 0.75;
                 AbsoluteLayout.SetLayoutFlags(proImage[i], AbsoluteLayoutFlags.PositionProportional);
                 AbsoluteLayout.SetLayoutBounds(proImage[i], new Rectangle(X, Y, AbsoluteLayout.AutoSize, AbsoluteLayout.AutoSize));
                 photoLayout.Children.Add(proImage[i]);
-                proImage[i].GestureRecognizers.Add(tappedGesture);
 				if (i != 5) Y = Y + 0.2;
             }
             for (int i = 6; i < 8; i++)
@@ -107,29 +133,33 @@ namespace ITI.Archi_Vite.Forms
 				X = X + 0.2;
 				Y = Y - 0.2;
 				proImage[i] = new Image();
-				if (professionals [i] != null)
+				if (professionals [i] != null) 
+				{
 					proImage [i].Source = professionals [i].Photo;
+					proImage [i].GestureRecognizers.Add (tappedGesture);
+				}
 				else
 					proImage [i].Source = "http://www.go-e-lan.info/vue/images/event/simon.PNG";
 				proImage [i].Scale = 0.75;
                 AbsoluteLayout.SetLayoutFlags(proImage[i], AbsoluteLayoutFlags.PositionProportional);
                 AbsoluteLayout.SetLayoutBounds(proImage[i], new Rectangle(X, Y, AbsoluteLayout.AutoSize, AbsoluteLayout.AutoSize));
-                proImage[i].GestureRecognizers.Add(tappedGesture);
                 photoLayout.Children.Add(proImage[i]);
             }
             for (int i = 8; i < 10; i++)
             {
 				Y = Y - 0.2;
 				proImage[i] = new Image();
-				if (professionals [i] != null)
+				if (professionals [i] != null) 
+				{
+					proImage [i].GestureRecognizers.Add (tappedGesture);
 					proImage [i].Source = professionals [i].Photo;
+				}
 				else
 					proImage [i].Source = patient.Photo;
 				proImage [i].Scale = 0.75;
                 AbsoluteLayout.SetLayoutFlags(proImage[i], AbsoluteLayoutFlags.PositionProportional);
                 AbsoluteLayout.SetLayoutBounds(proImage[i], new Rectangle(X, Y, AbsoluteLayout.AutoSize, AbsoluteLayout.AutoSize));
                 proImage[i].GestureRecognizers.Add(tappedGesture);
-                photoLayout.Children.Add(proImage[i]);
                 X = X - 0.2;
 
             }
@@ -143,7 +173,6 @@ namespace ITI.Archi_Vite.Forms
 				VerticalOptions = LayoutOptions.FillAndExpand
             };
             this.BackgroundColor = Color.White;
-
         }
 
         private void TappedGesture_Tapped(object sender, EventArgs e)
@@ -166,14 +195,13 @@ namespace ITI.Archi_Vite.Forms
         private Professional[] ProfessionalArray()
         {
             Professional[] pro = new Professional[10];
-            List<Professional> professionals = new List<Professional>();
 			Patient p = new Patient(_patient);
 			foreach (var patient in _userData.Follow.Keys) 
 			{
 				if (_patient.UserId == patient.UserId)
 					p = patient;
 			}
-			_userData.Follow.TryGetValue(p, out professionals);
+			_userData.Follow.TryGetValue(p, out pro);
             int count = 0;
             foreach (var professional in professionals)
             {
