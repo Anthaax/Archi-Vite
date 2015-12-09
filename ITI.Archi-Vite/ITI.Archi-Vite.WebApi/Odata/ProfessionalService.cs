@@ -23,9 +23,15 @@ namespace ITI.Archi_Vite.WebApi.Controllers
             _db.AddRequest.AddProfessional(newProfessional.User, newProfessional.Role);
         }
 
-        public async System.Threading.Tasks.Task<Professional> DeleteProfessional(int id)
+        public Professional DeleteProfessionalCheck(int id)
         {
-            Professional professional = await _db.Professional.FindAsync(id);
+            Professional professional = _db.SelectRequest.SelectProfessional(id);
+            if (professional != null) DeleteProfessional(professional, id);
+            return professional;           
+        }
+
+        private void DeleteProfessional(Professional professional, int id)
+        {
             _doc = new DocumentManager(_db);
             List<Follower> follow = _db.SelectRequest.SelectFollowForPro(id);
             foreach (var f in follow)
@@ -33,8 +39,6 @@ namespace ITI.Archi_Vite.WebApi.Controllers
                 _doc.DeleteFollowerFile(professional.ProfessionalId, f.Patient.PatientId);
             }
             _db.SuppressionRequest.ProfessionnalSuppression(professional);
-            await _db.SaveChangesAsync();
-            return professional;
         }
     }
 }

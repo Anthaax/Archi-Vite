@@ -25,8 +25,8 @@ namespace ITI.Archi_Vite.WebApi.Controllers
             DocumentSerializable doc = _doc.SeeDocument(patientId);
             return doc;
         }
-        
-        public void putDoc(MessageCreator newMessage)
+
+        public  void putDoc(MessageCreator newMessage)
         {
             _doc = new DocumentManager(_db);
             List<Professional> pro = new List<Professional>();
@@ -49,13 +49,11 @@ namespace ITI.Archi_Vite.WebApi.Controllers
             _doc.CreatePrescription(pro, _db.SelectRequest.SelectProfessional(newPrescription.Sender), _db.SelectRequest.SelectPatient(newPrescription.Patient), newPrescription.Title, newPrescription.DocPath);
         }
 
-        public async void postDocument(ReciverModification newDoc)
+        public void postDocument(ReciverModification newDoc)
         {
             _doc = new DocumentManager(_db);
             DocumentSerializable patientDoc = _doc.SeeDocument(newDoc.PatientId);
             _doc.AddReciver(newDoc.RecieverId, newDoc.PatientId, newDoc.Date);
-
-            await _db.SaveChangesAsync();
         }
 
         public void deleteDocument(ReciverModification doc)

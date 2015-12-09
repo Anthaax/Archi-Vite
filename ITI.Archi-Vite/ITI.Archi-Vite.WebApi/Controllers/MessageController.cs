@@ -36,77 +36,55 @@ namespace ITI.Archi_Vite.WebApi.Controllers
 
         // PUT: api/Message/5
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutFollower(int id, Follower follower)
+        public async Task<IHttpActionResult> PutFollower(int patientId,int receiverId, DateTime date )
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
-            if (id != follower.PatientId)
-            {
-                return BadRequest();
-            }
-
-            Do.putFollower(follower);
-
+     
             try
             {
-                await _db.SaveChangesAsync();
+                Do.putFollower(patientId, receiverId, date);               
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!FollowerExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                throw;
             }
 
             return StatusCode(HttpStatusCode.NoContent);
         }
 
         // POST: api/Message
-        [ResponseType(typeof(Follower))]
-        public async Task<IHttpActionResult> PostFollower(Follower follower)
+        [ResponseType(typeof(void))]
+        public async Task<IHttpActionResult> PostFollower(List<Professional> Receivers, Professional Sender, string Title, string Contents, Patient Patient)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            Do.postFollower(follower);
+           
             try
             {
-                await _db.SaveChangesAsync();
+                Do.postFollower( Receivers,  Sender,  Title,  Contents, Patient);
             }
             catch (DbUpdateException)
             {
-                if (FollowerExists(follower.PatientId))
-                {
-                    return Conflict();
-                }
-                else
-                {
                     throw;
-                }
             }
-
-            return CreatedAtRoute("DefaultApi", new { id = follower.PatientId }, follower);
+            return StatusCode(HttpStatusCode.NoContent);
         }
 
         // DELETE: api/Message/5
-        [ResponseType(typeof(Follower))]
-        public async Task<IHttpActionResult> DeleteFollower(int id)
+        [ResponseType(typeof(void))]
+        public async Task<IHttpActionResult> DeleteFollower(int reciverId, int patientid, DateTime date)
         {
-            if (Do.deleteFollower(id)== null)
+            if (reciverId== null || patientid == null)
             {
                 return NotFound();
             }
-
-            return Ok(Do.deleteFollower(id));
+            Do.deleteFollower(reciverId, patientid, date);
+            return StatusCode(HttpStatusCode.NoContent);
         }
 
         protected override void Dispose(bool disposing)

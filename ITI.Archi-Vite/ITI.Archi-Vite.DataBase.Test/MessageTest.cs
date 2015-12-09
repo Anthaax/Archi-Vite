@@ -70,12 +70,13 @@ namespace ITI.Archi_Vite.DataBase.Test
                 {
                     receivers.Add(f.Professionnal);
                 }
-                dm.CreateMessage(receivers, context.SelectRequest.SelectProfessional("AntoineR", "AntoineR"), "Coucou", "J'ai un pb", context.SelectRequest.SelectPatient("GuillaumeF", "GuillaumeF"));
-                DocumentSerializable document = dm.SeeDocument(context.SelectRequest.SelectProfessional(context.SelectRequest.SelectProfessional("AntoineR", "AntoineR").ProfessionalId), context.SelectRequest.SelectPatient("GuillaumeF", "GuillaumeF"));
+                dm.CreateMessage(receivers, context.SelectRequest.SelectProfessional("ClementR", "ClementR"), "Coucou", "J'ai un pb", context.SelectRequest.SelectPatient("GuillaumeF", "GuillaumeF"));
+                DocumentSerializable document = dm.SeeDocument(context.SelectRequest.SelectProfessional(context.SelectRequest.SelectProfessional("ClementR", "ClementR").ProfessionalId), context.SelectRequest.SelectPatient("GuillaumeF", "GuillaumeF"));
                 Assert.AreEqual(document.Messages.Count, 1);
-                dm.CreateMessage(receivers, context.SelectRequest.SelectProfessional("AntoineR", "AntoineR"), "Salut", "Hey", context.SelectRequest.SelectPatient("GuillaumeF", "GuillaumeF"));
-                DocumentSerializable documents = dm.SeeDocument(context.SelectRequest.SelectProfessional(context.SelectRequest.SelectProfessional("AntoineR", "AntoineR").ProfessionalId), context.SelectRequest.SelectPatient("GuillaumeF", "GuillaumeF"));
-                Assert.AreEqual(documents.Messages.Count, 2);
+
+                dm.DeleteDoc(document.Messages.First(), context.SelectRequest.SelectPatient("GuillaumeF", "GuillaumeF").PatientId+"$"+ context.SelectRequest.SelectProfessional("ClementR", "ClementR").ProfessionalId);
+                DocumentSerializable documents1 = dm.SeeDocument(context.SelectRequest.SelectProfessional(context.SelectRequest.SelectProfessional("ClementR", "ClementR").ProfessionalId), context.SelectRequest.SelectPatient("GuillaumeF", "GuillaumeF"));
+                Assert.AreEqual(documents1.Messages.Count, 0);
             }
         }
         [Test]
@@ -84,10 +85,9 @@ namespace ITI.Archi_Vite.DataBase.Test
             using (ArchiViteContext context = new ArchiViteContext())
             {
                 DocumentManager dm = new DocumentManager(context);
-                SelectRequest s = new SelectRequest(context);
-                dm.DeleteFollowerFile(s.SelectProfessional("SimonF", "SimonF").ProfessionalId, s.SelectPatient("GuillaumeF", "GuillaumeF").PatientId);
-                context.SuppressionRequest.FollowerSuppression(s.SelectOneFollow(s.SelectPatient("GuillaumeF", "GuillaumeF").PatientId, s.SelectProfessional("SimonF", "SimonF").ProfessionalId));
-                Assert.IsNull(s.SelectOneFollow(s.SelectPatient("GuillaumeF", "GuillaumeF").PatientId, s.SelectProfessional("SimonF", "SimonF").ProfessionalId));
+                dm.DeleteFollowerFile(context.SelectRequest.SelectProfessional("SimonF", "SimonF").ProfessionalId, context.SelectRequest.SelectPatient("GuillaumeF", "GuillaumeF").PatientId);
+                context.SuppressionRequest.FollowerSuppression(context.SelectRequest.SelectOneFollow(context.SelectRequest.SelectPatient("GuillaumeF", "GuillaumeF").PatientId, context.SelectRequest.SelectProfessional("SimonF", "SimonF").ProfessionalId));
+                Assert.IsNull(context.SelectRequest.SelectOneFollow(context.SelectRequest.SelectPatient("GuillaumeF", "GuillaumeF").PatientId, context.SelectRequest.SelectProfessional("SimonF", "SimonF").ProfessionalId));
             }
         }
         private User[] GetUsers()

@@ -54,10 +54,10 @@ namespace ITI.Archi_Vite.WebApi.Controllers
             {
                 return BadRequest(ModelState);
             }
-            Do.putDoc(newMessage);
+            
             try
             {
-                await _db.SaveChangesAsync();
+                Do.putDoc(newMessage);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -75,10 +75,11 @@ namespace ITI.Archi_Vite.WebApi.Controllers
             {
                 return BadRequest(ModelState);
             }
-            Do.putDoc(newPrescription);
+           
             try
             {
-                await _db.SaveChangesAsync();
+                Do.putDoc(newPrescription);
+                
             }
             catch (DbUpdateConcurrencyException)
             {

@@ -304,7 +304,7 @@ namespace ITI.Archi_Vite.Core
             DocumentSerializable Documents = DeserializeListDoc(GetPathFile(FilePath));
             foreach(var mes in Documents.Messages)
             {
-                if (mes.Date == message.Date && mes.Contents == message.Contents && mes.Patient == message.Patient)
+                if (mes.Date == message.Date && mes.Contents == message.Contents && mes.Patient.PatientId == message.Patient.PatientId)
                 {
                     Documents.Messages.Remove(mes);
                     Documents.Messages.Add(message);
@@ -318,7 +318,7 @@ namespace ITI.Archi_Vite.Core
             DocumentSerializable Documents = DeserializeListDoc(GetPathFile(FilePath));
             foreach (var pres in Documents.Prescriptions)
             {
-                if (pres.Date == prescription.Date && pres.DocPath == prescription.DocPath && pres.Patient == prescription.Patient)
+                if (pres.Date == prescription.Date && pres.DocPath == prescription.DocPath && pres.Patient.PatientId == prescription.Patient.PatientId)
                 {
                     Documents.Prescriptions.Remove(pres);
                     Documents.Prescriptions.Add(prescription);
@@ -327,12 +327,17 @@ namespace ITI.Archi_Vite.Core
             SerializeListDoc(Documents, GetPathFile(FilePath));
         }
 
-        private void DeleteDoc(Message message, string FilePath)
+        public void DeleteDoc(Message message, string FilePath)
         {
             DocumentSerializable Documents = DeserializeListDoc(GetPathFile(FilePath));
-            foreach (var mes in Documents.Messages)
+            List<Message> messages = new List<Message>();
+            foreach (var mess in Documents.Messages)
             {
-                if (mes.Date == message.Date && mes.Contents == message.Contents && mes.Patient == message.Patient)
+                messages.Add(mess);
+            }
+            foreach (var mes in messages)
+            {
+                if (mes.Date == message.Date && mes.Contents == message.Contents && mes.Patient.PatientId == message.Patient.PatientId)
                 {
                     Documents.Messages.Remove(mes);
                 }
@@ -340,12 +345,12 @@ namespace ITI.Archi_Vite.Core
             SerializeListDoc(Documents, GetPathFile(FilePath));
         }
 
-        private void DeleteDoc(Prescription prescription, string FilePath)
+        public void DeleteDoc(Prescription prescription, string FilePath)
         {
             DocumentSerializable Documents = DeserializeListDoc(GetPathFile(FilePath));
             foreach (var pres in Documents.Prescriptions)
             {
-                if (pres.Date == prescription.Date && pres.DocPath == prescription.DocPath && pres.Patient == prescription.Patient)
+                if (pres.Date == prescription.Date && pres.DocPath == prescription.DocPath && pres.Patient.PatientId == prescription.Patient.PatientId)
                 {
                     Documents.Prescriptions.Remove(pres);
                 }

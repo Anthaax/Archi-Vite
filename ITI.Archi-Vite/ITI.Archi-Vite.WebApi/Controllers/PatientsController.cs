@@ -30,13 +30,13 @@ namespace ITI.Archi_Vite.WebApi.Controllers
         [ResponseType(typeof(Patient))]
         public async Task<IHttpActionResult> GetPatient(int id)
         {
-
-            if ( Do.getPatient(id) == null)
+            Patient patient = Do.getPatient(id);
+            if ( patient == null)
             {
                 return NotFound();
             }
 
-            return Ok(Do.getPatient(id));
+            return Ok(patient);
         }
 
         // PUT: api/Patients/5
@@ -47,11 +47,10 @@ namespace ITI.Archi_Vite.WebApi.Controllers
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
-            }
-            Do.putPatient(newPatient);
+            }            
             try
             {
-                await _db.SaveChangesAsync();
+                Do.putPatient(newPatient);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -65,13 +64,13 @@ namespace ITI.Archi_Vite.WebApi.Controllers
         [ResponseType(typeof(Patient))]
         public async Task<IHttpActionResult> DeletePatient(int id)
         {
-            var result = Do.deletePatientCheck(id);
-            if (result.Item1)
+            Patient patient = Do.deletePatientCheck(id);
+            if (patient == null)
             {
                 return NotFound();
             }
 
-            return Ok(result.Item2);
+            return Ok(patient);
         }
 
         protected override void Dispose(bool disposing)

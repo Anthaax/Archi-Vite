@@ -30,86 +30,66 @@ namespace ITI.Archi_Vite.WebApi.Controllers
         [ResponseType(typeof(DocumentSerializable))]
         public async Task<IHttpActionResult> GetPrescrition(int patientId, int proId)
         {
-            if (Do.getPrescription(patientId, proId) == null)
+            DocumentSerializable prescription = Do.getPrescription(patientId, proId);
+            if ( prescription == null)
             {
                 return NotFound();
             }
 
-            return Ok(Do.getPrescription(patientId, proId));
+            return (Ok(prescription));
         }
 
         // PUT: api/Prescription/5
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutFollower(int id, Follower follower)
+        public async Task<IHttpActionResult> PutFollower(List<Professional> Receivers, Professional Sender, Patient Patient, string Title, string DocPath)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != follower.PatientId)
-            {
-                return BadRequest();
-            }
-
-            Do.putPrescription(id, follower);
-
             try
             {
-                await _db.SaveChangesAsync();
+                Do.putPrescription(Receivers, Sender, Patient, Title, DocPath);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!FollowerExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
                     throw;
-                }
             }
 
             return StatusCode(HttpStatusCode.NoContent);
         }
 
         // POST: api/Prescription
-        [ResponseType(typeof(Follower))]
-        public async Task<IHttpActionResult> PostFollower(Follower follower)
+        [ResponseType(typeof(void))]
+        public async Task<IHttpActionResult> PostFollower(int reciverId, int patientid, DateTime date)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
-            }
-            Do.postFollower(follower);
+            }            
             try
             {
-                await _db.SaveChangesAsync();
+                Do.postFollower(reciverId, patientid, date);
             }
             catch (DbUpdateException)
             {
-                if (FollowerExists(follower.PatientId))
-                {
-                    return Conflict();
-                }
-                else
-                {
                     throw;
-                }
             }
 
-            return CreatedAtRoute("DefaultApi", new { id = follower.PatientId }, follower);
+            return StatusCode(HttpStatusCode.NoContent);
         }
 
         // DELETE: api/Prescription/5
-        [ResponseType(typeof(Follower))]
-        public async Task<IHttpActionResult> DeleteFollower(int id)
+        [ResponseType(typeof(void))]
+        public async Task<IHttpActionResult> DeleteFollower(Prescription prescription, string FilePath)
         {
-            if (Do.deleteFollower(id) == null)
+            if (prescription == null || FilePath == null)
             {
                 return NotFound();
             }
-            return Ok(Do.deleteFollower(id));
+            Do.deleteFollower(prescription, FilePath);
+            return StatusCode(HttpStatusCode.NoContent);
         }
 
         protected override void Dispose(bool disposing)
