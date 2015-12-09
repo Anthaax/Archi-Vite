@@ -21,11 +21,10 @@ namespace ITI.Archi_Vite.Forms
 				BackgroundColor = Color.White,
 				BorderColor = Color.Black,
 				FontSize = 30,
-				TextColor = Color.Black
 			};
 			profilButton.Clicked += async (sender, e) =>
 			{
-				await Navigation.PushAsync(new ProfilPage(_userData));
+				await Navigation.PushAsync(new ProfilPage(_userData, _userData.User));
 			};
 			Button followButton = new Button {
 				Text = "Mes Suivis",
@@ -33,6 +32,7 @@ namespace ITI.Archi_Vite.Forms
 				BorderColor = Color.Black,
 				FontSize = 30,
 				FontAttributes = FontAttributes.Bold,
+				TextColor = Color.Black
 			};
 
 			Button documentsButton = new Button {
@@ -65,49 +65,50 @@ namespace ITI.Archi_Vite.Forms
 				SeparatorColor = Color.Black,
 				RowHeight = 150,
                 ItemTemplate = new DataTemplate(() =>
+                {
+                    Label firstName = new Label();
+                    firstName.SetBinding(Label.TextProperty, "FirstName");
+					firstName.FontSize = 40;
+
+                    Label spaceLabel = new Label();
+                    spaceLabel.Text = "  ";
+
+                    Label lastName = new Label();
+                    lastName.SetBinding(Label.TextProperty, "LastName");
+                    lastName.FontSize = 40;
+
+                    Image patientImage = new Image();
+					patientImage.SetBinding(Image.SourceProperty, "Photo");
+                    return new ViewCell
                     {
-                        Label firstName = new Label();
-                        firstName.SetBinding(Label.TextProperty, "FirstName");
-						firstName.FontSize = 40;
-
-                        Label spaceLabel = new Label();
-                        spaceLabel.Text = "  ";
-
-                        Label lastName = new Label();
-                        lastName.SetBinding(Label.TextProperty, "LastName");
-                        lastName.FontSize = 40;
-
-                        Image patientImage = new Image();
-						patientImage.SetBinding(Image.SourceProperty, "Photo");
-                        return new ViewCell
+                        View = new StackLayout
                         {
-                            View = new StackLayout
+							Orientation = StackOrientation.Horizontal,
+							HorizontalOptions = LayoutOptions.Center,
+							VerticalOptions = LayoutOptions.Center,
+                            Children =
                             {
-								Orientation = StackOrientation.Horizontal,
-								HorizontalOptions = LayoutOptions.Center,
-								VerticalOptions = LayoutOptions.Center,
-                                Children =
+                                
+                                new StackLayout
                                 {
-                                    
-                                    new StackLayout
+                                    Spacing = 0,
+                                    Children =
                                     {
-                                        Spacing = 0,
-                                        Children =
-                                        {
-											patientImage,
-                                            firstName,
-                                            spaceLabel,
-                                            lastName
-                                        },
-										Orientation = StackOrientation.Horizontal,
-										VerticalOptions = LayoutOptions.Center,
-										HorizontalOptions = LayoutOptions.Center,
-                                    }
-									
+										patientImage,
+                                        firstName,
+                                        spaceLabel,
+                                        lastName
+                                    },
+									Orientation = StackOrientation.Horizontal,
+									VerticalOptions = LayoutOptions.Center,
+									HorizontalOptions = LayoutOptions.Center,
                                 }
+								
                             }
-                        };
-                    })
+                        }
+                    };
+                })
+                
             };
 			this.BackgroundColor = Color.White;
 			this.Content = new StackLayout
@@ -118,8 +119,17 @@ namespace ITI.Archi_Vite.Forms
 					myFollow,
 					patientListView
 				}
-				};
+			};
+            patientListView.ItemTapped += PatientListView_ItemTapped;
         }
+
+        private async void PatientListView_ItemTapped(object sender, ItemTappedEventArgs e)
+        {
+            var user = e.Item as User;
+            Patient patient = new Patient(user);
+            await Navigation.PushAsync(new FollowPatientPage(_userData, patient));
+        }
+
         private void CreateMyPatient()
         {
             _myPatient = new List<Patient>();

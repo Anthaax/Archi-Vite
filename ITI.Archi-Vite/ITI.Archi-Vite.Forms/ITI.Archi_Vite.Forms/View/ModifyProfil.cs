@@ -121,7 +121,7 @@ namespace ITI.Archi_Vite.Forms
 				_userData.User.LastName = lastName.Text;
 				_userData.User.PhoneNumber = Int32.Parse(phoneNumber.Text);
 				_userData.User.Postcode = Int32.Parse(postCode.Text);
-				await Navigation.PushAsync(new ProfilPage(_userData));
+				await Navigation.PushAsync(new ProfilPage(_userData, _userData.User));
 			};
 			Content = new StackLayout
 			{
