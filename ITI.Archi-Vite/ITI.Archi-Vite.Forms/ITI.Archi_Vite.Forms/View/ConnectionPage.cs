@@ -129,6 +129,7 @@ namespace ITI.Archi_Vite.Forms
 			if (_user == null)
 				return false;
             _dataForUser = new Data(_user, CreateFollowerDictionnary(users, _user));
+			CreateSerializableDocument (_dataForUser, _user);
             return true;
 		}
 		private Dictionary<Patient, Professional[]> CreateFollowerDictionnary(User[] users, User curentUser)
@@ -141,23 +142,24 @@ namespace ITI.Archi_Vite.Forms
             for( int i = 0; i<4; i++)
             {
                 Professional pro = new Professional(users[i], "Infirmier");
-                proForGuillaume.SetValue(pro);
+				if(pro != null)
+				proForGuillaume.SetValue(pro, i);
             }
             for (int i = 0; i < 2; i++)
             {
                 Professional pro = new Professional(users[i], "Infirmier");
-                proForMaxime.SetValue(pro);
+                proForMaxime.SetValue(pro, i);
             }
             if(curentUser != users[5] ) follows.Add(guillaume, proForGuillaume);
             if (curentUser != users[4] && curentUser != users[3]) follows.Add(maxime, proForMaxime);
             return follows;
 		}
-        private DocumentSerializable CreateSerializableDocument(Data userData, User patient)
+		private DocumentSerializable CreateSerializableDocument(Data userData, User user)
         {
             List<Message> messages = new List<Message>();
             List<Prescription> prescriptions = new List<Prescription>();
-            Patient p = new Patient(patient);
-            Professional[] pro = ProfessionalArray(userData, patient);
+			Patient p = new Patient(user);
+            Professional[] pro = ProfessionalArray(userData, p);
             List<Professional> professional = new List<Professional>();
             for (int i = 0; i < 2; i++)
             {
@@ -169,10 +171,10 @@ namespace ITI.Archi_Vite.Forms
             return doc;
         }
 
-        private Professional[] ProfessionalArray(Data userData, User user)
+		private Professional[] ProfessionalArray(Data userData, Patient user)
         {
             Professional[] pro = new Professional[10];
-            Patient p = new Patient(user);
+			Patient p = user;
             foreach (var patient in userData.Follow.Keys)
             {
                 if (user.UserId == patient.UserId)

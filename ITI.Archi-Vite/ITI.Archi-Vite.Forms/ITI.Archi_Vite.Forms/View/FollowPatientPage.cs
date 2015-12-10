@@ -61,7 +61,7 @@ namespace ITI.Archi_Vite.Forms
             Button messageButton = new Button
             {
                 Text = "Messages",
-                FontSize = 40,
+                FontSize = 30,
                 BackgroundColor = Color.FromHex("439DFE"),
             };
 
@@ -72,7 +72,7 @@ namespace ITI.Archi_Vite.Forms
             Button prescriptionButton = new Button
             {
                 Text = "Prescriptions",
-                FontSize = 40,
+                FontSize = 30,
                 BackgroundColor = Color.FromHex("439DFE"),
             };
 
@@ -203,11 +203,6 @@ namespace ITI.Archi_Vite.Forms
 			}
 			_userData.Follow.TryGetValue(p, out pro);
             int count = 0;
-            foreach (var professional in professionals)
-            {
-                pro.SetValue(professional, count);
-                count++;
-            }
             return pro;
         }
     }
