@@ -10,12 +10,15 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 using ITI.Archi_Vite.DataBase;
+using ITI.Archi_Vite.Core;
 
 namespace ITI.Archi_Vite.WebApi.Controllers
 {
     public class UsersController : ApiController
     {
         private ArchiViteContext _db = new ArchiViteContext();
+        DocumentManager _doc;
+        UserService Do = new UserService();
 
         // GET: api/Users
         public IQueryable<User> GetUsers()
@@ -27,7 +30,7 @@ namespace ITI.Archi_Vite.WebApi.Controllers
         [ResponseType(typeof(User))]
         public async Task<IHttpActionResult> GetUser(int id)
         {
-            User user = await _db.User.FindAsync(id);
+            User user = Do.getUser(id);
             if (user == null)
             {
                 return NotFound();
@@ -39,7 +42,7 @@ namespace ITI.Archi_Vite.WebApi.Controllers
         [ResponseType(typeof(User))]
         public async Task<IHttpActionResult> GetUser(string pseudo, string password)
         {
-            User User = _db.SelectRequest.SelectUser(pseudo, password);
+            Do.getUser(pseudo, password);
             if (User == null)
             {
                 return NotFound();
@@ -56,12 +59,9 @@ namespace ITI.Archi_Vite.WebApi.Controllers
             {
                 return BadRequest(ModelState);
             }
-
-            _db.UpdateRequest.CheckUserInfo(user);
-
             try
             {
-                await _db.SaveChangesAsync();
+                Do.PostUser(user);
             }
             catch (DbUpdateException)
             {

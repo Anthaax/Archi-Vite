@@ -53,12 +53,9 @@ namespace ITI.Archi_Vite.WebApi.Controllers
             {
                 return BadRequest();
             }
-
-            Do.putProfessional(id, newProfessional);
-
             try
             {
-                await _db.SaveChangesAsync();
+                Do.putProfessional(id, newProfessional);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -80,11 +77,12 @@ namespace ITI.Archi_Vite.WebApi.Controllers
         [ResponseType(typeof(Professional))]
         public async Task<IHttpActionResult> DeleteProfessional(int id)
         {
-            if (Do.DeleteProfessional(id) == null)
+            Professional professional = Do.DeleteProfessionalCheck(id);
+            if (professional == null)
             {
                 return NotFound();
             }
-            return Ok(Do.DeleteProfessional(id));
+            return Ok(professional);
         }
 
         protected override void Dispose(bool disposing)

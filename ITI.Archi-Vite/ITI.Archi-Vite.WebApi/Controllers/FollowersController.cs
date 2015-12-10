@@ -48,11 +48,10 @@ namespace ITI.Archi_Vite.WebApi.Controllers
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
-            }
-            Do.PutFollower(follower);
+            }            
             try
             {
-                await _db.SaveChangesAsync();
+                Do.PutFollower(follower);                
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -66,14 +65,11 @@ namespace ITI.Archi_Vite.WebApi.Controllers
         [ResponseType(typeof(Follower))]
         public async Task<IHttpActionResult> DeleteFollower(int patientId, int proId)
         {
-            Follower follower = _db.SelectRequest.SelectOneFollow(patientId, proId);
-            if (follower == null)
+            Follower follower = Do.DeleteFollowerCheck(patientId, proId);
+            if ( follower == null)
             {
                 return NotFound();
-            }
-            Do.DeleteFollower(patientId, proId);
-            await _db.SaveChangesAsync();
-
+            }           
             return Ok(follower);
         }
 

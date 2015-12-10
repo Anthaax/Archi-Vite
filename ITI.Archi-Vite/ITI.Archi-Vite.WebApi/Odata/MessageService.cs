@@ -21,24 +21,20 @@ namespace ITI.Archi_Vite.WebApi.Controllers
             return doc;
         }
 
-        public void putFollower(Follower follower)
+        public void putFollower(int patientId, int receiverId, DateTime date)
         {
-            _db.Entry(follower).State = EntityState.Modified;
+            _doc.AddReciver(receiverId, patientId, date);
 
         }
 
-        public void postFollower(Follower follower)
+        public void postFollower(List<Professional> Receivers, Professional Sender, string Title, string Contents, Patient Patient)
         {
-            _db.Follower.Add(follower);
+            _doc.CreateMessage(Receivers, Sender, Title, Contents, Patient);
         }
 
-        public async System.Threading.Tasks.Task<Follower> deleteFollower(int id)
+        public void deleteFollower(int reciverId, int patientid, DateTime date)
         {
-            Follower follower = await _db.Follower.FindAsync(id);
-            _db.Follower.Remove(follower);
-            await _db.SaveChangesAsync();
-
-            return follower;
+            _doc.DeleteReciever(reciverId, patientid, date);
         }
     }
 }
