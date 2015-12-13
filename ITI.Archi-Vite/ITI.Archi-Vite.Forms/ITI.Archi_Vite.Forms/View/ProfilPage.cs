@@ -97,14 +97,23 @@ namespace ITI.Archi_Vite.Forms
 			};
 
             Button Suivis = new Button
+            {
+                Text = "Voir mes suivi",
+                FontSize = 40,
+                BackgroundColor = Color.FromHex("439DFE"),
+                VerticalOptions = LayoutOptions.End
+            };
+            Suivis.Clicked += FollowButtonClicked;
+            if (PageForPatient()) Suivis.Text = "Voir mon Suivis";
+
+            Button messages = new Button
 			{
-				Text = "Voir mes suivi",
+				Text = "Voir mes messages",
 				FontSize = 40,
 				BackgroundColor = Color.FromHex("439DFE"),
 				VerticalOptions = LayoutOptions.End
 			};
-			Suivis.Clicked += FollowButtonClicked;
-			if (PageForPatient()) Suivis.Text = "Voir mon Suivis";
+            messages.Clicked += Messages_Clicked;
 
             Button modify = new Button
             {
@@ -133,13 +142,19 @@ namespace ITI.Archi_Vite.Forms
 					city,
 					logo,
                     Suivis,
+					messages,
                     modify
                 },
             };
             this.BackgroundColor = Color.White;
         }
 
-		private async void FollowButtonClicked (object sender, EventArgs e)
+        private async void Messages_Clicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new MessageListPage(_userData));
+        }
+
+        private async void FollowButtonClicked (object sender, EventArgs e)
 		{
 			if (PageForPatient())
 			{
@@ -158,7 +173,7 @@ namespace ITI.Archi_Vite.Forms
 			return false;
         }
 
-         private bool PageForPatient()
+        private bool PageForPatient()
         {
             foreach(var patient in _userData.Follow.Keys )
             {

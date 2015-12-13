@@ -202,7 +202,6 @@ namespace ITI.Archi_Vite.Forms
 					p = patient;
 			}
 			_userData.Follow.TryGetValue(p, out pro);
-            int count = 0;
             return pro;
         }
     }

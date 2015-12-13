@@ -6,7 +6,7 @@ using System.Text;
 
 using Xamarin.Forms;
 
-namespace ITI.Archi_Vite.Forms.View
+namespace ITI.Archi_Vite.Forms
 {
     public class MessagePagecs : ContentPage
     {

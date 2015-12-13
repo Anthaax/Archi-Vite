@@ -128,8 +128,32 @@ namespace ITI.Archi_Vite.Forms
 			}
 			if (_user == null)
 				return false;
-            _dataForUser = new Data(_user, CreateFollowerDictionnary(users, _user));
-			CreateSerializableDocument (_dataForUser, _user);
+            List<Message> m = new List<Message>();
+            List<Prescription> p = new List<Prescription>();
+            DocumentSerializable doc = new DocumentSerializable(m,p);
+            if(_user != u5)
+            {
+                foreach (var message in CreateSerializableDocument(CreateFollowerDictionnary(users, _user), u4).Messages)
+                {
+                    doc.Messages.Add(message);
+                }
+                foreach (var prescription in CreateSerializableDocument(CreateFollowerDictionnary(users, _user), u4).Prescriptions)
+                {
+                    doc.Prescriptions.Add(prescription);
+                }
+            }
+            if (_user != u4 && _user != u3)
+            {
+                foreach (var message in CreateSerializableDocument(CreateFollowerDictionnary(users, _user), u5).Messages)
+                {
+                    doc.Messages.Add(message);
+                }
+                foreach (var prescription in CreateSerializableDocument(CreateFollowerDictionnary(users, _user), u5).Prescriptions)
+                {
+                    doc.Prescriptions.Add(prescription);
+                }
+            }
+            _dataForUser = new Data(_user, CreateFollowerDictionnary(users, _user), doc);
             return true;
 		}
 		private Dictionary<Patient, Professional[]> CreateFollowerDictionnary(User[] users, User curentUser)
@@ -154,33 +178,33 @@ namespace ITI.Archi_Vite.Forms
             if (curentUser != users[4] && curentUser != users[3]) follows.Add(maxime, proForMaxime);
             return follows;
 		}
-		private DocumentSerializable CreateSerializableDocument(Data userData, User user)
+		private DocumentSerializable CreateSerializableDocument(Dictionary<Patient, Professional[]> userData, User Patient)
         {
             List<Message> messages = new List<Message>();
             List<Prescription> prescriptions = new List<Prescription>();
-			Patient p = new Patient(user);
-            Professional[] pro = ProfessionalArray(userData, p);
             List<Professional> professional = new List<Professional>();
+            Patient p = new Patient(Patient);
+            Professional[] proForPatient = ProfessionalArray(userData, p);
             for (int i = 0; i < 2; i++)
             {
-                professional.Add(pro[i]);
+				professional.Add(proForPatient[i]);
             }
-            messages.Add(new Message("Coucou", "Il va bien", pro[0], professional, p));
-            messages.Add(new Message("Hey", "Il va bien", pro[1], professional, p));
+			messages.Add(new Message("Coucou", "Il va bien", proForPatient[0], professional, p));
+			if(p.UserId == 5) messages.Add(new Message("Hey", "Il va bien", proForPatient[1], professional, p));
             DocumentSerializable doc = new DocumentSerializable(messages, prescriptions);
             return doc;
         }
 
-		private Professional[] ProfessionalArray(Data userData, Patient user)
+		private Professional[] ProfessionalArray(Dictionary<Patient, Professional[]> userData, Patient user)
         {
             Professional[] pro = new Professional[10];
 			Patient p = user;
-            foreach (var patient in userData.Follow.Keys)
+            foreach (var patient in userData.Keys)
             {
                 if (user.UserId == patient.UserId)
                     p = patient;
             }
-            userData.Follow.TryGetValue(p, out pro);
+            userData.TryGetValue(p, out pro);
             int count = 0;
             foreach (var professional in pro)
             {

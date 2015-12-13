@@ -15,7 +15,6 @@ namespace ITI.Archi_Vite.Forms
         public PatientList(Data userData)
         {
             _userData = userData;
-			_userData = userData;
 			Button profilButton = new Button {
 				Text = "Mon Profil",
 				BackgroundColor = Color.White,
