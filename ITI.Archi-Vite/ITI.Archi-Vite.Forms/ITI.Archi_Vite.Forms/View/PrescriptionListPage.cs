@@ -8,11 +8,11 @@ using Xamarin.Forms;
 
 namespace ITI.Archi_Vite.Forms
 {
-    public class MessageListPage : ContentPage
+    public class PrescriptionListPage : ContentPage
     {
         Data _userData;
-        List<Message> _message;
-        public MessageListPage(Data userData)
+        List<Prescription> _prescriptions;
+        public PrescriptionListPage(Data userData)
         {
             _userData = userData;
             Button profilButton = new Button
@@ -20,7 +20,7 @@ namespace ITI.Archi_Vite.Forms
                 Text = "Mon Profil",
                 BackgroundColor = Color.White,
                 BorderColor = Color.Black,
-				TextColor = Color.Black,
+                TextColor = Color.Black,
                 FontSize = 30,
             };
             profilButton.Clicked += async (sender, e) =>
@@ -30,10 +30,10 @@ namespace ITI.Archi_Vite.Forms
             Button followButton = new Button
             {
                 Text = "Mes Suivis",
-                BackgroundColor = Color.White,
-                BorderColor = Color.Black,
+                BackgroundColor = Color.Gray,
+                BorderColor = Color.White,
                 FontSize = 30,
-                TextColor = Color.Black
+                FontAttributes = FontAttributes.Bold,
             };
 
             followButton.Clicked += FollowButtonClicked;
@@ -41,10 +41,10 @@ namespace ITI.Archi_Vite.Forms
             Button documentsButton = new Button
             {
                 Text = "Mes Documents",
-                BackgroundColor = Color.Gray,
-                BorderColor = Color.White,
+                BackgroundColor = Color.White,
+                BorderColor = Color.Black,
                 FontSize = 30,
-                FontAttributes = FontAttributes.Bold,
+                TextColor = Color.Black
             };
             StackLayout buttonStack = new StackLayout
             {
@@ -60,51 +60,51 @@ namespace ITI.Archi_Vite.Forms
             };
             Label myFollow = new Label
             {
-                Text = "Mes Messages",
+                Text = "Mes Prescriptions",
                 FontSize = 50,
                 HorizontalOptions = LayoutOptions.Center,
                 TextColor = Color.Gray
             };
-            CreateMyMessage();
-            ListView messageListView = new ListView
+            CreateMyPrescriptions();
+            ListView prescriptionListView = new ListView
             {
-                ItemsSource = _message,
+                ItemsSource = _prescriptions,
                 SeparatorColor = Color.Black,
                 RowHeight = 150,
                 ItemTemplate = new DataTemplate(() =>
                 {
                     Label title = new Label();
                     title.SetBinding(Label.TextProperty, "Title");
-					title.FontSize = 20;
-					title.TextColor = Color.Gray;
+                    title.FontSize = 20;
+                    title.TextColor = Color.Gray;
 
-					
+
                     Label senderName = new Label();
                     senderName.SetBinding(Label.TextProperty, "SenderName");
-					senderName.FontSize = 20;
-					senderName.TextColor = Color.Gray;
+                    senderName.FontSize = 20;
+                    senderName.TextColor = Color.Gray;
 
 
                     Label patientName = new Label();
                     patientName.SetBinding(Label.TextProperty, "PatientFullName");
                     patientName.FontSize = 20;
-					patientName.TextColor = Color.Gray;
+                    patientName.TextColor = Color.Gray;
 
 
-					Label patient = new Label();
-					patient.Text = "Patient : "; 
-					patient.FontSize = 20;
-					patient.TextColor = Color.Gray;
+                    Label patient = new Label();
+                    patient.Text = "Patient : ";
+                    patient.FontSize = 20;
+                    patient.TextColor = Color.Gray;
 
-					Label spaceLabel = new Label();
-					spaceLabel.Text = "  ";
-					spaceLabel.FontSize = 20;
-					spaceLabel.TextColor = Color.Gray;
+                    Label spaceLabel = new Label();
+                    spaceLabel.Text = "  ";
+                    spaceLabel.FontSize = 20;
+                    spaceLabel.TextColor = Color.Gray;
 
-					Label pro = new Label();
-					pro.Text = " De : ";
-					pro.FontSize = 20;
-					pro.TextColor = Color.Gray;
+                    Label pro = new Label();
+                    pro.Text = " De : ";
+                    pro.FontSize = 20;
+                    pro.TextColor = Color.Gray;
 
 
                     return new ViewCell
@@ -122,12 +122,12 @@ namespace ITI.Archi_Vite.Forms
                                     Spacing = 0,
                                     Children =
                                     {
-										patient,
-										patientName,
-										spaceLabel,
-                                    	title,
-										pro,
-										senderName
+                                        patient,
+                                        patientName,
+                                        spaceLabel,
+                                        title,
+                                        pro,
+                                        senderName
                                     },
                                     Orientation = StackOrientation.Horizontal,
                                     VerticalOptions = LayoutOptions.Center,
@@ -147,24 +147,24 @@ namespace ITI.Archi_Vite.Forms
                 {
                     buttonStack,
                     myFollow,
-                    messageListView
+                    prescriptionListView
                 }
             };
-            messageListView.ItemTapped += MessageListView_ItemTapped;
+            prescriptionListView.ItemTapped += MessageListView_ItemTapped;
         }
 
         private async void MessageListView_ItemTapped(object sender, ItemTappedEventArgs e)
         {
-            var message = e.Item as Message;
-            if(message != null)
+            var prescription = e.Item as Prescription;
+            if (prescription != null)
             {
-                await Navigation.PushAsync(new MessagePage(_userData, message));
+                await Navigation.PushAsync(new PrescriptionPage(_userData, prescription));
             }
         }
 
-        private void CreateMyMessage()
+        private void CreateMyPrescriptions()
         {
-            _message = _userData.Documents.Messages;
+            _prescriptions = _userData.Documents.Prescriptions;
         }
 
         private async void FollowButtonClicked(object sender, EventArgs e)

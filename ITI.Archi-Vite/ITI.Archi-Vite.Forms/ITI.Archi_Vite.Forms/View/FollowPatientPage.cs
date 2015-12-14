@@ -68,6 +68,7 @@ namespace ITI.Archi_Vite.Forms
             AbsoluteLayout.SetLayoutFlags(messageButton, AbsoluteLayoutFlags.PositionProportional);
             AbsoluteLayout.SetLayoutBounds(messageButton, new Rectangle(0, 1, AbsoluteLayout.AutoSize, AbsoluteLayout.AutoSize));
             photoLayout.Children.Add(messageButton);
+            messageButton.Clicked += MessageButton_Clicked;
 
             Button prescriptionButton = new Button
             {
@@ -79,6 +80,7 @@ namespace ITI.Archi_Vite.Forms
             AbsoluteLayout.SetLayoutFlags(prescriptionButton, AbsoluteLayoutFlags.PositionProportional);
             AbsoluteLayout.SetLayoutBounds(prescriptionButton, new Rectangle(1, 1, AbsoluteLayout.AutoSize, AbsoluteLayout.AutoSize));
             photoLayout.Children.Add(prescriptionButton);
+            prescriptionButton.Clicked += PrescriptionButton_Clicked;
 
             Image patientImage = new Image
             {
@@ -102,7 +104,7 @@ namespace ITI.Archi_Vite.Forms
 					proImage [i].Source = professionals [i].Photo;
 				}
 				else
-					proImage [i].Source = patient.Photo;
+					proImage [i].Source = "http://3.bp.blogspot.com/_9Q_36sq8aPo/S0D4__i1w1I/AAAAAAAAACo/cgLl5IYQtjA/s400/croix.png";
 				proImage [i].Scale = 0.75;
 				AbsoluteLayout.SetLayoutFlags(proImage[i], AbsoluteLayoutFlags.PositionProportional);
 				AbsoluteLayout.SetLayoutBounds(proImage[i], new Rectangle(X, Y, AbsoluteLayout.AutoSize, AbsoluteLayout.AutoSize));
@@ -121,7 +123,7 @@ namespace ITI.Archi_Vite.Forms
 					proImage [i].Source = professionals [i].Photo;
 				}
 				else
-					proImage [i].Source = patient.Photo;
+					proImage [i].Source = "http://3.bp.blogspot.com/_9Q_36sq8aPo/S0D4__i1w1I/AAAAAAAAACo/cgLl5IYQtjA/s400/croix.png";
 				proImage [i].Scale = 0.75;
                 AbsoluteLayout.SetLayoutFlags(proImage[i], AbsoluteLayoutFlags.PositionProportional);
                 AbsoluteLayout.SetLayoutBounds(proImage[i], new Rectangle(X, Y, AbsoluteLayout.AutoSize, AbsoluteLayout.AutoSize));
@@ -139,7 +141,7 @@ namespace ITI.Archi_Vite.Forms
 					proImage [i].GestureRecognizers.Add (tappedGesture);
 				}
 				else
-					proImage [i].Source = "http://www.go-e-lan.info/vue/images/event/simon.PNG";
+					proImage [i].Source = "http://3.bp.blogspot.com/_9Q_36sq8aPo/S0D4__i1w1I/AAAAAAAAACo/cgLl5IYQtjA/s400/croix.png";
 				proImage [i].Scale = 0.75;
                 AbsoluteLayout.SetLayoutFlags(proImage[i], AbsoluteLayoutFlags.PositionProportional);
                 AbsoluteLayout.SetLayoutBounds(proImage[i], new Rectangle(X, Y, AbsoluteLayout.AutoSize, AbsoluteLayout.AutoSize));
@@ -155,11 +157,11 @@ namespace ITI.Archi_Vite.Forms
 					proImage [i].Source = professionals [i].Photo;
 				}
 				else
-					proImage [i].Source = patient.Photo;
+					proImage [i].Source = "http://3.bp.blogspot.com/_9Q_36sq8aPo/S0D4__i1w1I/AAAAAAAAACo/cgLl5IYQtjA/s400/croix.png";
 				proImage [i].Scale = 0.75;
                 AbsoluteLayout.SetLayoutFlags(proImage[i], AbsoluteLayoutFlags.PositionProportional);
                 AbsoluteLayout.SetLayoutBounds(proImage[i], new Rectangle(X, Y, AbsoluteLayout.AutoSize, AbsoluteLayout.AutoSize));
-                proImage[i].GestureRecognizers.Add(tappedGesture);
+				photoLayout.Children.Add(proImage[i]);
                 X = X - 0.2;
 
             }
@@ -173,6 +175,16 @@ namespace ITI.Archi_Vite.Forms
 				VerticalOptions = LayoutOptions.FillAndExpand
             };
             this.BackgroundColor = Color.White;
+        }
+
+        private async void PrescriptionButton_Clicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new PrescriptionListPage(_userData));
+        }
+
+        private async void MessageButton_Clicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new MessageListPage(_userData));
         }
 
         private void TappedGesture_Tapped(object sender, EventArgs e)

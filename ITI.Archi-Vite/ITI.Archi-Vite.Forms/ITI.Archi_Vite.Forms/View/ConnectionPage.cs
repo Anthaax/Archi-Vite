@@ -109,11 +109,11 @@ namespace ITI.Archi_Vite.Forms
 		{
 			User[] users = new User[6];
 			User u0 = new User (1, "Antoine", "Raquillet", DateTime.Now, "72 avenue maurice thorez", "Ivry-sur-Seine", 12345, "AntoineR", "AntoineR",0616066606, "http://new.intechinfo.fr/wp-content/uploads/2015/10/RAQUILLET-Antoine.jpg");
-			User u1 = new User(2, "Simon", "Favraud", DateTime.Now, "72 avenue maurice thorez", "Ivry-sur-Seine", 12345, "SimonF", "SimonF", 0626066606, "http://www.go-e-lan.info/vue/images/event/simon.PNG");
-			User u2 = new User (3, "Clement", "Rousseau", DateTime.Now, "72 avenue maurice thorez", "Ivry-sur-Seine", 12345, "ClementR", "ClementR",0636066606, "http://www.go-e-lan.info/vue/images/event/clem.PNG");
+			User u1 = new User(2, "Simon", "Favraud", DateTime.Now, "72 avenue maurice thorez", "Ivry-sur-Seine", 12345, "SimonF", "SimonF", 0626066606, "http://i.imgur.com/9cSffeM.png");
+			User u2 = new User (3, "Clement", "Rousseau", DateTime.Now, "72 avenue maurice thorez", "Ivry-sur-Seine", 12345, "ClementR", "ClementR",0636066606, "http://i.imgur.com/silO1AR.png");
 			User u3 = new User (4, "Olivier", "Spinelli", DateTime.Now, "72 avenue maurice thorez", "Ivry-sur-Seine", 12345, "OlivierS", "OlivierS",0646066606, "http://new.intechinfo.fr/wp-content/uploads/2015/10/olivier-spinelli_portrait.png");
-			User u4 = new User (5, "Guillaume", "Fimes", DateTime.Now, "72 avenue maurice thorez", "Ivry-sur-Seine", 12345, "GuillaumeF", "GuillaumeF", 0656066606, "http://www.go-e-lan.info/vue/images/event/fimes.PNG");
-			User u5 = new User (6, "Maxime", "De Vogelas", DateTime.Now, "72 avenue maurice thorez", "Ivry-sur-Seine", 12345, "MaximeD", "MaximeD", 0666066606, "http://www.go-e-lan.info/vue/images/event/max.PNG");
+			User u4 = new User (5, "Guillaume", "Fimes", DateTime.Now, "72 avenue maurice thorez", "Ivry-sur-Seine", 12345, "GuillaumeF", "GuillaumeF", 0656066606, "http://i.imgur.com/GWji92h.png");
+			User u5 = new User (6, "Maxime", "De Vogelas", DateTime.Now, "72 avenue maurice thorez", "Ivry-sur-Seine", 12345, "MaximeD", "MaximeD", 0666066606, "http://i.imgur.com/3yZF0Lz.png");
 			users[0] = u0;
 			users[1] = u1;
 			users[2] = u2;

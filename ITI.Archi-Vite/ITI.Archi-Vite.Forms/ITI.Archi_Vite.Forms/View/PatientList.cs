@@ -15,10 +15,12 @@ namespace ITI.Archi_Vite.Forms
         public PatientList(Data userData)
         {
             _userData = userData;
-			Button profilButton = new Button {
+			Button profilButton = new Button
+			{
 				Text = "Mon Profil",
 				BackgroundColor = Color.White,
 				BorderColor = Color.Black,
+				TextColor = Color.Black,
 				FontSize = 30,
 			};
 			profilButton.Clicked += async (sender, e) =>
@@ -125,8 +127,11 @@ namespace ITI.Archi_Vite.Forms
         private async void PatientListView_ItemTapped(object sender, ItemTappedEventArgs e)
         {
             var user = e.Item as User;
-            Patient patient = new Patient(user);
-            await Navigation.PushAsync(new FollowPatientPage(_userData, patient));
+            if(user != null)
+            {
+                Patient patient = new Patient(user);
+                await Navigation.PushAsync(new FollowPatientPage(_userData, patient));
+            }
         }
 
         private void CreateMyPatient()

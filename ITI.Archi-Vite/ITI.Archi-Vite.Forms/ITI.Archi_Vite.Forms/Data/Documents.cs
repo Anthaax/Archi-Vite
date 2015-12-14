@@ -8,34 +8,46 @@ namespace ITI.Archi_Vite.Forms
 {
     public abstract class Documents
     {
-        readonly List<Professional> receivers;
-        readonly Patient patient;
-        readonly Professional sender;
-        readonly DateTime date;
-        readonly string title;
+        readonly List<Professional> _receivers;
+        readonly Patient _patient;
+        readonly Professional _sender;
+        readonly DateTime _date;
+        readonly string _title;
+		readonly string _senderFullName;
+        readonly string _patientFullName;
+
 
         protected Documents(Professional Sender, List<Professional> Receivers, Patient Patient, string Title)
         {
-            receivers = Receivers;
-            patient = Patient;
-            sender = Sender;
-            date = DateTime.Now;
-            title = Title;
+            _receivers = Receivers;
+            _patient = Patient;
+            _sender = Sender;
+			_senderFullName = Sender.FirstName + " " + Sender.LastName;
+            _date = DateTime.Now;
+            _title = Title;
         }
 
         public List<Professional> Receivers
         {
             get
             {
-                return receivers;
+                return _receivers;
             }
         }
 
-        public Patient Patient
+		public string SenderName
+		{
+			get
+			{
+				return _senderFullName;
+			}
+		}
+        
+		public Patient Patient
         {
             get
             {
-                return patient;
+                return _patient;
             }
         }
 
@@ -43,15 +55,15 @@ namespace ITI.Archi_Vite.Forms
         {
             get
             {
-                return sender;
+                return _sender;
             }
         }
 
-        public DateTime Date
+		public string Date
         {
             get
             {
-                return date;
+				return _date.ToString();
             }
         }
 
@@ -59,7 +71,14 @@ namespace ITI.Archi_Vite.Forms
         {
             get
             {
-                return title;
+                return _title;
+            }
+        }
+        public string PatientFullName
+        {
+            get
+            {
+                return _patientFullName;
             }
         }
     }
