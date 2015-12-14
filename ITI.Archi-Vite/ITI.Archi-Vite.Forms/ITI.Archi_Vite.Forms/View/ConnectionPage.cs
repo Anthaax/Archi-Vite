@@ -128,29 +128,90 @@ namespace ITI.Archi_Vite.Forms
 			}
 			if (_user == null)
 				return false;
-            _dataForUser = new Data(_user, CreateFollowerDictionnary(users, _user));
+            List<Message> m = new List<Message>();
+            List<Prescription> p = new List<Prescription>();
+            DocumentSerializable doc = new DocumentSerializable(m,p);
+            if(_user != u5)
+            {
+                foreach (var message in CreateSerializableDocument(CreateFollowerDictionnary(users, _user), u4).Messages)
+                {
+                    doc.Messages.Add(message);
+                }
+                foreach (var prescription in CreateSerializableDocument(CreateFollowerDictionnary(users, _user), u4).Prescriptions)
+                {
+                    doc.Prescriptions.Add(prescription);
+                }
+            }
+            if (_user != u4 && _user != u3)
+            {
+                foreach (var message in CreateSerializableDocument(CreateFollowerDictionnary(users, _user), u5).Messages)
+                {
+                    doc.Messages.Add(message);
+                }
+                foreach (var prescription in CreateSerializableDocument(CreateFollowerDictionnary(users, _user), u5).Prescriptions)
+                {
+                    doc.Prescriptions.Add(prescription);
+                }
+            }
+            _dataForUser = new Data(_user, CreateFollowerDictionnary(users, _user), doc);
             return true;
 		}
-		private Dictionary<Patient, List<Professional>> CreateFollowerDictionnary(User[] users, User curentUser)
+		private Dictionary<Patient, Professional[]> CreateFollowerDictionnary(User[] users, User curentUser)
 		{
-			Dictionary<Patient, List<Professional>> follows = new Dictionary<Patient, List<Professional>> ();
-            List<Professional> proForGuillaume = new List<Professional>();
-            List<Professional> proForMaxime = new List<Professional>();
+            Dictionary<Patient, Professional[]> follows = new Dictionary<Patient, Professional[]>();
+            Professional[] proForGuillaume = new Professional[10];
+            Professional[] proForMaxime = new Professional[10];
             Patient guillaume = new Patient(users[4]);
             Patient maxime = new Patient(users[5]); 
             for( int i = 0; i<4; i++)
             {
                 Professional pro = new Professional(users[i], "Infirmier");
-                proForGuillaume.Add(pro);
+				if(pro != null)
+				proForGuillaume.SetValue(pro, i);
             }
             for (int i = 0; i < 2; i++)
             {
                 Professional pro = new Professional(users[i], "Infirmier");
-                proForMaxime.Add(pro);
+                proForMaxime.SetValue(pro, i);
             }
             if(curentUser != users[5] ) follows.Add(guillaume, proForGuillaume);
             if (curentUser != users[4] && curentUser != users[3]) follows.Add(maxime, proForMaxime);
             return follows;
 		}
-	}
+		private DocumentSerializable CreateSerializableDocument(Dictionary<Patient, Professional[]> userData, User Patient)
+        {
+            List<Message> messages = new List<Message>();
+            List<Prescription> prescriptions = new List<Prescription>();
+            List<Professional> professional = new List<Professional>();
+            Patient p = new Patient(Patient);
+            Professional[] proForPatient = ProfessionalArray(userData, p);
+            for (int i = 0; i < 2; i++)
+            {
+				professional.Add(proForPatient[i]);
+            }
+			messages.Add(new Message("Coucou", "Il va bien", proForPatient[0], professional, p));
+			if(p.UserId == 5) messages.Add(new Message("Hey", "Il va bien", proForPatient[1], professional, p));
+            DocumentSerializable doc = new DocumentSerializable(messages, prescriptions);
+            return doc;
+        }
+
+		private Professional[] ProfessionalArray(Dictionary<Patient, Professional[]> userData, Patient user)
+        {
+            Professional[] pro = new Professional[10];
+			Patient p = user;
+            foreach (var patient in userData.Keys)
+            {
+                if (user.UserId == patient.UserId)
+                    p = patient;
+            }
+            userData.TryGetValue(p, out pro);
+            int count = 0;
+            foreach (var professional in pro)
+            {
+                pro.SetValue(professional, count);
+                count++;
+            }
+            return pro;
+        }
+    }
 }
