@@ -18,7 +18,7 @@ namespace ITI.Archi_Vite.WebApi.Controllers
             return professional;
         }
 
-        public void putProfessional(int id, ProfessionalCreation newProfessional)
+        public void putProfessional(ProfessionalCreation newProfessional)
         {
             _db.AddRequest.AddProfessional(newProfessional.User, newProfessional.Role);
         }

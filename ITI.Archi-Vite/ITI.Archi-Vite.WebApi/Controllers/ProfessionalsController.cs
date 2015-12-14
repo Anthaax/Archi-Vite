@@ -42,31 +42,20 @@ namespace ITI.Archi_Vite.WebApi.Controllers
 
         // PUT: api/Professionals/5
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutProfessional(int id, ProfessionalCreation newProfessional)
+        public async Task<IHttpActionResult> PutProfessional( ProfessionalCreation newProfessional)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != newProfessional.User.UserId)
-            {
-                return BadRequest();
-            }
             try
             {
-                Do.putProfessional(id, newProfessional);
+                Do.putProfessional( newProfessional);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ProfessionalExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
                     throw;
-                }
             }
 
             return StatusCode(HttpStatusCode.NoContent);

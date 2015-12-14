@@ -13,26 +13,28 @@ namespace ITI.Archi_Vite.WebApi.Controllers
         private ArchiViteContext _db = new ArchiViteContext();
         private DocumentManager _doc;
 
-        public DocumentSerializable getFollower(int id)
+        public DocumentSerializable getMessage(int idPro, int idPatient )
         {
-            Professional pro = _db.SelectRequest.SelectProfessional(id);
-            Patient patient = _db.SelectRequest.SelectPatient(id);
+            _doc = new DocumentManager(_db);
+            Professional pro = _db.SelectRequest.SelectProfessional(idPro);
+            Patient patient = _db.SelectRequest.SelectPatient(idPatient);
             DocumentSerializable doc = _doc.SeeDocument(pro, patient);
             return doc;
         }
 
-        public void putFollower(int patientId, int receiverId, DateTime date)
+        public void postMessage(int patientId, int receiverId, DateTime date)
         {
             _doc.AddReciver(receiverId, patientId, date);
 
         }
 
-        public void postFollower(List<Professional> Receivers, Professional Sender, string Title, string Contents, Patient Patient)
+        public void putMessage(List<Professional> Receivers, Professional Sender, string Title, string Contents, Patient Patient)
         {
+            _doc = new DocumentManager(_db);
             _doc.CreateMessage(Receivers, Sender, Title, Contents, Patient);
         }
 
-        public void deleteFollower(int reciverId, int patientid, DateTime date)
+        public void deleteMessage(int reciverId, int patientid, DateTime date)
         {
             _doc.DeleteReciever(reciverId, patientid, date);
         }

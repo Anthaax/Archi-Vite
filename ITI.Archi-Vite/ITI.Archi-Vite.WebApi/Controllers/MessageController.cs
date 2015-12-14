@@ -28,15 +28,15 @@ namespace ITI.Archi_Vite.WebApi.Controllers
 
         // GET: api/Message/5
         [ResponseType(typeof(Follower))]
-        public async Task<IHttpActionResult> GetFollower(int id)
+        public async Task<IHttpActionResult> GetMessage(int proId, int patientId)
         {
-            var doc = Do.getFollower(id);
+            var doc = Do.getMessage(proId,patientId);
             return Ok(doc);
         }
 
         // PUT: api/Message/5
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutFollower(int patientId,int receiverId, DateTime date )
+        public async Task<IHttpActionResult> PutMessage(List<Professional> Receivers, Professional Sender, string Title, string Contents, Patient Patient )
         {
             if (!ModelState.IsValid)
             {
@@ -45,7 +45,7 @@ namespace ITI.Archi_Vite.WebApi.Controllers
      
             try
             {
-                Do.putFollower(patientId, receiverId, date);               
+                Do.putMessage(Receivers, Sender, Title, Contents, Patient);               
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -57,7 +57,7 @@ namespace ITI.Archi_Vite.WebApi.Controllers
 
         // POST: api/Message
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PostFollower(List<Professional> Receivers, Professional Sender, string Title, string Contents, Patient Patient)
+        public async Task<IHttpActionResult> PostMessage(int patientId, int receiverId, DateTime date)
         {
             if (!ModelState.IsValid)
             {
@@ -66,7 +66,7 @@ namespace ITI.Archi_Vite.WebApi.Controllers
            
             try
             {
-                Do.postFollower( Receivers,  Sender,  Title,  Contents, Patient);
+                Do.postMessage(patientId, receiverId, date);
             }
             catch (DbUpdateException)
             {
@@ -77,13 +77,13 @@ namespace ITI.Archi_Vite.WebApi.Controllers
 
         // DELETE: api/Message/5
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> DeleteFollower(int reciverId, int patientid, DateTime date)
+        public async Task<IHttpActionResult> DeleteMessage(int reciverId, int patientid, DateTime date)
         {
             if (reciverId== null || patientid == null)
             {
                 return NotFound();
             }
-            Do.deleteFollower(reciverId, patientid, date);
+            Do.deleteMessage(reciverId, patientid, date);
             return StatusCode(HttpStatusCode.NoContent);
         }
 
