@@ -9,10 +9,16 @@ namespace ITI.Archi_Vite.WebApi.Controllers
 {
     public class FollowerService
     {
-        private ArchiViteContext _db = new ArchiViteContext();
-        DocumentManager _doc;
+        readonly ArchiViteContext _db;
+        readonly DocumentManager _doc;
 
-        public Dictionary<Patient, Professional[]> getDocument(int id)
+        public FollowerService()
+        {
+            _db = new ArchiViteContext();
+            _doc = new DocumentManager(_db);
+        }
+
+        public Dictionary<Patient, Professional[]> getDocument(int id )
         {           
         var follower = _db.SelectRequest.SelectAllFollow(id);
         return follower;

@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using ITI.Archi_Vite.Core;
 using System.Data.Entity;
+using ITI.Archi_Vite.WebApi.Controllers;
+
 namespace ITI.Archi_Vite.DataBase.Test
 {
     [TestFixture]
@@ -80,14 +82,58 @@ namespace ITI.Archi_Vite.DataBase.Test
             }
         }
         [Test]
-        public void DeleteMessage()
+        public void DeleteFollow()
         {
             using (ArchiViteContext context = new ArchiViteContext())
             {
+                FollowerService _followerService = new FollowerService();
                 DocumentManager dm = new DocumentManager(context);
                 dm.DeleteFollowerFile(context.SelectRequest.SelectProfessional("SimonF", "SimonF").ProfessionalId, context.SelectRequest.SelectPatient("GuillaumeF", "GuillaumeF").PatientId);
                 context.SuppressionRequest.FollowerSuppression(context.SelectRequest.SelectOneFollow(context.SelectRequest.SelectPatient("GuillaumeF", "GuillaumeF").PatientId, context.SelectRequest.SelectProfessional("SimonF", "SimonF").ProfessionalId));
                 Assert.IsNull(context.SelectRequest.SelectOneFollow(context.SelectRequest.SelectPatient("GuillaumeF", "GuillaumeF").PatientId, context.SelectRequest.SelectProfessional("SimonF", "SimonF").ProfessionalId));
+
+                FollowerCreation myNewFollow = new FollowerCreation(context.SelectRequest.SelectPatient("GuillaumeF", "GuillaumeF").PatientId,
+                    context.SelectRequest.SelectProfessional("SimonF", "Simonf").ProfessionalId);
+                _followerService.PutFollower(myNewFollow);
+            }
+        }
+
+        [Test]
+        public void DeleteData()
+        {
+            using (ArchiViteContext context = new ArchiViteContext())
+            {
+                DocumentManager _doc = new DocumentManager(context);
+                var selectQuery1 = context.Follower.ToList();
+                foreach (var follow in selectQuery1)
+                {
+                    _doc.DeleteFollowerFile(follow.ProfessionnalId, follow.PatientId);
+                    context.SuppressionRequest.FollowerSuppression(follow);
+                    context.SaveChanges();
+                }
+                var selectQuery2 = context.Patient.ToList();
+                foreach (var patient in selectQuery2)
+                {
+                    _doc.DeletePatientFile(patient.PatientId);
+                    context.Patient.Remove(patient);
+                    context.SaveChanges();
+                }
+                var selectQuery3 = context.Professional.ToList();
+                foreach (var pro in selectQuery3)
+                {
+                    context.Professional.Remove(pro);
+                    context.SaveChanges();
+                }
+                var selectQuery4 = context.User.ToList();
+                foreach (var user in selectQuery4)
+                {
+                    context.User.Remove(user);
+                    context.SaveChanges();
+                }
+                Assert.IsFalse(context.Follower.Any());
+                Assert.IsFalse(context.Patient.Any());
+                Assert.IsFalse(context.Professional.Any());
+                Assert.IsFalse(context.User.Any());
             }
         }
         private User[] GetUsers()

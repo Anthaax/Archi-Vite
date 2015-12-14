@@ -11,7 +11,7 @@ using System.Data.Entity;
 
 namespace ITI.Archi_Vite.Core
 {
-    public class DocumentManager
+    public class DocumentManager 
     {
         ArchiViteContext _context;
         SuppressionRequest _supp;

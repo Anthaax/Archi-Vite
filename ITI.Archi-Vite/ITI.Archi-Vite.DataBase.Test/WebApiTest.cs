@@ -16,17 +16,19 @@ namespace ITI.Archi_Vite.DataBase.Test
     {
         DocumentManager _doc;
         UserService _userService;
+        FollowerService _followerService;
         DocumentService _documentService;
         public WebApiTest()
         {
             _userService = new UserService();
             _documentService = new DocumentService();
+            _followerService = new FollowerService();
         }
 
         [Test]
         public void GetUser()
         {
-            
+
             User u = _userService.getUser("ClementR", "ClementR");
             Assert.AreEqual(u.LastName, "Rousseau");
             int id = u.UserId;
@@ -49,11 +51,52 @@ namespace ITI.Archi_Vite.DataBase.Test
         }
 
         [Test]
-        public void SeeDocumentPatient()
+        public void getFollower()
         {
             using (ArchiViteContext context = new ArchiViteContext())
             {
-            }  
+                Dictionary<Patient, Professional[]> expectedFollow = new Dictionary<Patient, Professional[]>();
+                Professional[] proArray = new Professional[10];
+
+                proArray.SetValue(context.SelectRequest.SelectProfessional("SimonF", "SimonF"), 0);
+                proArray.SetValue(context.SelectRequest.SelectProfessional("ClementR", "ClementR"), 1);
+                proArray.SetValue(context.SelectRequest.SelectProfessional("OlivierS", "OlivierS"), 2);
+
+                expectedFollow.Add(context.SelectRequest.SelectPatient("GuillaumeF", "GuillaumeF"), proArray);
+                Dictionary<Patient, Professional[]> allFollow = _followerService.getDocument(context.SelectRequest.SelectProfessional("ClementR", "ClementR").ProfessionalId);
+
+
+                foreach (var pair in allFollow)
+                {
+                    Assert.AreEqual(pair.Key.PatientId, context.SelectRequest.SelectPatient("GuillaumeF", "GuillaumeF").PatientId);
+                    for (int i = 0; i < 3; i++)
+                    {
+                        Assert.AreEqual(pair.Value[i].ProfessionalId, proArray[i].ProfessionalId);
+                    }
+                }
+            }
+        }
+
+        [Test]
+        public void putFollower()
+        {
+            using (ArchiViteContext context = new ArchiViteContext())
+            {
+                _doc = new DocumentManager(context);
+                FollowerCreation myNewFollow = new FollowerCreation(context.SelectRequest.SelectPatient("GuillaumeF", "GuillaumeF").PatientId,
+                    context.SelectRequest.SelectProfessional("AntoineR", "AntoineR").ProfessionalId);
+                _followerService.PutFollower(myNewFollow);
+
+                Dictionary<Patient, Professional[]> allFollow = _followerService.getDocument(context.SelectRequest.SelectProfessional("ClementR", "ClementR").ProfessionalId);
+                foreach (var pair in allFollow)
+                {
+                    Assert.AreEqual(pair.Value[0].ProfessionalId, context.SelectRequest.SelectProfessional("AntoineR", "AntoineR").ProfessionalId);
+                }
+
+                _doc.DeleteFollowerFile(context.SelectRequest.SelectProfessional("AntoineR","AntoineR").ProfessionalId, context.SelectRequest.SelectPatient("GuillaumeF", "GuillaumeF").PatientId);
+                context.SuppressionRequest.FollowerSuppression(context.SelectRequest.SelectOneFollow(context.SelectRequest.SelectPatient("GuillaumeF", "GuillaumeF").PatientId, context.SelectRequest.SelectProfessional("AntoineR", "AntoineR").ProfessionalId));
+                Assert.IsNull(context.SelectRequest.SelectOneFollow(context.SelectRequest.SelectPatient("GuillaumeF", "GuillaumeF").PatientId, context.SelectRequest.SelectProfessional("AntoineR", "AntoineR").ProfessionalId));
+            }
         }
     }
 }
