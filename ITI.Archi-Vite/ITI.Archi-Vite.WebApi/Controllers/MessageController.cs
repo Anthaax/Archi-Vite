@@ -18,22 +18,13 @@ namespace ITI.Archi_Vite.WebApi.Controllers
     {
         private ArchiViteContext _db = new ArchiViteContext();
         private DocumentManager _doc;
-        MessageService Do = new MessageService();
+        DocumentService Do = new DocumentService();
 
         // GET: api/Message
         public IQueryable<Follower> GetFollower()
         {
             return _db.Follower;
         }
-
-        // GET: api/Message/5
-        [ResponseType(typeof(Follower))]
-        public async Task<IHttpActionResult> GetMessage(int proId, int patientId)
-        {
-            var doc = Do.getMessage(proId,patientId);
-            return Ok(doc);
-        }
-
         // PUT: api/Message/5
         [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> PutMessage(List<Professional> Receivers, Professional Sender, string Title, string Contents, Patient Patient )
@@ -54,7 +45,6 @@ namespace ITI.Archi_Vite.WebApi.Controllers
 
             return StatusCode(HttpStatusCode.NoContent);
         }
-
         // POST: api/Message
         [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> PostMessage(int patientId, int receiverId, DateTime date)
@@ -74,7 +64,6 @@ namespace ITI.Archi_Vite.WebApi.Controllers
             }
             return StatusCode(HttpStatusCode.NoContent);
         }
-
         // DELETE: api/Message/5
         [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> DeleteMessage(int reciverId, int patientid, DateTime date)
