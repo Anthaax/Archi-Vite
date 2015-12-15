@@ -23,6 +23,7 @@ namespace ITI.Archi_Vite.Forms
             _patient = Patient;
             _sender = Sender;
 			_senderFullName = Sender.FirstName + " " + Sender.LastName;
+			_patientFullName = Patient.FirstName + " " + Patient.LastName;
             _date = DateTime.Now;
             _title = Title;
         }

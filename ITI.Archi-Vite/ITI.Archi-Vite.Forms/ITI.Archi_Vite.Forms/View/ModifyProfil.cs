@@ -26,6 +26,9 @@ namespace ITI.Archi_Vite.Forms
 				FontSize = 30,
 				TextColor = Color.Black
 			};
+			if (PageForPatient()) followButton.Text = "Mon Suivis";
+
+			followButton.Clicked += FollowButtonClicked;
 
 			Button documentsButton = new Button {
 				Text = "Mes Documents",
@@ -153,6 +156,18 @@ namespace ITI.Archi_Vite.Forms
 			{
 				entry.TextColor = Color.Gray;
 			}
+		}
+		private bool PageForPatient()
+		{
+			foreach(var patient in _userData.Follow.Keys )
+			{
+				if (patient.UserId == _userData.User.UserId) return true;
+			}
+			return false;
+		}
+		private async void FollowButtonClicked(object sender, EventArgs e)
+		{
+			await Navigation.PushAsync(new MessageListPage(_userData));
 		}
 	}
 }

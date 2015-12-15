@@ -115,6 +115,15 @@ namespace ITI.Archi_Vite.Forms
 			};
             messages.Clicked += Messages_Clicked;
 
+            Button prescription = new Button
+            {
+                Text = "Voir mes prescriptions",
+                FontSize = 40,
+                BackgroundColor = Color.FromHex("439DFE"),
+                VerticalOptions = LayoutOptions.End
+            };
+            prescription.Clicked += Prescription_Clicked;
+
             Button modify = new Button
             {
                 Text = "Modifier mes infos",
@@ -143,10 +152,16 @@ namespace ITI.Archi_Vite.Forms
 					logo,
                     Suivis,
 					messages,
+					prescription,
                     modify
                 },
             };
             this.BackgroundColor = Color.White;
+        }
+
+        private async void Prescription_Clicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new PrescriptionListPage(_userData));
         }
 
         private async void Messages_Clicked(object sender, EventArgs e)

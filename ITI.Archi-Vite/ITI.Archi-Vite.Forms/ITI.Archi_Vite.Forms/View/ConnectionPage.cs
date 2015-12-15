@@ -190,7 +190,11 @@ namespace ITI.Archi_Vite.Forms
 				professional.Add(proForPatient[i]);
             }
 			messages.Add(new Message("Coucou", "Il va bien", proForPatient[0], professional, p));
-			if(p.UserId == 5) messages.Add(new Message("Hey", "Il va bien", proForPatient[1], professional, p));
+			if (p.UserId == 5) 
+			{
+				messages.Add (new Message ("Hey", "Il va bien", proForPatient [1], professional, p));
+				prescriptions.Add (new Prescription ("Hey", "http://i.imgur.com/GWji92h.png", proForPatient [1], professional, p));
+			}
             DocumentSerializable doc = new DocumentSerializable(messages, prescriptions);
             return doc;
         }

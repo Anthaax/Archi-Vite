@@ -35,6 +35,7 @@ namespace ITI.Archi_Vite.Forms
                 FontSize = 30,
                 FontAttributes = FontAttributes.Bold,
             };
+			if (PageForPatient()) followButton.Text = "Mon Suivis";
 
             followButton.Clicked += FollowButtonClicked;
 

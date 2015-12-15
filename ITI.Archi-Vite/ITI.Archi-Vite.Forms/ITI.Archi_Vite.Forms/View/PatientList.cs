@@ -33,8 +33,8 @@ namespace ITI.Archi_Vite.Forms
 				BorderColor = Color.Black,
 				FontSize = 30,
 				FontAttributes = FontAttributes.Bold,
-				TextColor = Color.Black
 			};
+			if (PageForPatient()) followButton.Text = "Mon Suivis";
 
 			Button documentsButton = new Button {
 				Text = "Mes Documents",
@@ -142,5 +142,13 @@ namespace ITI.Archi_Vite.Forms
                 _myPatient.Add(dictionaryPatient);
             }
         }
+		private bool PageForPatient()
+		{
+			foreach(var patient in _userData.Follow.Keys )
+			{
+				if (patient.UserId == _userData.User.UserId) return true;
+			}
+			return false;
+		}
     }
 }

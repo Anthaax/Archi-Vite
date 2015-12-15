@@ -38,6 +38,7 @@ namespace ITI.Archi_Vite.Forms
 				FontSize = 30,
 				FontAttributes = FontAttributes.Bold,
 			};
+			if (PageForPatient()) followButton.Text = "Mon Suivis";
 
 			Button documentsButton = new Button {
 				Text = "Mes Documents",
@@ -216,6 +217,14 @@ namespace ITI.Archi_Vite.Forms
 			_userData.Follow.TryGetValue(p, out pro);
             return pro;
         }
+		private bool PageForPatient()
+		{
+			foreach(var patient in _userData.Follow.Keys )
+			{
+				if (patient.UserId == _userData.User.UserId) return true;
+			}
+			return false;
+		}
     }
 }
 

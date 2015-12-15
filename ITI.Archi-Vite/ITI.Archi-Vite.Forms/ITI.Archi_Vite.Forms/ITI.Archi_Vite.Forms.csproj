@@ -45,6 +45,7 @@
     <Compile Include="Data\User.cs" />
     <Compile Include="View\ConnectionPage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="View\DocumentsPage.cs" />
     <Compile Include="View\MessageListPage.cs" />
     <Compile Include="View\MessagePage.cs" />
     <Compile Include="View\PatientList.cs" />
