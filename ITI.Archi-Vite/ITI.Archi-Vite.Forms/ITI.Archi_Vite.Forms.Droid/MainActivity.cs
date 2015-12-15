@@ -14,6 +14,7 @@ namespace ITI.Archi_Vite.Forms.Droid
     [Activity(Label = "Archi'Vite", Icon = "@drawable/logo", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsApplicationActivity
     {
+		static readonly File file = new File(Environment.GetExternalStoragePublicDirectory(Environment.DirectoryPictures), "tmp.jpg");
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);

@@ -98,13 +98,14 @@ namespace ITI.Archi_Vite.Forms
 
             Button Suivis = new Button
             {
-                Text = "Voir mes suivi",
+                Text = "Voir mes Suivis",
                 FontSize = 40,
                 BackgroundColor = Color.FromHex("439DFE"),
                 VerticalOptions = LayoutOptions.End
             };
             Suivis.Clicked += FollowButtonClicked;
-            if (PageForPatient()) Suivis.Text = "Voir mon Suivis";
+            if (PageForPatient()) Suivis.Text = "Voir mon Suivi";
+            else if (!UserAccount()) Suivis.Text = "Retour à mon suivi";
 
             Button messages = new Button
 			{
@@ -114,6 +115,7 @@ namespace ITI.Archi_Vite.Forms
 				VerticalOptions = LayoutOptions.End
 			};
             messages.Clicked += Messages_Clicked;
+            if (!UserAccount()) messages.IsVisible = false;
 
             Button prescription = new Button
             {
@@ -123,6 +125,9 @@ namespace ITI.Archi_Vite.Forms
                 VerticalOptions = LayoutOptions.End
             };
             prescription.Clicked += Prescription_Clicked;
+
+            if (!UserAccount()) prescription.IsVisible = false;
+
 
             Button modify = new Button
             {

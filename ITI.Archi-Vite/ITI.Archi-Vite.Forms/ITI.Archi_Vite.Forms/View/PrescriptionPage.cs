@@ -37,7 +37,7 @@ namespace ITI.Archi_Vite.Forms
                 FontSize = 30,
                 TextColor = Color.Black
             };
-            if (PageForPatient()) followButton.Text = "Mon Suivis";
+            if (PageForPatient()) followButton.Text = "Mon Suivi";
 
             followButton.Clicked += FollowButtonClicked;
             Button documentsButton = new Button
@@ -63,7 +63,7 @@ namespace ITI.Archi_Vite.Forms
 
             Label messageLabel = new Label()
             {
-                Text = "Message",
+                Text = "Prescription",
                 FontSize = 40,
                 TextColor = Color.Gray,
                 HorizontalOptions = LayoutOptions.Center,
@@ -118,7 +118,7 @@ namespace ITI.Archi_Vite.Forms
 
             Button returnButton = new Button()
             {
-                Text = "Retour à mes messages",
+                Text = "Retour à mes prescriptions",
                 FontSize = 40,
                 BackgroundColor = Color.FromHex("439DFE"),
                 VerticalOptions = LayoutOptions.End
@@ -145,12 +145,17 @@ namespace ITI.Archi_Vite.Forms
 
         private async void ReturnButton_Clicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new MessageListPage(_userData));
+			await Navigation.PushAsync(new PrescriptionListPage(_userData));
         }
 
         private async void FollowButtonClicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new MessageListPage(_userData));
+			if (PageForPatient())
+			{
+				Patient patient = new Patient(_userData.User);
+				await Navigation.PushAsync(new FollowPatientPage(_userData, patient));
+			}
+			else await Navigation.PushAsync(new PatientList(_userData));
         }
 
         private bool PageForPatient()
