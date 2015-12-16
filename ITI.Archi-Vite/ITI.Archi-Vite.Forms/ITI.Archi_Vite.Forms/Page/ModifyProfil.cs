@@ -1,6 +1,10 @@
 ﻿using System;
 
 using Xamarin.Forms;
+using XLabs.Forms.Mvvm;
+using XLabs.Ioc;
+using XLabs.Platform.Device;
+using XLabs.Platform.Services.Media;
 
 namespace ITI.Archi_Vite.Forms
 {
@@ -8,10 +12,14 @@ namespace ITI.Archi_Vite.Forms
 	{
 		Image _profilPhoto;
 		Data _userData;
+        CameraViewModel _cameraview;
 		public ModifyProfil (Data userData)
 		{
 			_userData = userData;
-			Button profilButton = new Button {
+            _cameraview = new CameraViewModel();
+            var tappedGesture = new TapGestureRecognizer();
+            tappedGesture.Tapped += TappedGesture_Tapped;
+            Button profilButton = new Button {
 				Text = "Mon Profil",
 				BackgroundColor = Color.Gray,
 				BorderColor = Color.Black,
@@ -87,6 +95,7 @@ namespace ITI.Archi_Vite.Forms
 				VerticalOptions = LayoutOptions.CenterAndExpand,
 				TextColor = Color.Gray
 			};
+
 			Entry city = new Entry
 			{
 				Text = _userData.User.City,
@@ -107,16 +116,27 @@ namespace ITI.Archi_Vite.Forms
 				TextColor = Color.Gray
 			};
 			_profilPhoto = new Image {
-				Source = _userData.User.Photo
+				Source = _userData.User.Photo, 
 			};
+			_profilPhoto.GestureRecognizers.Add (tappedGesture);
+
 			Button modify = new Button
 			{
 				Text = "Sauvegarder",
 				FontSize = 40,
 				BackgroundColor = Color.FromHex("439DFE"),
-				VerticalOptions = LayoutOptions.EndAndExpand
+				VerticalOptions = LayoutOptions.EndAndExpand,
+                
 			};
-			modify.Clicked += async (sender, e) => 
+            Button photo = new Button
+            {
+                Text = "Prendre une photo",
+                FontSize = 40,
+                BackgroundColor = Color.FromHex("439DFE"),
+                VerticalOptions = LayoutOptions.EndAndExpand,
+        	};
+			photo.Clicked += Photo_Clicked;
+            modify.Clicked += async (sender, e) => 
 			{
 				_userData.User.Adress = adress.Text;
 				_userData.User.City = city.Text;
@@ -138,13 +158,26 @@ namespace ITI.Archi_Vite.Forms
 					city,
 					phoneNumber,
 					_profilPhoto,
+                    photo,
 					modify
 				},
 			};
 			this.BackgroundColor = Color.White;
 		}
 
-		public Image ProfilPhoto
+		async void Photo_Clicked (object sender, EventArgs e)
+		{
+			await _cameraview.TakePicture();
+			_profilPhoto.Source = _cameraview.ImageSource;
+		}
+
+        private async void TappedGesture_Tapped(object sender, EventArgs e)
+        {
+            await _cameraview.SelectPicture();
+            _profilPhoto.Source = _cameraview.ImageSource;
+        }
+
+        public Image ProfilPhoto
 		{
 			get { return _profilPhoto; }
 		}
@@ -165,11 +198,16 @@ namespace ITI.Archi_Vite.Forms
 			}
 			return false;
 		}
-		private async void FollowButtonClicked(object sender, EventArgs e)
+        private async void FollowButtonClicked(object sender, EventArgs e)
 		{
-			await Navigation.PushAsync(new MessageListPage(_userData));
-		}
-	}
+            if (PageForPatient())
+            {
+                Patient patient = new Patient(_userData.User);
+                await Navigation.PushAsync(new FollowPatientPage(_userData, patient));
+            }
+            else await Navigation.PushAsync(new PatientList(_userData));
+        }
+    }
 }
 
 

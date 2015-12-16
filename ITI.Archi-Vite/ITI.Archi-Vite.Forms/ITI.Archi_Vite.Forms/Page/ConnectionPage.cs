@@ -18,6 +18,7 @@ namespace ITI.Archi_Vite.Forms
 		Data _dataForUser;
         public ConnectionPage()
         {
+			AutoConnection ();
             Image logo = new Image
             {
                 Source = "Logo.png",
@@ -61,7 +62,7 @@ namespace ITI.Archi_Vite.Forms
 
                     if (CanPutUserData(pseudo.Text, password.Text))
                     {
-                        Patient patient = new Patient(_user);
+						SaveUserData();
 						await Navigation.PushAsync(new ProfilPage(_dataForUser, _dataForUser.User));
                     }
                     else await DisplayAlert("Error", "Les champ doivent etre valides", "Ok");
@@ -90,6 +91,13 @@ namespace ITI.Archi_Vite.Forms
                 entry.TextColor = Color.Gray;
             }
         }
+
+        private async void SaveUserData()
+        {
+            Application.Current.Properties.Add("UserData", _dataForUser);
+            await Application.Current.SavePropertiesAsync();
+        }
+
         private async Task<User> ConnectionGestion(string pseudo, string password)
         {
             using (var client = new HttpClient())
@@ -216,6 +224,14 @@ namespace ITI.Archi_Vite.Forms
                 count++;
             }
             return pro;
+        }
+        private async void AutoConnection()
+        {
+            object userData;
+            Application.Current.Properties.TryGetValue("UserData", out userData);
+            Data _userData = userData as Data;
+            if (_userData != null)
+            await Navigation.PushAsync(new ProfilPage(_userData, _userData.User));
         }
     }
 }
