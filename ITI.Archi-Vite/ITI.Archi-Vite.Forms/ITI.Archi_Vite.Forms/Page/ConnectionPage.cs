@@ -5,10 +5,10 @@ using System.Reflection.Emit;
 using System.Text;
 using System.Net.Http;
 
-
 using Xamarin.Forms;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace ITI.Archi_Vite.Forms
 {
@@ -92,10 +92,9 @@ namespace ITI.Archi_Vite.Forms
             }
         }
 
-        private async void SaveUserData()
+        private void SaveUserData()
         {
-            Application.Current.Properties.Add("UserData", _dataForUser);
-            await Application.Current.SavePropertiesAsync();
+            
         }
 
         private async Task<User> ConnectionGestion(string pseudo, string password)
@@ -225,13 +224,10 @@ namespace ITI.Archi_Vite.Forms
             }
             return pro;
         }
-        private async void AutoConnection()
+        private void AutoConnection()
         {
-            object userData;
-            Application.Current.Properties.TryGetValue("UserData", out userData);
-            Data _userData = userData as Data;
-            if (_userData != null)
-            await Navigation.PushAsync(new ProfilPage(_userData, _userData.User));
+            string json = JsonConvert.SerializeObject(_dataForUser);
+            string path = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
         }
     }
 }
