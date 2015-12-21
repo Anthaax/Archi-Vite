@@ -42,8 +42,9 @@ namespace ITI.Archi_Vite.Forms
 				FontSize = 30,
 				TextColor = Color.Black
 			};
+            documentsButton.Clicked += Document_Clicked;
 
-			StackLayout buttonStack = new StackLayout {
+            StackLayout buttonStack = new StackLayout {
 
 				Children = {
 					profilButton,

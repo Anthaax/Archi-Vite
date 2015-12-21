@@ -43,6 +43,9 @@ namespace ITI.Archi_Vite.Forms
 				FontSize = 30,
 				TextColor = Color.Black
 			};
+
+            documentsButton.Clicked += DocumentsButton_Clicked;
+
 			StackLayout buttonStack = new StackLayout {
 
 				Children = {
@@ -122,6 +125,11 @@ namespace ITI.Archi_Vite.Forms
 				}
 			};
             patientListView.ItemTapped += PatientListView_ItemTapped;
+        }
+
+        private async void DocumentsButton_Clicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new DocumentsPage(_userData));
         }
 
         private async void PatientListView_ItemTapped(object sender, ItemTappedEventArgs e)

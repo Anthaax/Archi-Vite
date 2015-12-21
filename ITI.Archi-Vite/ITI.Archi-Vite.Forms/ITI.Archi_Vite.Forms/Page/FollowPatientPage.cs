@@ -48,7 +48,9 @@ namespace ITI.Archi_Vite.Forms
 				TextColor = Color.Black
 			};
 
-			StackLayout buttonStack = new StackLayout {
+            documentsButton.Clicked += DocumentsButton_Clicked;
+
+            StackLayout buttonStack = new StackLayout {
 
 				Children = {
 					profilButton,
@@ -188,6 +190,11 @@ namespace ITI.Archi_Vite.Forms
 				VerticalOptions = LayoutOptions.FillAndExpand
             };
             this.BackgroundColor = Color.White;
+        }
+
+        private async void DocumentsButton_Clicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new DocumentsPage(_userData));
         }
 
         private async void CreateMessageButtton_Clicked(object sender, EventArgs e)
