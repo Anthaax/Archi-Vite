@@ -161,6 +161,11 @@ namespace ITI.Archi_Vite.Forms
             messageListView.ItemTapped += MessageListView_ItemTapped;
         }
 
+        private async void Document_Clicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new DocumentsPage(_userData));
+        }
+
         private async void MessageListView_ItemTapped(object sender, ItemTappedEventArgs e)
         {
             var message = e.Item as Message;

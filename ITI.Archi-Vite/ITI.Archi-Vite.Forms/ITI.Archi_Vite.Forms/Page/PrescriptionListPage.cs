@@ -141,6 +141,14 @@ namespace ITI.Archi_Vite.Forms
                 })
 
             };
+            Button document = new Button
+            {
+                Text = "Voir mes documents",
+                FontSize = 40,
+                BackgroundColor = Color.FromHex("439DFE"),
+                VerticalOptions = LayoutOptions.End
+            };
+            document.Clicked += Document_Clicked;
             this.BackgroundColor = Color.White;
             this.Content = new StackLayout
             {
@@ -161,6 +169,10 @@ namespace ITI.Archi_Vite.Forms
             {
                 await Navigation.PushAsync(new PrescriptionPage(_userData, prescription));
             }
+        }
+        private async void Document_Clicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new DocumentsPage(_userData));
         }
 
         private void CreateMyPrescriptions()

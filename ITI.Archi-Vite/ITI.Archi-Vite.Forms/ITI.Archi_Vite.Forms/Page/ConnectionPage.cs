@@ -10,7 +10,6 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.IO;
-using Polenter.Serialization;
 
 namespace ITI.Archi_Vite.Forms
 {
@@ -234,7 +233,6 @@ namespace ITI.Archi_Vite.Forms
         public void SaveUserData()
         {
             var obj = _dataForUser;
-			var serializer = new SharpSerializer(true);
         }
 
         public bool LoadUserData()

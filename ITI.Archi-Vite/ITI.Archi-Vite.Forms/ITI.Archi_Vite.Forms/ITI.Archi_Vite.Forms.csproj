@@ -44,6 +44,7 @@
     <Compile Include="Data\Professional.cs" />
     <Compile Include="Data\User.cs" />
     <Compile Include="Interface\ISaveAndLoad.cs" />
+    <Compile Include="Page\AddReciverPage.cs" />
     <Compile Include="Page\ConnectionPage.cs" />
     <Compile Include="Page\CreateMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
