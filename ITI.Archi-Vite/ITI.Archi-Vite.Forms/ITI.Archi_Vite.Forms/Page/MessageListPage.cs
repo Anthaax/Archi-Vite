@@ -140,6 +140,14 @@ namespace ITI.Archi_Vite.Forms
                 })
 
             };
+			Button document = new Button
+			{
+				Text = "Voir mes documents",
+				FontSize = 40,
+				BackgroundColor = Color.FromHex("439DFE"),
+				VerticalOptions = LayoutOptions.End
+			};
+			document.Clicked += Document_Clicked;
             this.BackgroundColor = Color.White;
             this.Content = new StackLayout
             {

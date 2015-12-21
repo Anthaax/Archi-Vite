@@ -9,6 +9,8 @@ using Xamarin.Forms;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using System.IO;
+using Polenter.Serialization;
 
 namespace ITI.Archi_Vite.Forms
 {
@@ -18,7 +20,7 @@ namespace ITI.Archi_Vite.Forms
 		Data _dataForUser;
         public ConnectionPage()
         {
-			AutoConnection ();
+			//AutoConnection();
             Image logo = new Image
             {
                 Source = "Logo.png",
@@ -62,7 +64,8 @@ namespace ITI.Archi_Vite.Forms
 
                     if (CanPutUserData(pseudo.Text, password.Text))
                     {
-						SaveUserData();
+      //                  LoadUserData();
+						//SaveUserData();
 						await Navigation.PushAsync(new ProfilPage(_dataForUser, _dataForUser.User));
                     }
                     else await DisplayAlert("Error", "Les champ doivent etre valides", "Ok");
@@ -83,6 +86,15 @@ namespace ITI.Archi_Vite.Forms
             this.BackgroundColor = Color.White;
         }
 
+        private async void AutoConnection()
+        {
+            LoadUserData();
+            if(_dataForUser != null)
+            {
+                await Navigation.PushAsync(new ProfilPage(_dataForUser, _dataForUser.User));
+            }
+        }
+
         private void EntryTextChanged(object sender, TextChangedEventArgs e)
         {
             Entry entry = sender as Entry;
@@ -91,12 +103,6 @@ namespace ITI.Archi_Vite.Forms
                 entry.TextColor = Color.Gray;
             }
         }
-
-        private void SaveUserData()
-        {
-            
-        }
-
         private async Task<User> ConnectionGestion(string pseudo, string password)
         {
             using (var client = new HttpClient())
@@ -224,10 +230,27 @@ namespace ITI.Archi_Vite.Forms
             }
             return pro;
         }
-        private void AutoConnection()
+
+        public void SaveUserData()
         {
-            string json = JsonConvert.SerializeObject(_dataForUser);
-            string path = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+            var obj = _dataForUser;
+			var serializer = new SharpSerializer(true);
+        }
+
+        public bool LoadUserData()
+        {
+            try
+            {
+                string text = DependencyService.Get<ISaveAndLoad>().LoadText("user.txt");
+                string serializer = JsonConvert.SerializeObject(_dataForUser);
+				var userdata = JsonConvert.DeserializeObject(serializer);
+				_dataForUser = (Data)userdata;
+            }
+            catch (IOException)
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

@@ -107,27 +107,15 @@ namespace ITI.Archi_Vite.Forms
             if (PageForPatient()) Suivis.Text = "Voir mon Suivi";
             else if (!UserAccount()) Suivis.Text = "Retour à mon suivi";
 
-            Button messages = new Button
+            Button document = new Button
 			{
-				Text = "Voir mes messages",
+				Text = "Voir mes documents",
 				FontSize = 40,
 				BackgroundColor = Color.FromHex("439DFE"),
 				VerticalOptions = LayoutOptions.End
 			};
-            messages.Clicked += Messages_Clicked;
-            if (!UserAccount()) messages.IsVisible = false;
-
-            Button prescription = new Button
-            {
-                Text = "Voir mes prescriptions",
-                FontSize = 40,
-                BackgroundColor = Color.FromHex("439DFE"),
-                VerticalOptions = LayoutOptions.End
-            };
-            prescription.Clicked += Prescription_Clicked;
-
-            if (!UserAccount()) prescription.IsVisible = false;
-
+            document.Clicked += Document_Clicked;
+            if (!UserAccount()) document.IsVisible = false;
 
             Button modify = new Button
             {
@@ -156,22 +144,16 @@ namespace ITI.Archi_Vite.Forms
 					city,
 					logo,
                     Suivis,
-					messages,
-					prescription,
+					document,
                     modify
                 },
             };
             this.BackgroundColor = Color.White;
         }
 
-        private async void Prescription_Clicked(object sender, EventArgs e)
+        private async void Document_Clicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new PrescriptionListPage(_userData));
-        }
-
-        private async void Messages_Clicked(object sender, EventArgs e)
-        {
-            await Navigation.PushAsync(new MessageListPage(_userData));
+            await Navigation.PushAsync(new DocumentsPage(_userData));
         }
 
         private async void FollowButtonClicked (object sender, EventArgs e)

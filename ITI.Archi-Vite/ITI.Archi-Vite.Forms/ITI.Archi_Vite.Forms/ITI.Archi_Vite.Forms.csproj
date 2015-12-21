@@ -43,7 +43,9 @@
     <Compile Include="Data\Prescription.cs" />
     <Compile Include="Data\Professional.cs" />
     <Compile Include="Data\User.cs" />
+    <Compile Include="Interface\ISaveAndLoad.cs" />
     <Compile Include="Page\ConnectionPage.cs" />
+    <Compile Include="Page\CreateMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Page\DocumentsPage.cs" />
     <Compile Include="Page\MessageListPage.cs" />
@@ -79,6 +81,10 @@
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\packages\Newtonsoft.Json.7.0.1\lib\portable-net45+wp80+win8+wpa81+dnxcore50\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Polenter.SharpSerializer.Portable, Version=2.20.0.0, Culture=neutral, PublicKeyToken=8f4f20011571ee5f, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\SharpSerializer.2.20\lib\portable-net4+sl4+wp+windows8+xbox\Polenter.SharpSerializer.Portable.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Xamarin.Forms.Core">
       <HintPath>..\..\packages\Xamarin.Forms.2.0.0.6490\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.Core.dll</HintPath>

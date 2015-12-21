@@ -6,7 +6,7 @@ using System.Text;
 
 using Xamarin.Forms;
 
-namespace ITI.Archi_Vite.Forms.View
+namespace ITI.Archi_Vite.Forms
 {
     public class DocumentsPage : ContentPage
     {
@@ -29,22 +29,22 @@ namespace ITI.Archi_Vite.Forms.View
             Button followButton = new Button
             {
                 Text = "Mes Suivis",
-                BackgroundColor = Color.Gray,
-                BorderColor = Color.White,
+                BackgroundColor = Color.White,
+                BorderColor = Color.Black,
+                TextColor = Color.Black,
                 FontSize = 30,
-                FontAttributes = FontAttributes.Bold,
             };
-            if (PageForPatient()) followButton.Text = "Mon Suivis";
+            if (PageForPatient()) followButton.Text = "Mon Suivi";
 
             followButton.Clicked += FollowButtonClicked;
 
             Button documentsButton = new Button
             {
                 Text = "Mes Documents",
-                BackgroundColor = Color.White,
-                BorderColor = Color.Black,
+                BackgroundColor = Color.Gray,
+                BorderColor = Color.White,
                 FontSize = 30,
-                TextColor = Color.Black
+                FontAttributes = FontAttributes.Bold,
             };
             StackLayout buttonStack = new StackLayout
             {
@@ -62,13 +62,13 @@ namespace ITI.Archi_Vite.Forms.View
             {
                 Text = "Mes Documents",
                 FontSize = 50,
-                HorizontalOptions = LayoutOptions.Center,
+				VerticalOptions = LayoutOptions.CenterAndExpand,
                 TextColor = Color.Gray
             };
 
             Button messages = new Button
             {
-                Text = _userData.Documents.Messages.Count.ToString(),
+				Text = "Nombre de messages : " + _userData.Documents.Messages.Count.ToString(),
                 FontSize = 40,
                 BackgroundColor = Color.FromHex("439DFE"),
                 VerticalOptions = LayoutOptions.CenterAndExpand
@@ -77,12 +77,22 @@ namespace ITI.Archi_Vite.Forms.View
 
             Button prescription = new Button
             {
-                Text = _userData.Documents.Prescriptions.Count.ToString(),
+				Text = "Nombre de prescriptions : " + _userData.Documents.Prescriptions.Count.ToString(),
                 FontSize = 40,
                 BackgroundColor = Color.FromHex("439DFE"),
                 VerticalOptions = LayoutOptions.CenterAndExpand
             };
             prescription.Clicked += Prescription_Clicked;
+            Content = new StackLayout
+            {
+
+                Children = {
+                    buttonStack,
+                    messages,
+                    prescription
+                },
+            };
+            this.BackgroundColor = Color.White;
         }
         private async void Prescription_Clicked(object sender, EventArgs e)
         {
