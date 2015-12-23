@@ -1,0 +1,149 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ITI.Archi_Vite.Forms
+{
+    public class DataJsonConvertor
+    {
+        public Data DataJsonToData(DataJson json)
+        {
+            User curentUser = CreateUser(json.User);
+            Dictionary<Patient, Professional[]> follow = CreateDictionary(json.Follow);
+            DocumentSerializable documents = CreateDocumentSerializable(json.Documents);
+            Data d = new Data(curentUser, follow, documents);
+            return d;
+        }
+
+        private User CreateUser(UserJson user)
+        {
+            User u = new User(user.UserId, user.FirstName, user.LastName, user.Birthdate, user.Adress, user.City, user.Postcode, user.Pseudo, user.Password, user.PhoneNumber, user.Photo);
+            return u;
+        }
+        private User CreateUser(int userId, string firstName, string lastName, DateTime birthdate, string adress, string city, int postcode, string pseudo, string password, int phoneNumber, string Photo)
+        {
+            User u = new User(userId, firstName, lastName, birthdate, adress, city, postcode, pseudo, password, phoneNumber, Photo);
+            return u;
+        }
+        private Patient CreatePatient(int userId, string firstName, string lastName, DateTime birthdate, string adress, string city, int postcode, string pseudo, string password, int phoneNumber, string Photo)
+        {
+            Patient p = new Patient(CreateUser(userId, firstName, lastName, birthdate, adress, city, postcode, pseudo, password, phoneNumber, Photo));
+            return p;
+        }
+        private Professional CreatePro(int userId, string firstName, string lastName, DateTime birthdate, string adress, string city, int postcode, string pseudo, string password, int phoneNumber, string Photo, string role)
+        {
+            Professional p = new Professional(CreateUser(userId, firstName, lastName, birthdate, adress, city, postcode, pseudo, password, phoneNumber, Photo), role);
+            return p;
+        }
+        private Dictionary<Patient, Professional[]> CreateDictionary(Dictionary<PatientJson, ProfessionalJson[]> follow)
+        {
+            List<PatientJson> fJson = follow.Keys.ToList();
+            List<ProfessionalJson[]> pJson = follow.Values.ToList();
+            List<Patient> f = CreatePatientList(fJson);
+            List<Professional[]> p = CreateArrayProList(pJson);
+            return CreateDictionaryWithList(f, p);
+        }
+        private List<Patient> CreatePatientList(List<PatientJson> patientJson)
+        {
+            List<Patient> f = new List<Patient>();
+            foreach (var pJson in patientJson)
+            {
+                Patient p = CreatePatient(pJson.UserId, pJson.FirstName, pJson.LastName, pJson.Birthdate, pJson.Adress, pJson.City, pJson.Postcode, pJson.Pseudo, pJson.Password, pJson.PhoneNumber, pJson.Photo);
+                f.Add(p);
+            }
+            return f;
+        }
+        private List<Professional[]> CreateArrayProList(List<ProfessionalJson[]> proJson)
+        {
+            List<Professional[]> f = new List<Professional[]>();
+            foreach (var pJson in proJson)
+            {
+                Professional[] p = CreateProArray(pJson);
+				f.Add (p);
+            }
+            return f;
+        }
+        private Professional[] CreateProArray(ProfessionalJson[] proJson)
+        {
+            Professional[] p = new Professional[10];
+            for (int i = 0; i < proJson.Length; i++)
+            {
+                if (proJson[i] != null)
+                {
+                    Professional pro = CreatePro(proJson[i].UserId, proJson[i].FirstName, proJson[i].LastName, proJson[i].Birthdate, proJson[i].Adress, proJson[i].City, proJson[i].Postcode, proJson[i].Pseudo, proJson[i].Password, proJson[i].PhoneNumber, proJson[i].Photo, proJson[i].Role);
+                    p.SetValue(pro, i);
+                }
+                else
+                {
+                    p.SetValue(null, i);
+                }
+            }
+            return p;
+        }
+        private Dictionary<Patient, Professional[]> CreateDictionaryWithList(List<Patient> p, List<Professional[]> pro)
+        {
+            Dictionary<Patient, Professional[]> dico = new Dictionary<Patient, Professional[]>();
+            for (int i = 0; i < p.Count; i++)
+            {
+                dico.Add(p.ToArray()[i], pro.ToArray()[i]);
+            }
+            return dico;
+        }
+        private DocumentSerializable CreateDocumentSerializable(DocumentSerializableJson json)
+        {
+            List<Message> m = CreateMessageList(json.Message);
+            List<Prescription> p = CreatePrescriptionList(json.Prescription);
+            DocumentSerializable d = new DocumentSerializable(m, p);
+            return d;
+        }
+        private List<Message> CreateMessageList(List<MessageJson> mJson)
+        {
+            List<Message> m = new List<Message>();
+            foreach (var message in mJson)
+            {
+                m.Add(CreateMessage(message));
+            }
+            return m;
+        }
+        private List<Prescription> CreatePrescriptionList(List<PrescriptionJson> mJson)
+        {
+            List<Prescription> m = new List<Prescription>();
+            foreach (var message in mJson)
+            {
+                m.Add(CreatePrescription(message));
+            }
+            return m;
+        }
+
+        private Prescription CreatePrescription(PrescriptionJson mJson)
+        {
+            Professional p = CreatePro(mJson.Sender.UserId, mJson.Sender.FirstName, mJson.Sender.LastName, mJson.Sender.Birthdate, mJson.Sender.Adress, mJson.Sender.City, mJson.Sender.Postcode, mJson.Sender.Pseudo, mJson.Sender.Password, mJson.Sender.PhoneNumber, mJson.Sender.Photo, mJson.Sender.Role);
+            Patient pa = CreatePatient(mJson.Patient.UserId, mJson.Patient.FirstName, mJson.Patient.LastName, mJson.Patient.Birthdate, mJson.Patient.Adress, mJson.Patient.City, mJson.Patient.Postcode, mJson.Patient.Pseudo, mJson.Patient.Password, mJson.Patient.PhoneNumber, mJson.Patient.Photo);
+            List<Professional> pro = CreateListPro(mJson.Recievers);
+            Prescription m = new Prescription(mJson.Title, mJson.DocPath, p, pro, pa);
+            return m;
+        }
+
+        private Message CreateMessage(MessageJson mJson)
+        {
+            Professional p = CreatePro(mJson.Sender.UserId, mJson.Sender.FirstName, mJson.Sender.LastName, mJson.Sender.Birthdate, mJson.Sender.Adress, mJson.Sender.City, mJson.Sender.Postcode, mJson.Sender.Pseudo, mJson.Sender.Password, mJson.Sender.PhoneNumber, mJson.Sender.Photo, mJson.Sender.Role);
+            Patient pa = CreatePatient(mJson.Patient.UserId, mJson.Patient.FirstName, mJson.Patient.LastName, mJson.Patient.Birthdate, mJson.Patient.Adress, mJson.Patient.City, mJson.Patient.Postcode, mJson.Patient.Pseudo, mJson.Patient.Password, mJson.Patient.PhoneNumber, mJson.Patient.Photo);
+            List<Professional> pro = CreateListPro(mJson.Recievers);
+            Message m = new Message(mJson.Title, mJson.Contents, p, pro, pa);
+            return m;
+
+        }
+        private List<Professional> CreateListPro(List<ProfessionalJson> pJson)
+        {
+            List<Professional> p = new List<Professional>();
+            foreach (var pro in pJson)
+            {
+                Professional pr = CreatePro(pro.UserId, pro.FirstName, pro.LastName, pro.Birthdate, pro.Adress, pro.City, pro.Postcode, pro.Pseudo, pro.Password, pro.PhoneNumber, pro.Photo, pro.Role);
+                p.Add(pr);
+            }
+            return p;
+        }
+    }
+}

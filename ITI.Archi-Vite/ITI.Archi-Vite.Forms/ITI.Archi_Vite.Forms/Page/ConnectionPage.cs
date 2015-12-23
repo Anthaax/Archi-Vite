@@ -10,6 +10,7 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.IO;
+using Polenter.Serialization;
 
 namespace ITI.Archi_Vite.Forms
 {
@@ -17,9 +18,11 @@ namespace ITI.Archi_Vite.Forms
     {
 		User _user;
 		Data _dataForUser;
+        DataJsonConvertor _jsonCovertor = new DataJsonConvertor();
+        DataConvertor _convertor = new DataConvertor();
         public ConnectionPage()
         {
-			//AutoConnection();
+			AutoConnection();
             Image logo = new Image
             {
                 Source = "Logo.png",
@@ -63,8 +66,7 @@ namespace ITI.Archi_Vite.Forms
 
                     if (CanPutUserData(pseudo.Text, password.Text))
                     {
-      //                  LoadUserData();
-						//SaveUserData();
+						SaveUserData();
 						await Navigation.PushAsync(new ProfilPage(_dataForUser, _dataForUser.User));
                     }
                     else await DisplayAlert("Error", "Les champ doivent etre valides", "Ok");
@@ -232,22 +234,26 @@ namespace ITI.Archi_Vite.Forms
 
         public void SaveUserData()
         {
-            var obj = _dataForUser;
+            DataJson json = _convertor.DataToDataJson(_dataForUser);
+            DependencyService.Get<ISaveAndLoad>().SaveData("user.txt", json);
         }
 
         public bool LoadUserData()
         {
             try
             {
-                string text = DependencyService.Get<ISaveAndLoad>().LoadText("user.txt");
-                string serializer = JsonConvert.SerializeObject(_dataForUser);
-				var userdata = JsonConvert.DeserializeObject(serializer);
-				_dataForUser = (Data)userdata;
+                DataJson json = DependencyService.Get<ISaveAndLoad>().LoadData("user.txt");
+				if(json != null)
+                	_dataForUser = _jsonCovertor.DataJsonToData(json);
+				else return false;
             }
             catch (IOException)
             {
                 return false;
             }
+			catch(Exception e) {
+				return false;
+			}
             return true;
         }
     }

@@ -28,7 +28,7 @@ namespace ITI.Archi_Vite.Forms
             _title = Title;
         }
 
-        public List<Professional> Receivers
+        public List<Professional> Recievers
         {
             get
             {
@@ -60,11 +60,11 @@ namespace ITI.Archi_Vite.Forms
             }
         }
 
-		public string Date
+		public DateTime Date
         {
             get
             {
-				return _date.ToString();
+				return _date;
             }
         }
 

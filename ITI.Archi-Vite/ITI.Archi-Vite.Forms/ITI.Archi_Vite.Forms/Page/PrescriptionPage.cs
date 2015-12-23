@@ -94,7 +94,7 @@ namespace ITI.Archi_Vite.Forms
 
             Label recieversLabel = new Label()
             {
-                Text = "À : " + _prescription.Receivers.Count + " personne(s)",
+                Text = "À : " + _prescription.Recievers.Count + " personne(s)",
                 FontSize = 40,
                 TextColor = Color.Gray,
                 HorizontalOptions = LayoutOptions.StartAndExpand,
@@ -155,7 +155,7 @@ namespace ITI.Archi_Vite.Forms
 				Patient patient = new Patient(_userData.User);
 				await Navigation.PushAsync(new FollowPatientPage(_userData, patient));
 			}
-			else await Navigation.PushAsync(new PatientList(_userData));
+			else await Navigation.PushAsync(new PatientListPage(_userData));
         }
 
         private bool PageForPatient()

@@ -14,7 +14,20 @@ namespace ITI.Archi_Vite.Forms
 			:base(user.UserId, user.FirstName, user.LastName, user.Birthdate, user.Adress, user.City, user.Postcode, user.Pseudo, user.Password, user.PhoneNumber, user.Photo)
 		{
 			_professionalId = UserId;
-			_role = role;
+			Role = role;
 		}
+
+        public string Role
+        {
+            get
+            {
+                return _role;
+            }
+
+            set
+            {
+                _role = value;
+            }
+        }
     }
 }

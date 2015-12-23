@@ -8,11 +8,11 @@ using Xamarin.Forms;
 
 namespace ITI.Archi_Vite.Forms
 {
-    public class PatientList : ContentPage
+    public class PatientListPage : ContentPage
     {
         List<Patient> _myPatient;
         Data _userData;
-        public PatientList(Data userData)
+        public PatientListPage(Data userData)
         {
             _userData = userData;
 			Button profilButton = new Button
