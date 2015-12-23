@@ -96,7 +96,7 @@ namespace ITI.Archi_Vite.Forms
 
             Label recieversLabel = new Label()
             {
-                Text = "À : " + _message.Receivers.Count + " personne(s)",
+                Text = "À : " + _message.Recievers.Count + " personne(s)",
                 FontSize = 40,
                 TextColor = Color.Gray,
 				HorizontalOptions = LayoutOptions.StartAndExpand,

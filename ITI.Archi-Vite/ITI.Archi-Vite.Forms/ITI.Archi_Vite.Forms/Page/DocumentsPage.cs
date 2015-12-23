@@ -110,7 +110,7 @@ namespace ITI.Archi_Vite.Forms
                 Patient patient = new Patient(_userData.User);
                 await Navigation.PushAsync(new FollowPatientPage(_userData, patient));
             }
-            else await Navigation.PushAsync(new PatientList(_userData));
+            else await Navigation.PushAsync(new PatientListPage(_userData));
         }
 
         private bool PageForPatient()

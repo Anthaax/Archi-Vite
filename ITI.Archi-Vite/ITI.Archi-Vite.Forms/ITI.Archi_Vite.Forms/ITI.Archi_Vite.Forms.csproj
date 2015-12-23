@@ -36,6 +36,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="App.cs" />
+    <Compile Include="Convertor\DataConvertor.cs" />
+    <Compile Include="Convertor\DataJsonConvertor.cs" />
     <Compile Include="Data\Documents.cs" />
     <Compile Include="Data\DocumentSerializable.cs" />
     <Compile Include="Data\Message.cs" />
@@ -44,6 +46,14 @@
     <Compile Include="Data\Professional.cs" />
     <Compile Include="Data\User.cs" />
     <Compile Include="Interface\ISaveAndLoad.cs" />
+    <Compile Include="Json\DataJson.cs" />
+    <Compile Include="Json\DocumentsJson.cs" />
+    <Compile Include="Json\DocumentSerializableJson.cs" />
+    <Compile Include="Json\MessageJson.cs" />
+    <Compile Include="Json\PatientJson.cs" />
+    <Compile Include="Json\ProfessionalJson.cs" />
+    <Compile Include="Json\PrescriptionJson.cs" />
+    <Compile Include="Json\UserJson.cs" />
     <Compile Include="Page\AddReciverPage.cs" />
     <Compile Include="Page\ConnectionPage.cs" />
     <Compile Include="Page\CreateMessage.cs" />
@@ -51,7 +61,7 @@
     <Compile Include="Page\DocumentsPage.cs" />
     <Compile Include="Page\MessageListPage.cs" />
     <Compile Include="Page\MessagePage.cs" />
-    <Compile Include="Page\PatientList.cs" />
+    <Compile Include="Page\PatientListPage.cs" />
     <Compile Include="Page\PrescriptionListPage.cs" />
     <Compile Include="Page\PrescriptionPage.cs" />
     <Compile Include="Page\ProfilPage.cs" />
@@ -120,4 +130,5 @@
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
+  <ItemGroup />
 </Project>
