@@ -35,7 +35,7 @@ namespace ITI.Archi_Vite.WebApi.Controllers
             {
                 pro.Add(_db.SelectRequest.SelectProfessional(proId));
             }
-            _doc.CreateMessage(pro, _db.SelectRequest.SelectProfessional(newMessage.SenderId), newMessage.Title, newMessage.Content, _db.SelectRequest.SelectPatient(newMessage.PatientId));
+            _doc.CreateMessage(pro, _db.SelectRequest.SelectUser(newMessage.SenderId), newMessage.Title, newMessage.Content, _db.SelectRequest.SelectPatient(newMessage.PatientId));
         }
 
         public void putDoc(PrescriptionCreator newPrescription)
@@ -46,7 +46,7 @@ namespace ITI.Archi_Vite.WebApi.Controllers
             {
                 pro.Add(_db.SelectRequest.SelectProfessional(proId));
             }
-            _doc.CreatePrescription(pro, _db.SelectRequest.SelectProfessional(newPrescription.Sender), _db.SelectRequest.SelectPatient(newPrescription.Patient), newPrescription.Title, newPrescription.DocPath);
+            _doc.CreatePrescription(pro, _db.SelectRequest.SelectUser(newPrescription.Sender), _db.SelectRequest.SelectPatient(newPrescription.Patient), newPrescription.Title, newPrescription.DocPath);
         }
 
         public void postDocument(ReciverModification newDoc)

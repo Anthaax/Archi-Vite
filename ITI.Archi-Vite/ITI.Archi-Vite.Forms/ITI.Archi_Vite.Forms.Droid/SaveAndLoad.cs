@@ -45,7 +45,7 @@ namespace ITI.Archi_Vite.Forms.Droid
             {
                 data = (DataJson)serializer.Deserialize(fileStream);
             }
-            catch (SerializationException e)
+			catch (Exception e)
             {
 				return null;
             }
@@ -67,7 +67,7 @@ namespace ITI.Archi_Vite.Forms.Droid
             {
                 serializer.Serialize(saveData, fileStream);
             }
-            catch (SerializationException e)
+			catch (Exception e)
             {
                 Console.WriteLine("Failed to serialize. Reason: " + e.Message);
                 throw;

@@ -10,7 +10,7 @@ namespace ITI.Archi_Vite.Forms
     {
         readonly string _contents;
 		readonly string _patientFullName;
-        public Message(string Title, string Contents, Professional Sender, List<Professional> Receivers, Patient Patient)
+        public Message(string Title, string Contents, User Sender, List<Professional> Receivers, Patient Patient)
             : base(Sender, Receivers, Patient, Title)
         {
             _contents = Contents;

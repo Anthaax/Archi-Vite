@@ -28,7 +28,7 @@ namespace ITI.Archi_Vite.WebApi.Controllers
 
         }
 
-        public void putMessage(List<Professional> Receivers, Professional Sender, string Title, string Contents, Patient Patient)
+        public void putMessage(List<Professional> Receivers, User Sender, string Title, string Contents, Patient Patient)
         {
             _doc = new DocumentManager(_db);
             _doc.CreateMessage(Receivers, Sender, Title, Contents, Patient);

@@ -20,7 +20,7 @@ namespace ITI.Archi_Vite.WebApi.Controllers
             return doc;
         }
 
-        public void putPrescription(List<Professional> Receivers, Professional Sender, Patient Patient, string Title, string DocPath)
+        public void putPrescription(List<Professional> Receivers, User Sender, Patient Patient, string Title, string DocPath)
         {
             _doc.CreatePrescription(Receivers, Sender, Patient, Title, DocPath);
         }

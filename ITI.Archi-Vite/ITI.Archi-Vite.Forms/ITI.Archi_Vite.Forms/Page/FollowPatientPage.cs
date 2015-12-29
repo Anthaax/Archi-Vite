@@ -225,7 +225,14 @@ namespace ITI.Archi_Vite.Forms
 						if (professionals[i] != null && source.Uri.ToString() == professionals[i].Photo) Navigation.PushAsync(new ProfilPage(_userData, professionals[i]));
 					}
 				}
-                
+                var s = image.Source as FileImageSource;
+                if (s != null)
+                {
+                    for (int i = 0; i < professionals.Length; i++)
+                    {
+                        if (professionals[i] != null && s.File.ToString() == professionals[i].Photo) Navigation.PushAsync(new ProfilPage(_userData, professionals[i]));
+                    }
+                }
             }
         }
 

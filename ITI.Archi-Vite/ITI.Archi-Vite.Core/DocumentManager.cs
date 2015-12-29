@@ -20,12 +20,12 @@ namespace ITI.Archi_Vite.Core
             _context = context;
             _supp = new SuppressionRequest(context);
         }
-        public void CreateMessage(List<Professional> Receivers, Professional Sender, string Title, string Contents, Patient Patient)
+        public void CreateMessage(List<Professional> Receivers, User Sender, string Title, string Contents, Patient Patient)
         {
             Message m = new Message(Title, Contents, Sender, Receivers, Patient);
             CreateDoc(m);
         }
-        public void CreatePrescription(List<Professional> Receivers, Professional Sender, Patient Patient, string Title, string DocPath)
+        public void CreatePrescription(List<Professional> Receivers, User Sender, Patient Patient, string Title, string DocPath)
         {
             Prescription p = new Prescription(Title, DocPath, Sender, Receivers, Patient);
             CreateDoc(p);
@@ -237,23 +237,18 @@ namespace ITI.Archi_Vite.Core
         }
         private void CreateDoc(Message message)
         {
-            var senderFollow = _context.Follower
-                                    .Include(c => c.Patient)
-                                    .Include(c => c.Professionnal)
-                                    .Where(t => t.Patient.PatientId.Equals(message.Patient.PatientId) && t.ProfessionnalId.Equals(message.Sender.ProfessionalId))
-                                    .FirstOrDefault();
-            if (senderFollow != null)
+            if (_context.SelectRequest.SelectProfessional(message.Sender.UserId) != null)
             {
-                AddDoc(message, message.Patient.PatientId + "$" + message.Sender.ProfessionalId);
+                var senderFollow = _context.SelectRequest.SelectOneFollow(message.Patient.PatientId, message.Sender.UserId);
+                if (senderFollow != null)
+                {
+                    AddDoc(message, message.Patient.PatientId + "$" + message.Sender.UserId);
+                }
             }
             foreach (var receiver in message.Receivers)
             {
-                var follow = _context.Follower
-                                    .Include(c => c.Patient)
-                                    .Include(c => c.Professionnal)
-                                    .Where(t => t.Patient.PatientId.Equals(message.Patient.PatientId) && t.ProfessionnalId.Equals(receiver.ProfessionalId))
-                                    .FirstOrDefault();
-                if (follow != null && follow != senderFollow)
+                var follow = _context.SelectRequest.SelectOneFollow(message.Patient.PatientId, receiver.ProfessionalId);
+                if (follow != null)
                 {
                     AddDoc(message, message.Patient.PatientId + "$" + receiver.ProfessionalId);
                 }
@@ -263,22 +258,14 @@ namespace ITI.Archi_Vite.Core
 
         private void CreateDoc(Prescription prescription)
         {
-            var senderFollow = _context.Follower
-                                    .Include(c => c.Patient)
-                                    .Include(c => c.Professionnal)
-                                    .Where(t => t.Patient.PatientId.Equals(prescription.Patient.PatientId) && t.ProfessionnalId.Equals(prescription.Sender.ProfessionalId))
-                                    .FirstOrDefault();
+            var senderFollow = _context.SelectRequest.SelectOneFollow(prescription.Patient.PatientId, prescription.Sender.UserId);
             if (senderFollow != null)
             {
-                AddDoc(prescription, senderFollow.PatientId + "$" + senderFollow.ProfessionnalId);
+                AddDoc(prescription, prescription.Patient.PatientId + "$" + prescription.Sender.UserId);
             }
             foreach (var receiver in prescription.Receivers)
             {
-                var follow = _context.Follower
-                                    .Include(c => c.Patient)
-                                    .Include(c => c.Professionnal)
-                                    .Where(t => t.Patient.PatientId.Equals(prescription.Patient.PatientId) && t.ProfessionnalId.Equals(receiver.ProfessionalId))
-                                    .FirstOrDefault();
+                var follow = _context.SelectRequest.SelectOneFollow(prescription.Patient.PatientId, receiver.ProfessionalId);
                 if (follow != null && follow != senderFollow)
                 {
                     AddDoc(prescription, senderFollow.PatientId + "$" + senderFollow.ProfessionnalId);

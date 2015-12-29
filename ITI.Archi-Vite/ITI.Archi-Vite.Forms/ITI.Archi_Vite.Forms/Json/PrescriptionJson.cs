@@ -9,14 +9,6 @@ namespace ITI.Archi_Vite.Forms
 {
     public class PrescriptionJson : DocumentsJson
     {
-        public PrescriptionJson()
-        {
-
-        }
-        public PrescriptionJson(JsonToken jsonToken)
-        {
-
-        }
         public string DocPath { get; set; }
     }
 }

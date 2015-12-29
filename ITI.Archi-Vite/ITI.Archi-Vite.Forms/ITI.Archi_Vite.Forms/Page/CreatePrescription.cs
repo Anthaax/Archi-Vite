@@ -13,8 +13,12 @@ namespace ITI.Archi_Vite.Forms.Page
         Data _userData;
         Patient _patient;
         List<Professional> _recievers;
-        Entry title;
-        Button content;
+        Entry _title;
+        Button _takePhoto;
+        Button _choosePhoto;
+        CameraViewModel _cameraview;
+        Image _photo;
+        DataConvertor _convertor = new DataConvertor();
         public CreatePrescription(Data userData, Patient patient, List<Professional> recievers)
         {
             _userData = userData;
@@ -22,6 +26,7 @@ namespace ITI.Archi_Vite.Forms.Page
             if (recievers != null)
                 _recievers = recievers;
             else _recievers = new List<Professional>();
+            _cameraview = new CameraViewModel();
             Button profilButton = new Button
             {
                 Text = "Mon Profil",
@@ -66,7 +71,7 @@ namespace ITI.Archi_Vite.Forms.Page
                 HorizontalOptions = LayoutOptions.Start
 
             };
-            Label message = new Label
+            Label prescription = new Label
             {
                 Text = "Creation de Prescription",
                 FontSize = 50,
@@ -98,7 +103,7 @@ namespace ITI.Archi_Vite.Forms.Page
                 HorizontalOptions = LayoutOptions.Start
 
             };
-            title = new Entry
+            _title = new Entry
             {
                 Placeholder = "Titre de la prescription",
                 FontSize = 40,
@@ -106,15 +111,39 @@ namespace ITI.Archi_Vite.Forms.Page
                 HorizontalOptions = LayoutOptions.FillAndExpand,
                 VerticalOptions = LayoutOptions.Center,
             };
-            title.TextChanged += EntryTextChanged;
+            _title.TextChanged += EntryTextChanged;
 
-            content = new Button
+            _takePhoto = new Button
             {
+                Text = "Prendre une photo",
                 FontSize = 20,
                 HorizontalOptions = LayoutOptions.FillAndExpand,
                 VerticalOptions = LayoutOptions.FillAndExpand,
             };
-            content.Clicked += Content_Clicked;
+            _takePhoto.Clicked += Content_Clicked;
+            _choosePhoto = new Button
+            {
+                Text = "Choisir une image éxistante",
+                FontSize = 20,
+                HorizontalOptions = LayoutOptions.FillAndExpand,
+                VerticalOptions = LayoutOptions.FillAndExpand,
+            };
+            _choosePhoto.Clicked += _choosePhoto_Clicked;
+            StackLayout takePhotoStack = new StackLayout
+            {
+
+                Children = {
+                    _takePhoto,
+                    _choosePhoto,
+                },
+                Orientation = StackOrientation.Horizontal,
+                HorizontalOptions = LayoutOptions.Start
+
+            };
+            _photo = new Image
+            {
+            };
+
             Button create = new Button
             {
                 Text = "Envoyer",
@@ -138,10 +167,11 @@ namespace ITI.Archi_Vite.Forms.Page
 
                 Children = {
                     buttonStack,
-                    message,
-                    title,
+                    prescription,
+                    _title,
                     addRecieverStack,
-                    content,
+                    takePhotoStack,
+                    _photo,
                     create,
                     back
                 },
@@ -149,9 +179,16 @@ namespace ITI.Archi_Vite.Forms.Page
             this.BackgroundColor = Color.White;
         }
 
-        private void Content_Clicked(object sender, EventArgs e)
+        private async void _choosePhoto_Clicked(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            await _cameraview.SelectPicture();
+            _photo.Source = _cameraview.ImageSource;
+        }
+
+        private async void Content_Clicked(object sender, EventArgs e)
+        {
+            await _cameraview.TakePicture();
+            _photo.Source = _cameraview.ImageSource;
         }
 
         private async void Add_Clicked(object sender, EventArgs e)
@@ -166,6 +203,7 @@ namespace ITI.Archi_Vite.Forms.Page
 
         private async void Create_Clicked(object sender, EventArgs e)
         {
+
             await DisplayAlert("Envoi", "Le message à été envoyé", "OK");
             await Navigation.PushAsync(new MessageListPage(_userData));
         }
@@ -177,7 +215,7 @@ namespace ITI.Archi_Vite.Forms.Page
                 Patient patient = new Patient(_userData.User);
                 await Navigation.PushAsync(new FollowPatientPage(_userData, patient));
             }
-            else await Navigation.PushAsync(new PatientList(_userData));
+            else await Navigation.PushAsync(new PatientListPage(_userData));
         }
 
         private bool PageForPatient()
@@ -195,6 +233,37 @@ namespace ITI.Archi_Vite.Forms.Page
             {
                 entry.TextColor = Color.Gray;
             }
+        }
+        private async void MessageAdd(Prescription p)
+        {
+            if(TostringSource(_photo)!= null)
+                _userData.Documents.Prescriptions.Add(p);
+            else
+                await DisplayAlert("Envoi", "Le message à été envoyé", "OK");
+
+        }
+        private Prescription GetMessage()
+        {
+            return new Prescription(_title.Text, TostringSource(_photo), _userData.User, _recievers, _patient);
+        }
+        private string TostringSource(Image i)
+        {
+            var source = i.Source as UriImageSource;
+            if (source != null)
+            {
+                return source.Uri.ToString();
+            }
+            var s = i.Source as FileImageSource;
+            if (s != null)
+            {
+                return s.File.ToString();
+            }
+            return null;
+        }
+        public void SaveUserData()
+        {
+            DataJson json = _convertor.DataToDataJson(_userData);
+            DependencyService.Get<ISaveAndLoad>().SaveData("user.txt", json);
         }
     }
 }

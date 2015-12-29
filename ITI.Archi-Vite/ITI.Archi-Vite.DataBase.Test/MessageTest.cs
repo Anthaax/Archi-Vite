@@ -72,7 +72,7 @@ namespace ITI.Archi_Vite.DataBase.Test
                 {
                     receivers.Add(f.Professionnal);
                 }
-                dm.CreateMessage(receivers, context.SelectRequest.SelectProfessional("ClementR", "ClementR"), "Coucou", "J'ai un pb", context.SelectRequest.SelectPatient("GuillaumeF", "GuillaumeF"));
+                dm.CreateMessage(receivers, context.SelectRequest.SelectUser("ClementR", "ClementR"), "Coucou", "J'ai un pb", context.SelectRequest.SelectPatient("GuillaumeF", "GuillaumeF"));
                 DocumentSerializable document = dm.SeeDocument(context.SelectRequest.SelectProfessional(context.SelectRequest.SelectProfessional("ClementR", "ClementR").ProfessionalId), context.SelectRequest.SelectPatient("GuillaumeF", "GuillaumeF"));
                 Assert.AreEqual(document.Messages.Count, 1);
 

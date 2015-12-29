@@ -9,14 +9,6 @@ namespace ITI.Archi_Vite.Forms
 {
     public class DocumentSerializableJson
     {
-        public DocumentSerializableJson()
-        {
-
-        }
-        public DocumentSerializableJson(JsonToken jsonToken)
-        {
-
-        }
         public List<MessageJson> Message { get; set; }
         public List<PrescriptionJson> Prescription { get; set; }
     }

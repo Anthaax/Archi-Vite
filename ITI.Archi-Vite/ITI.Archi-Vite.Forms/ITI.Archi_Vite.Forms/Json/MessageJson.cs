@@ -9,14 +9,6 @@ namespace ITI.Archi_Vite.Forms
 {
     public class MessageJson : DocumentsJson
     {
-        public MessageJson()
-        {
-
-        }
-        public MessageJson(JsonToken jsonToken)
-        {
-
-        }
         public string Contents { get; set; }		
     }
 }

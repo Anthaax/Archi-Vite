@@ -13,8 +13,10 @@ namespace ITI.Archi_Vite.Forms
         Data _userData;
         Patient _patient;
 		List<Professional> _recievers;
-
-		public CreateMessage(Data userData, Patient patient, List<Professional> recievers)
+        Entry _title;
+        Editor _content;
+        DataConvertor _convertor = new DataConvertor();
+        public CreateMessage(Data userData, Patient patient, List<Professional> recievers)
         {
             _userData = userData;
             _patient = patient;
@@ -97,7 +99,7 @@ namespace ITI.Archi_Vite.Forms
                 HorizontalOptions = LayoutOptions.Start
 
             };
-            Entry title = new Entry
+            _title = new Entry
             {
                 Placeholder = "Titre du message",
                 FontSize = 40,
@@ -105,15 +107,15 @@ namespace ITI.Archi_Vite.Forms
                 HorizontalOptions = LayoutOptions.FillAndExpand,
                 VerticalOptions = LayoutOptions.Center,
             };
-            title.TextChanged += EntryTextChanged;
+            _title.TextChanged += EntryTextChanged;
 
-            Editor content = new Editor
+            _content = new Editor
             {
                 FontSize = 20,
                 HorizontalOptions = LayoutOptions.FillAndExpand,
                 VerticalOptions = LayoutOptions.FillAndExpand,
             };
-            content.TextChanged += Content_TextChanged;
+            _content.TextChanged += Content_TextChanged;
 
             Button create = new Button
             {
@@ -139,9 +141,9 @@ namespace ITI.Archi_Vite.Forms
                 Children = {
                     buttonStack,
                     message,
-                    title,
+                    _title,
                     addRecieverStack,
-                    content,
+                    _content,
                     create,
                     back
                 },
@@ -161,7 +163,11 @@ namespace ITI.Archi_Vite.Forms
 
         private async void Create_Clicked(object sender, EventArgs e)
         {
+            Message message = GetMessage();
+            MessageAdd(message);
+            SaveUserData();
             await DisplayAlert("Envoi", "Le message à été envoyé", "OK");
+
             await Navigation.PushAsync(new MessageListPage(_userData));
         }
 
@@ -199,6 +205,19 @@ namespace ITI.Archi_Vite.Forms
             {
                 entry.TextColor = Color.Gray;
             }
+        }
+        private void MessageAdd( Message m )
+        {
+            _userData.Documents.Messages.Add(m);
+        }
+        private Message GetMessage()
+        {
+            return new Message(_title.Text, _content.Text, _userData.User, _recievers, _patient);
+        }
+        public void SaveUserData()
+        {
+            DataJson json = _convertor.DataToDataJson(_userData);
+            DependencyService.Get<ISaveAndLoad>().SaveData("user.txt", json);
         }
     }
 }

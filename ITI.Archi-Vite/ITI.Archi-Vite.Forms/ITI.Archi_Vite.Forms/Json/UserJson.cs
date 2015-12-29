@@ -9,13 +9,6 @@ namespace ITI.Archi_Vite.Forms
 {
     public class UserJson
     {
-        public UserJson()
-        {
-
-        }
-        public UserJson(JToken jsonToken)
-        {
-        }
         public int UserId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
