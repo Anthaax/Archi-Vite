@@ -16,13 +16,11 @@ namespace ITI.Archi_Vite.Forms
         Entry _title;
         Editor _content;
         DataConvertor _convertor = new DataConvertor();
-        public CreateMessage(Data userData, Patient patient, List<Professional> recievers)
+        public CreateMessage(Data userData, Patient patient, List<Professional> recievers, string title, string content)
         {
             _userData = userData;
             _patient = patient;
-            if (recievers != null)
-                _recievers = recievers;
-			else recievers = new List<Professional>();
+            Initiliaze(title, content, recievers);
             Button profilButton = new Button
             {
                 Text = "Mon Profil",
@@ -153,7 +151,17 @@ namespace ITI.Archi_Vite.Forms
 
         private async void Add_Clicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new AddReciverPage(_userData, _patient, null));
+			await Navigation.PushAsync(new AddReciverPage(_userData, _patient, null, _title.Text, _content.Text, true));
+        }
+
+        private void Initiliaze(string title, string content, List<Professional> recievers)
+        {
+            _title.Text = title;
+            _content.Text = content;
+            if (recievers != null)
+                _recievers = recievers;
+            else
+                _recievers = new List<Professional>();
         }
 
         private async void Back_Clicked(object sender, EventArgs e)
@@ -217,7 +225,7 @@ namespace ITI.Archi_Vite.Forms
         public void SaveUserData()
         {
             DataJson json = _convertor.DataToDataJson(_userData);
-            DependencyService.Get<ISaveAndLoad>().SaveData("user.txt", json);
+			DependencyService.Get<ISaveLoadAndDelete>().SaveData("user.txt", json);
         }
     }
 }

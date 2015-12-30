@@ -6,7 +6,7 @@ using System.Text;
 
 using Xamarin.Forms;
 
-namespace ITI.Archi_Vite.Forms.Page
+namespace ITI.Archi_Vite.Forms
 {
     public class CreatePrescription : ContentPage
     {
@@ -19,13 +19,14 @@ namespace ITI.Archi_Vite.Forms.Page
         CameraViewModel _cameraview;
         Image _photo;
         DataConvertor _convertor = new DataConvertor();
-        public CreatePrescription(Data userData, Patient patient, List<Professional> recievers)
+        public CreatePrescription(Data userData, Patient patient, List<Professional> recievers, string title, string docPath)
         {
             _userData = userData;
             _patient = patient;
-            if (recievers != null)
-                _recievers = recievers;
-            else _recievers = new List<Professional>();
+			if (recievers != null)
+				_recievers = recievers;
+			else
+				_recievers = new List<Professional>();
             _cameraview = new CameraViewModel();
             Button profilButton = new Button
             {
@@ -80,7 +81,7 @@ namespace ITI.Archi_Vite.Forms.Page
             };
             Label recivers = new Label
             {
-                Text = "À : " + recievers.Count.ToString() + " personnes",
+                Text = "À : " + _recievers.Count.ToString() + " personnes",
                 FontSize = 40,
                 VerticalOptions = LayoutOptions.Start,
                 TextColor = Color.Gray
@@ -116,7 +117,8 @@ namespace ITI.Archi_Vite.Forms.Page
             _takePhoto = new Button
             {
                 Text = "Prendre une photo",
-                FontSize = 20,
+				BackgroundColor = Color.FromHex("439DFE"),
+                FontSize = 25,
                 HorizontalOptions = LayoutOptions.FillAndExpand,
                 VerticalOptions = LayoutOptions.FillAndExpand,
             };
@@ -124,7 +126,8 @@ namespace ITI.Archi_Vite.Forms.Page
             _choosePhoto = new Button
             {
                 Text = "Choisir une image éxistante",
-                FontSize = 20,
+				BackgroundColor = Color.FromHex("439DFE"),
+                FontSize = 25,
                 HorizontalOptions = LayoutOptions.FillAndExpand,
                 VerticalOptions = LayoutOptions.FillAndExpand,
             };
@@ -161,6 +164,7 @@ namespace ITI.Archi_Vite.Forms.Page
                 VerticalOptions = LayoutOptions.End
             };
             back.Clicked += Back_Clicked;
+			Initiliaze(title, docPath);
 
             Content = new StackLayout
             {
@@ -179,6 +183,18 @@ namespace ITI.Archi_Vite.Forms.Page
             this.BackgroundColor = Color.White;
         }
 
+        private void Initiliaze (string title, string docPath)
+        {
+			if (title != null)
+				_title.Text = title;
+			else
+				_title.Text = "";
+            _photo = new Image
+            {
+                Source = docPath
+            };
+        }
+
         private async void _choosePhoto_Clicked(object sender, EventArgs e)
         {
             await _cameraview.SelectPicture();
@@ -193,7 +209,7 @@ namespace ITI.Archi_Vite.Forms.Page
 
         private async void Add_Clicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new AddReciverPage(_userData, _patient, null));
+			await Navigation.PushAsync(new AddReciverPage(_userData, _patient, null, _title.Text, TostringSource(_photo), false));
         }
 
         private async void Back_Clicked(object sender, EventArgs e)
@@ -263,7 +279,7 @@ namespace ITI.Archi_Vite.Forms.Page
         public void SaveUserData()
         {
             DataJson json = _convertor.DataToDataJson(_userData);
-            DependencyService.Get<ISaveAndLoad>().SaveData("user.txt", json);
+			DependencyService.Get<ISaveLoadAndDelete>().SaveData("user.txt", json);
         }
     }
 }

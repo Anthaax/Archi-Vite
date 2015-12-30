@@ -85,6 +85,18 @@ namespace ITI.Archi_Vite.Forms
             photoLayout.Children.Add(createMessageButtton);
             createMessageButtton.Clicked += CreateMessageButtton_Clicked;
 
+            Button createPrescriptionButtton = new Button
+            {
+                Text = "Ajouter une prescription",
+                FontSize = 20,
+                BackgroundColor = Color.FromHex("439DFE"),
+            };
+
+            AbsoluteLayout.SetLayoutFlags(createPrescriptionButtton, AbsoluteLayoutFlags.PositionProportional);
+            AbsoluteLayout.SetLayoutBounds(createPrescriptionButtton, new Rectangle(1, 0.9, AbsoluteLayout.AutoSize, AbsoluteLayout.AutoSize));
+            photoLayout.Children.Add(createPrescriptionButtton);
+            createPrescriptionButtton.Clicked += CreatePrescriptionButtton_Clicked;
+
             Button prescriptionButton = new Button
             {
                 Text = "Prescriptions",
@@ -192,6 +204,11 @@ namespace ITI.Archi_Vite.Forms
             this.BackgroundColor = Color.White;
         }
 
+        private async void CreatePrescriptionButtton_Clicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new CreatePrescription(_userData, _patient, null, null, null));
+        }
+
         private async void DocumentsButton_Clicked(object sender, EventArgs e)
         {
             await Navigation.PushAsync(new DocumentsPage(_userData));
@@ -199,7 +216,7 @@ namespace ITI.Archi_Vite.Forms
 
         private async void CreateMessageButtton_Clicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new CreateMessage(_userData, _patient, null));
+            await Navigation.PushAsync(new CreateMessage(_userData, _patient, null, null, null));
         }
 
         private async void PrescriptionButton_Clicked(object sender, EventArgs e)

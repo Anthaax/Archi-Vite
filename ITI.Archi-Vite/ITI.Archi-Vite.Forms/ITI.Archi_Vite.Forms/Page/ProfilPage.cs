@@ -102,7 +102,7 @@ namespace ITI.Archi_Vite.Forms
                 Text = "Voir mes Suivis",
                 FontSize = 40,
                 BackgroundColor = Color.FromHex("439DFE"),
-                VerticalOptions = LayoutOptions.End
+                VerticalOptions = LayoutOptions.EndAndExpand
             };
             Suivis.Clicked += FollowButtonClicked;
             if (PageForPatient()) Suivis.Text = "Voir mon Suivi";
@@ -113,7 +113,7 @@ namespace ITI.Archi_Vite.Forms
 				Text = "Voir mes documents",
 				FontSize = 40,
 				BackgroundColor = Color.FromHex("439DFE"),
-				VerticalOptions = LayoutOptions.End
+				VerticalOptions = LayoutOptions.EndAndExpand
 			};
             document.Clicked += Document_Clicked;
             if (!UserAccount()) document.IsVisible = false;
@@ -125,12 +125,19 @@ namespace ITI.Archi_Vite.Forms
                 BackgroundColor = Color.FromHex("439DFE"),
 				VerticalOptions = LayoutOptions.EndAndExpand
             };
-			modify.Clicked += async (sender, e) => 
-			{
-				await Navigation.PushAsync(new ModifyProfil(_userData));
-			};
-
+            modify.Clicked += async (sender, e) =>
+            {
+                await Navigation.PushAsync(new ModifyProfil(_userData));
+            };
             if (!UserAccount()) modify.IsVisible = false;
+            Button deconnection = new Button
+            {
+                Text = "Se déconnecter",
+                FontSize = 40,
+                BackgroundColor = Color.FromHex("439DFE"),
+                VerticalOptions = LayoutOptions.EndAndExpand
+            };
+            deconnection.Clicked += Deconnection_Clicked;
 
             Content = new StackLayout
             {
@@ -146,10 +153,17 @@ namespace ITI.Archi_Vite.Forms
 					logo,
                     Suivis,
 					document,
-                    modify
+                    modify,
+                    deconnection
                 },
             };
             this.BackgroundColor = Color.White;
+        }
+
+        private async void Deconnection_Clicked(object sender, EventArgs e)
+        {
+			DependencyService.Get<ISaveLoadAndDelete>().DeleteData("user.txt");
+            await Navigation.PushAsync(new ConnectionPage());
         }
 
         private async void Document_Clicked(object sender, EventArgs e)

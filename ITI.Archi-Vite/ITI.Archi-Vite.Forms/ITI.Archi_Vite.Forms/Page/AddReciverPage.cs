@@ -14,17 +14,17 @@ namespace ITI.Archi_Vite.Forms
         Patient _patient;
         List<Professional> _recievers;
         Professional[] professionals;
+        string _title;
+        string _content;
+        bool _message;
         TapGestureRecognizer imageTapped = new TapGestureRecognizer();
 
-        public AddReciverPage(Data userData, Patient patient, List<Professional> recievers)
+        public AddReciverPage(Data userData, Patient patient, List<Professional> recievers, string title, string content, bool message)
         {
             _userData = userData;
             _patient = patient;
-            if (recievers != null)
-                _recievers = recievers;
-            else
-                _recievers = new List<Professional>();
-            
+            _message = message;
+            Initiliaze(title, content, recievers);
             imageTapped.Tapped += Image_Taped;
             AbsoluteLayout photoLayout = new AbsoluteLayout
             {
@@ -88,6 +88,10 @@ namespace ITI.Archi_Vite.Forms
                 FontSize = 23,
                 BackgroundColor = Color.FromHex("439DFE"),
             };
+            if (!_message)
+            {
+                backMessage.Text = "Retour à la prescription";
+            }
             backMessage.Clicked += BackMessage_Clicked;
 
             AbsoluteLayout.SetLayoutFlags(backMessage, AbsoluteLayoutFlags.PositionProportional);
@@ -190,10 +194,21 @@ namespace ITI.Archi_Vite.Forms
             };
             this.BackgroundColor = Color.White;
         }
-
+        private void Initiliaze(string title, string content, List<Professional> recievers)
+        {
+            _title = title;
+            _content = content;
+            if (recievers != null)
+                _recievers = recievers;
+            else
+                _recievers = new List<Professional>();
+        }
         private async void BackMessage_Clicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new CreateMessage(_userData, _patient, _recievers));
+            if (_message)
+                await Navigation.PushAsync(new CreateMessage(_userData, _patient, _recievers, _title, _content));
+            else if (!_message)
+                await Navigation.PushAsync(new CreatePrescription(_userData, _patient, _recievers, _title, _content));
         }
         private void Image_Taped(object sender, EventArgs e)
         {

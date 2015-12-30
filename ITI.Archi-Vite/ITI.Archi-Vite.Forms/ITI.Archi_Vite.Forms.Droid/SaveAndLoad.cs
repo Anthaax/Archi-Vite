@@ -19,7 +19,7 @@ using Polenter.Serialization;
 [assembly: Dependency(typeof(SaveAndLoad))]
 namespace ITI.Archi_Vite.Forms.Droid
 {
-    public class SaveAndLoad : ISaveAndLoad
+    public class SaveAndLoad : ISaveLoadAndDelete
     {
         public void SaveText(string filename, string text)
         {
@@ -76,6 +76,13 @@ namespace ITI.Archi_Vite.Forms.Droid
             {
                 fileStream.Close();
             }
+        }
+
+        public void DeleteData(string fileName)
+        {
+            var documentsPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
+            var filePath = Path.Combine(documentsPath, fileName);
+            System.IO.File.Delete(filePath);
         }
     }
 }

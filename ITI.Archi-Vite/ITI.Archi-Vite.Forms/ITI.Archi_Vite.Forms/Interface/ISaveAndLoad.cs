@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 
 namespace ITI.Archi_Vite.Forms
 {
-    public interface ISaveAndLoad
+    public interface ISaveLoadAndDelete
     {
         void SaveText(string filename, string text);
         void SaveData(string fileName, DataJson saveData);
         string LoadText(string filename);
         DataJson LoadData(string fileName);
+        void DeleteData(string fileName);
 
     }
 }

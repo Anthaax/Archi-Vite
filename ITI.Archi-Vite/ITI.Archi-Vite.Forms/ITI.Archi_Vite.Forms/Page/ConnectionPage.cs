@@ -235,14 +235,14 @@ namespace ITI.Archi_Vite.Forms
         public void SaveUserData()
         {
             DataJson json = _convertor.DataToDataJson(_dataForUser);
-            DependencyService.Get<ISaveAndLoad>().SaveData("user.txt", json);
+			DependencyService.Get<ISaveLoadAndDelete>().SaveData("user.txt", json);
         }
 
         public bool LoadUserData()
         {
             try
             {
-                DataJson json = DependencyService.Get<ISaveAndLoad>().LoadData("user.txt");
+				DataJson json = DependencyService.Get<ISaveLoadAndDelete>().LoadData("user.txt");
 				if(json != null)
                 	_dataForUser = _jsonCovertor.DataJsonToData(json);
 				else return false;
