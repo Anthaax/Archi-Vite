@@ -19,47 +19,14 @@ namespace ITI.Archi_Vite.Forms
             _cameraview = new CameraViewModel();
             var tappedGesture = new TapGestureRecognizer();
             tappedGesture.Tapped += TappedGesture_Tapped;
-            Button profilButton = new Button {
-				Text = "Mon Profil",
-				BackgroundColor = Color.Gray,
-				BorderColor = Color.Black,
-				FontSize = 30,
-				FontAttributes = FontAttributes.Bold,
-			};
 
-			Button followButton = new Button {
-				Text = "Mes Suivis",
-				BackgroundColor = Color.White,
-				BorderColor = Color.Black,
-				FontSize = 30,
-				TextColor = Color.Black
-			};
-			if (PageForPatient()) followButton.Text = "Mon Suivis";
+            MultibleButtonView button = new MultibleButtonView(_userData);
 
-			followButton.Clicked += FollowButtonClicked;
+            button.DocumentsIsDisable();
+            button.FollowButton.Clicked += FollowButtonClicked;
+            button.DocumentButton.Clicked += DocumentButton_Clicked;
 
-			Button documentsButton = new Button {
-				Text = "Mes Documents",
-				BackgroundColor = Color.White,
-				BorderColor = Color.Black,
-				FontSize = 30,
-				TextColor = Color.Black
-			};
-
-            documentsButton.Clicked += DocumentsButton_Clicked;
-
-            StackLayout buttonStack = new StackLayout {
-
-				Children = {
-					profilButton,
-					followButton,
-					documentsButton
-				},
-				Orientation = StackOrientation.Horizontal,					
-				HorizontalOptions = LayoutOptions.Start
-
-			};
-			Entry firstName = new Entry
+            Entry firstName = new Entry
 			{
 				Text = _userData.User.FirstName,
 				FontSize = 40,
@@ -152,7 +119,7 @@ namespace ITI.Archi_Vite.Forms
 			{
 
 				Children = {
-					buttonStack,
+					button,
 					firstName,
 					lastName,
 					adress,
@@ -167,7 +134,7 @@ namespace ITI.Archi_Vite.Forms
 			this.BackgroundColor = Color.White;
 		}
 
-        private async void DocumentsButton_Clicked(object sender, EventArgs e)
+        private async void DocumentButton_Clicked(object sender, EventArgs e)
         {
             await Navigation.PushAsync(new DocumentsPage(_userData));
         }

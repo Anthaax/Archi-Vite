@@ -15,50 +15,13 @@ namespace ITI.Archi_Vite.Forms
         public PrescriptionListPage(Data userData)
         {
             _userData = userData;
-            Button profilButton = new Button
-            {
-                Text = "Mon Profil",
-                BackgroundColor = Color.White,
-                BorderColor = Color.Black,
-                TextColor = Color.Black,
-                FontSize = 30,
-            };
-            profilButton.Clicked += async (sender, e) =>
-            {
-                await Navigation.PushAsync(new ProfilPage(_userData, _userData.User));
-            };
-            Button followButton = new Button
-            {
-                Text = "Mes Suivis",
-                BackgroundColor = Color.Gray,
-                BorderColor = Color.White,
-                FontSize = 30,
-                FontAttributes = FontAttributes.Bold,
-            };
-			if (PageForPatient()) followButton.Text = "Mon Suivis";
 
-            followButton.Clicked += FollowButtonClicked;
+            MultibleButtonView button = new MultibleButtonView(_userData);
 
-            Button documentsButton = new Button
-            {
-                Text = "Mes Documents",
-                BackgroundColor = Color.White,
-                BorderColor = Color.Black,
-                FontSize = 30,
-                TextColor = Color.Black
-            };
-            StackLayout buttonStack = new StackLayout
-            {
+            button.DocumentsIsDisable();
+            button.FollowButton.Clicked += FollowButtonClicked;
+            button.ProfilButton.Clicked += ProfilButtonClicked;
 
-                Children = {
-                    profilButton,
-                    followButton,
-                    documentsButton
-                },
-                Orientation = StackOrientation.Horizontal,
-                HorizontalOptions = LayoutOptions.Start
-
-            };
             Label myFollow = new Label
             {
                 Text = "Mes Prescriptions",
@@ -154,7 +117,7 @@ namespace ITI.Archi_Vite.Forms
             {
                 Children =
                 {
-                    buttonStack,
+                    button.Content,
                     myFollow,
                     prescriptionListView
                 }
@@ -197,6 +160,10 @@ namespace ITI.Archi_Vite.Forms
                 if (patient.UserId == _userData.User.UserId) return true;
             }
             return false;
+        }
+        private async void ProfilButtonClicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new ProfilPage(_userData, _userData.User));
         }
     }
 }

@@ -12,60 +12,30 @@ namespace ITI.Archi_Vite.Forms
     {
 		Data _userData;
         User _user;
+
 		public ProfilPage(Data userData, User user)
         {
 			_userData = userData;
             _user = user;
-			Button profilButton = new Button {
-				Text = "Mon Profil",
-				BackgroundColor = Color.Gray,
-				BorderColor = Color.Black,
-				FontSize = 30,
-				FontAttributes = FontAttributes.Bold,
-			};
 
-			Button followButton = new Button {
-				Text = "Mes Suivis",
-				BackgroundColor = Color.White,
-				BorderColor = Color.Black,
-				FontSize = 30,
-				TextColor = Color.Black
-			};
-            if (PageForPatient()) followButton.Text = "Mon Suivis";
+            MultibleButtonView button = new MultibleButtonView(_userData);
 
-            followButton.Clicked += FollowButtonClicked;
+			button.ProfilIsDisable ();
+            button.FollowButton.Clicked += FollowButtonClicked;
+            button.DocumentButton.Clicked += Document_Clicked;   
 
-            Button documentsButton = new Button {
-				Text = "Mes Documents",
-				BackgroundColor = Color.White,
-				BorderColor = Color.Black,
-				FontSize = 30,
-				TextColor = Color.Black
-			};
-            documentsButton.Clicked += Document_Clicked;
-
-            StackLayout buttonStack = new StackLayout {
-
-				Children = {
-					profilButton,
-					followButton,
-					documentsButton
-				},
-				Orientation = StackOrientation.Horizontal,					
-				HorizontalOptions = LayoutOptions.Start
-
-			};
 			Label title = new Label {
 				Text = "Profil",
 				FontSize = 40,
 				HorizontalOptions = LayoutOptions.Center
 			};
+
 			Label name = new Label {
 				Text = _user.FirstName + "  " + _user.LastName,
 				FontSize = 30,
-				HorizontalOptions = LayoutOptions.Center
-				
+				HorizontalOptions = LayoutOptions.Center	
 			};
+
 			Label phonenumber = new Label
 			{
 				Text = "Numero : " + _user.PhoneNumber ,
@@ -73,18 +43,21 @@ namespace ITI.Archi_Vite.Forms
 				HorizontalOptions = LayoutOptions.Center
 
             };
+
 			Label adresse = new Label
 			{
 				Text = "Adresse : "+ _user.Adress,
                 FontSize = 30,
                 HorizontalOptions = LayoutOptions.Center
 			};
+
 			Label postCode = new Label
 			{
 				Text = _user.Postcode.ToString(),
 				FontSize = 30,
 				HorizontalOptions = LayoutOptions.Center
 			};
+
 			Label city = new Label
 			{
 				Text = _user.City,
@@ -104,9 +77,13 @@ namespace ITI.Archi_Vite.Forms
                 BackgroundColor = Color.FromHex("439DFE"),
                 VerticalOptions = LayoutOptions.EndAndExpand
             };
+
             Suivis.Clicked += FollowButtonClicked;
-            if (PageForPatient()) Suivis.Text = "Voir mon Suivi";
-            else if (!UserAccount()) Suivis.Text = "Retour à mon suivi";
+
+            if (PageForPatient())
+                Suivis.Text = "Voir mon Suivi";
+            else if (!UserAccount())
+                Suivis.Text = "Retour à mon suivi";
 
             Button document = new Button
 			{
@@ -116,7 +93,9 @@ namespace ITI.Archi_Vite.Forms
 				VerticalOptions = LayoutOptions.EndAndExpand
 			};
             document.Clicked += Document_Clicked;
-            if (!UserAccount()) document.IsVisible = false;
+
+            if (!UserAccount())
+                document.IsVisible = false;
 
             Button modify = new Button
             {
@@ -143,7 +122,7 @@ namespace ITI.Archi_Vite.Forms
             {
 
                 Children = {
-					buttonStack,
+					button.Content,
 					title,
 					name,
 					phonenumber,

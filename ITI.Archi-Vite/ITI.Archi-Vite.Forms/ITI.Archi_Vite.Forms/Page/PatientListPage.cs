@@ -15,49 +15,13 @@ namespace ITI.Archi_Vite.Forms
         public PatientListPage(Data userData)
         {
             _userData = userData;
-			Button profilButton = new Button
-			{
-				Text = "Mon Profil",
-				BackgroundColor = Color.White,
-				BorderColor = Color.Black,
-				TextColor = Color.Black,
-				FontSize = 30,
-			};
-			profilButton.Clicked += async (sender, e) =>
-			{
-				await Navigation.PushAsync(new ProfilPage(_userData, _userData.User));
-			};
-			Button followButton = new Button {
-				Text = "Mes Suivis",
-				BackgroundColor = Color.Gray,
-				BorderColor = Color.Black,
-				FontSize = 30,
-				FontAttributes = FontAttributes.Bold,
-			};
-			if (PageForPatient()) followButton.Text = "Mon Suivis";
+            MultibleButtonView button = new MultibleButtonView(_userData);
 
-			Button documentsButton = new Button {
-				Text = "Mes Documents",
-				BackgroundColor = Color.White,
-				BorderColor = Color.Black,
-				FontSize = 30,
-				TextColor = Color.Black
-			};
+            button.FollowIsDisable();
+            button.DocumentButton.Clicked += DocumentsButton_Clicked;
+            button.ProfilButton.Clicked += ProfilButtonClicked;
 
-            documentsButton.Clicked += DocumentsButton_Clicked;
-
-			StackLayout buttonStack = new StackLayout {
-
-				Children = {
-					profilButton,
-					followButton,
-					documentsButton
-				},
-				Orientation = StackOrientation.Horizontal,					
-				HorizontalOptions = LayoutOptions.Start
-
-			};
-			Label myFollow = new Label {
+            Label myFollow = new Label {
 				Text = "Mes Suivis",
 				FontSize = 50,
 				HorizontalOptions = LayoutOptions.Center
@@ -119,7 +83,7 @@ namespace ITI.Archi_Vite.Forms
 			{
 				Children = 
 				{
-					buttonStack,
+					button.Content,
 					myFollow,
 					patientListView
 				}
@@ -158,5 +122,9 @@ namespace ITI.Archi_Vite.Forms
 			}
 			return false;
 		}
+        private async void ProfilButtonClicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new ProfilPage(_userData, _userData.User));
+        }
     }
 }

@@ -31,48 +31,12 @@ namespace ITI.Archi_Vite.Forms
                 VerticalOptions = LayoutOptions.FillAndExpand
             };
 
-            Button profilButton = new Button
-            {
-                Text = "Mon Profil",
-                BackgroundColor = Color.White,
-                BorderColor = Color.Black,
-                TextColor = Color.Black,
-                FontSize = 30,
-            };
-            profilButton.Clicked += async (sender, e) =>
-            {
-                await Navigation.PushAsync(new ProfilPage(_userData, _userData.User));
-            };
-            Button followButton = new Button
-            {
-                Text = "Mes Suivis",
-                BackgroundColor = Color.Gray,
-                BorderColor = Color.Black,
-                FontSize = 30,
-                FontAttributes = FontAttributes.Bold,
-            };
-            if (PageForPatient()) followButton.Text = "Mon Suivis";
+            MultibleButtonView button = new MultibleButtonView(_userData);
 
-            Button documentsButton = new Button
-            {
-                Text = "Mes Documents",
-                BackgroundColor = Color.White,
-                BorderColor = Color.Black,
-                FontSize = 30,
-                TextColor = Color.Black
-            };
+            button.DocumentsIsDisable();
+            button.FollowButton.Clicked += FollowButtonClicked;
+            button.ProfilButton.Clicked += ProfilButtonClicked;
 
-            StackLayout buttonStack = new StackLayout
-            {
-
-                Children = {
-                    profilButton,
-                    followButton,
-                    documentsButton
-                },
-                Orientation = StackOrientation.Horizontal,
-                HorizontalOptions = LayoutOptions.Start
-            };
             Image patientImage = new Image
             {
                 Source = patient.Photo,
@@ -187,13 +151,14 @@ namespace ITI.Archi_Vite.Forms
             {
 
                 Children = {
-                    buttonStack,
+                    button.Content,
                     photoLayout
                 },
                 VerticalOptions = LayoutOptions.FillAndExpand
             };
             this.BackgroundColor = Color.White;
         }
+
         private void Initiliaze(string title, string content, List<Professional> recievers)
         {
             _title = title;
@@ -307,6 +272,19 @@ namespace ITI.Archi_Vite.Forms
                 }
             }
             return image;
+        }
+        private async void FollowButtonClicked(object sender, EventArgs e)
+        {
+            if (PageForPatient())
+            {
+                Patient patient = new Patient(_userData.User);
+                await Navigation.PushAsync(new FollowPatientPage(_userData, patient));
+            }
+            else await Navigation.PushAsync(new PatientListPage(_userData));
+        }
+        private async void ProfilButtonClicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new ProfilPage(_userData, _userData.User));
         }
     }
 }

@@ -71,6 +71,8 @@
     <Compile Include="HttpClientExtensions.cs" />
     <Compile Include="Page\FollowPatientPage.cs" />
     <Compile Include="ViewModel\CameraViewModel.cs" />
+    <Compile Include="View\DispositionPhotoView.cs" />
+    <Compile Include="View\MultibleButtonView.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

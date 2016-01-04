@@ -28,50 +28,12 @@ namespace ITI.Archi_Vite.Forms
 			else
 				_recievers = new List<Professional>();
             _cameraview = new CameraViewModel();
-            Button profilButton = new Button
-            {
-                Text = "Mon Profil",
-                BackgroundColor = Color.White,
-                BorderColor = Color.Black,
-                TextColor = Color.Black,
-                FontSize = 30,
-            };
-            profilButton.Clicked += async (sender, e) =>
-            {
-                await Navigation.PushAsync(new ProfilPage(_userData, _userData.User));
-            };
-            Button followButton = new Button
-            {
-                Text = "Mes Suivis",
-                BackgroundColor = Color.White,
-                BorderColor = Color.Black,
-                TextColor = Color.Black,
-                FontSize = 30,
-            };
-            if (PageForPatient()) followButton.Text = "Mon Suivi";
+            MultibleButtonView button = new MultibleButtonView(_userData);
 
-            followButton.Clicked += FollowButtonClicked;
+            button.DocumentsIsDisable();
+            button.FollowButton.Clicked += FollowButtonClicked;
+            button.ProfilButton.Clicked += ProfilButtonClicked;
 
-            Button documentsButton = new Button
-            {
-                Text = "Mes Documents",
-                BackgroundColor = Color.Gray,
-                BorderColor = Color.White,
-                FontSize = 30,
-                FontAttributes = FontAttributes.Bold,
-            };
-            StackLayout buttonStack = new StackLayout
-            {
-
-                Children = {
-                    profilButton,
-                    followButton,
-                    documentsButton
-                },
-                Orientation = StackOrientation.Horizontal,
-                HorizontalOptions = LayoutOptions.Start
-
-            };
             Label prescription = new Label
             {
                 Text = "Creation de Prescription",
@@ -170,7 +132,7 @@ namespace ITI.Archi_Vite.Forms
             {
 
                 Children = {
-                    buttonStack,
+                    button.Content,
                     prescription,
                     _title,
                     addRecieverStack,
@@ -280,6 +242,10 @@ namespace ITI.Archi_Vite.Forms
         {
             DataJson json = _convertor.DataToDataJson(_userData);
 			DependencyService.Get<ISaveLoadAndDelete>().SaveData("user.txt", json);
+        }
+        private async void ProfilButtonClicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new ProfilPage(_userData, _userData.User));
         }
     }
 }
