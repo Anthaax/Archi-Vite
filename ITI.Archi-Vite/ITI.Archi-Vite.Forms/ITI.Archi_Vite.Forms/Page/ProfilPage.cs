@@ -66,8 +66,13 @@ namespace ITI.Archi_Vite.Forms
 			};
 			Image logo = new Image
 			{
-				Source = _user.Photo,
-				HorizontalOptions = LayoutOptions.FillAndExpand,
+				Source = new UriImageSource
+                {
+                    Uri = new Uri(_user.Photo),
+                    CachingEnabled = true,
+                    CacheValidity = new TimeSpan(5, 0, 0, 0)
+                },
+                HorizontalOptions = LayoutOptions.FillAndExpand,
 			};
 
             Button Suivis = new Button

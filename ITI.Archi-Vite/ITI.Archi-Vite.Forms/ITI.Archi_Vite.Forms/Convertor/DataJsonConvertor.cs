@@ -13,7 +13,8 @@ namespace ITI.Archi_Vite.Forms
             User curentUser = CreateUser(json.User);
             Dictionary<Patient, Professional[]> follow = CreateDictionary(json.Follow);
             DocumentSerializable documents = CreateDocumentSerializable(json.Documents);
-            Data d = new Data(curentUser, follow, documents);
+            DocumentSerializable documentsAdded = CreateDocumentSerializable(json.DocumentAdded);
+            Data d = new Data(curentUser, follow, documents, documentsAdded);
             return d;
         }
 

@@ -20,7 +20,6 @@ namespace ITI.Archi_Vite.Forms
         {
             _userData = userData;
             _patient = patient;
-            Initiliaze(title, content, recievers);
 
             MultibleButtonView button = new MultibleButtonView(_userData);
 
@@ -35,31 +34,7 @@ namespace ITI.Archi_Vite.Forms
                 VerticalOptions = LayoutOptions.Start,
                 TextColor = Color.Gray
             };
-            Label recivers = new Label
-            {
-                Text = "À : " + recievers.Count.ToString() + " personnes",
-                FontSize = 40,
-                VerticalOptions = LayoutOptions.Start,
-                TextColor = Color.Gray
-            };
-            Button add = new Button
-            {
-                Text = "+",
-                FontSize = 40,
-                BackgroundColor = Color.FromHex("439DFE"),
-            };
-            add.Clicked += Add_Clicked;
-            StackLayout addRecieverStack = new StackLayout
-            {
-
-                Children = {
-                    recivers,
-                    add,
-                },
-                Orientation = StackOrientation.Horizontal,
-                HorizontalOptions = LayoutOptions.Start
-
-            };
+            
             _title = new Entry
             {
                 Placeholder = "Titre du message",
@@ -77,7 +52,32 @@ namespace ITI.Archi_Vite.Forms
                 VerticalOptions = LayoutOptions.FillAndExpand,
             };
             _content.TextChanged += Content_TextChanged;
+			Initiliaze(title, content, recievers);
+			Label recivers = new Label
+			{
+				Text = "À : " + _recievers.Count.ToString() + " personnes",
+				FontSize = 40,
+				VerticalOptions = LayoutOptions.Start,
+				TextColor = Color.Gray
+			};
+			Button add = new Button
+			{
+				Text = "+",
+				FontSize = 40,
+				BackgroundColor = Color.FromHex("439DFE"),
+			};
+			add.Clicked += Add_Clicked;
+			StackLayout addRecieverStack = new StackLayout
+			{
 
+				Children = {
+					recivers,
+					add,
+				},
+				Orientation = StackOrientation.Horizontal,
+				HorizontalOptions = LayoutOptions.Start
+
+			};
             Button create = new Button
             {
                 Text = "Envoyer",
@@ -180,6 +180,7 @@ namespace ITI.Archi_Vite.Forms
         private void MessageAdd( Message m )
         {
             _userData.Documents.Messages.Add(m);
+			_userData.DocumentsAdded.Messages.Add (m);
         }
         private Message GetMessage()
         {

@@ -100,12 +100,6 @@ namespace ITI.Archi_Vite.Forms
                 return _documentButton;
             }
         }
-
-        private async void _profilButton_Clicked(object sender, EventArgs e)
-        {
-            await Navigation.PushAsync(new ProfilPage(_userData, _userData.User));
-        }
-
         private bool PageForPatient()
         {
             foreach (var patient in _userData.Follow.Keys)

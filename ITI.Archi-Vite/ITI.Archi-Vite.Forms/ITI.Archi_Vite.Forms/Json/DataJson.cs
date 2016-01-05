@@ -10,6 +10,7 @@ namespace ITI.Archi_Vite.Forms
         public Dictionary<PatientJson, ProfessionalJson[]> Follow { get; set; }
         public UserJson User { get; set; }
         public DocumentSerializableJson Documents { get; set; }
+        public DocumentSerializableJson DocumentAdded { get; set; }
     }
 }
 

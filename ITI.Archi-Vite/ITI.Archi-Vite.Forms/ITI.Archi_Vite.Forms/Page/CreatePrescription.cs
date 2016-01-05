@@ -181,7 +181,9 @@ namespace ITI.Archi_Vite.Forms
 
         private async void Create_Clicked(object sender, EventArgs e)
         {
-
+			Prescription p = GetPrescription();
+			PrescriptionAdd (p);
+			SaveUserData ();
             await DisplayAlert("Envoi", "Le message à été envoyé", "OK");
             await Navigation.PushAsync(new MessageListPage(_userData));
         }
@@ -195,6 +197,18 @@ namespace ITI.Archi_Vite.Forms
             }
             else await Navigation.PushAsync(new PatientListPage(_userData));
         }
+
+		private void PrescriptionAdd( Prescription p )
+		{
+			_userData.Documents.Prescriptions.Add(p);
+			_userData.DocumentsAdded.Prescriptions.Add (p);
+		}
+
+		private void MessageAdd( Message m )
+		{
+			_userData.Documents.Messages.Add(m);
+			_userData.DocumentsAdded.Messages.Add (m);
+		}
 
         private bool PageForPatient()
         {
@@ -220,7 +234,7 @@ namespace ITI.Archi_Vite.Forms
                 await DisplayAlert("Envoi", "Le message à été envoyé", "OK");
 
         }
-        private Prescription GetMessage()
+		private Prescription GetPrescription()
         {
             return new Prescription(_title.Text, TostringSource(_photo), _userData.User, _recievers, _patient);
         }
