@@ -10,7 +10,7 @@ namespace ITI.Archi_Vite.Forms
     {
         string docPath;
 
-        public Prescription(string Title, string DocPath, Professional Sender, List<Professional> Receivers, Patient Patient)
+        public Prescription(string Title, string DocPath, User Sender, List<Professional> Receivers, Patient Patient)
             : base(Sender, Receivers, Patient, Title)
         {
             this.DocPath = DocPath;

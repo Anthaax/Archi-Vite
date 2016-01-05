@@ -226,7 +226,7 @@ namespace ITI.Archi_Vite.DataBase.Test
                 List<Professional> listPro = new List<Professional>();
                 listPro.Add(context.SelectRequest.SelectProfessional("ClementR", "ClementR"));
                 listPro.Add(context.SelectRequest.SelectProfessional("SimonF", "SimonF"));
-                Professional Sender = context.SelectRequest.SelectProfessional("AntoineR", "AntoineR");
+                User Sender = context.SelectRequest.SelectUser("AntoineR", "AntoineR");
                 string Title = "My Title";
                 string Contents = "My Contents";
                 Patient P = context.SelectRequest.SelectPatient("GuillaumeF", "GuillaumeF");
@@ -249,7 +249,7 @@ namespace ITI.Archi_Vite.DataBase.Test
                 List<Professional> listPro = new List<Professional>();
                 listPro.Add(context.SelectRequest.SelectProfessional("ClementR", "ClementR"));
                 listPro.Add(context.SelectRequest.SelectProfessional("SimonF", "SimonF"));
-                Professional Sender = context.SelectRequest.SelectProfessional("AntoineR", "AntoineR");
+                User Sender = context.SelectRequest.SelectUser("AntoineR", "AntoineR");
                 string Title = "My Title2";
                 string Contents = "My Contents";
                 Patient P = context.SelectRequest.SelectPatient("GuillaumeF", "GuillaumeF");

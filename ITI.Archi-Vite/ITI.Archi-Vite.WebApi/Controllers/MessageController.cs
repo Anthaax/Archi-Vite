@@ -27,7 +27,7 @@ namespace ITI.Archi_Vite.WebApi.Controllers
         }
         // PUT: api/Message/5
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutMessage(List<Professional> Receivers, Professional Sender, string Title, string Contents, Patient Patient )
+        public async Task<IHttpActionResult> PutMessage(List<Professional> Receivers, User Sender, string Title, string Contents, Patient Patient )
         {
             if (!ModelState.IsValid)
             {

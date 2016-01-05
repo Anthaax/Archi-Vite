@@ -12,7 +12,7 @@ namespace ITI.Archi_Vite.Core
     {
         readonly string contents;
 
-        public Message(string Title, string Contents, Professional Sender, List<Professional> Receivers, Patient Patient)
+        public Message(string Title, string Contents, User Sender, List<Professional> Receivers, Patient Patient)
             : base(Sender, Receivers, Patient, Title)
         {
             contents = Contents;

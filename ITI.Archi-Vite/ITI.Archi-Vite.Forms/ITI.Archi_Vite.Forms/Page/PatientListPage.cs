@@ -8,51 +8,20 @@ using Xamarin.Forms;
 
 namespace ITI.Archi_Vite.Forms
 {
-    public class PatientList : ContentPage
+    public class PatientListPage : ContentPage
     {
         List<Patient> _myPatient;
         Data _userData;
-        public PatientList(Data userData)
+        public PatientListPage(Data userData)
         {
             _userData = userData;
-			Button profilButton = new Button {
-				Text = "Mon Profil",
-				BackgroundColor = Color.White,
-				BorderColor = Color.Black,
-				FontSize = 30,
-			};
-			profilButton.Clicked += async (sender, e) =>
-			{
-				await Navigation.PushAsync(new ProfilPage(_userData, _userData.User));
-			};
-			Button followButton = new Button {
-				Text = "Mes Suivis",
-				BackgroundColor = Color.Gray,
-				BorderColor = Color.Black,
-				FontSize = 30,
-				FontAttributes = FontAttributes.Bold,
-				TextColor = Color.Black
-			};
+            MultibleButtonView button = new MultibleButtonView(_userData);
 
-			Button documentsButton = new Button {
-				Text = "Mes Documents",
-				BackgroundColor = Color.White,
-				BorderColor = Color.Black,
-				FontSize = 30,
-				TextColor = Color.Black
-			};
-			StackLayout buttonStack = new StackLayout {
+            button.FollowIsDisable();
+            button.DocumentButton.Clicked += DocumentsButton_Clicked;
+            button.ProfilButton.Clicked += ProfilButtonClicked;
 
-				Children = {
-					profilButton,
-					followButton,
-					documentsButton
-				},
-				Orientation = StackOrientation.Horizontal,					
-				HorizontalOptions = LayoutOptions.Start
-
-			};
-			Label myFollow = new Label {
+            Label myFollow = new Label {
 				Text = "Mes Suivis",
 				FontSize = 50,
 				HorizontalOptions = LayoutOptions.Center
@@ -114,7 +83,7 @@ namespace ITI.Archi_Vite.Forms
 			{
 				Children = 
 				{
-					buttonStack,
+					button.Content,
 					myFollow,
 					patientListView
 				}
@@ -122,11 +91,19 @@ namespace ITI.Archi_Vite.Forms
             patientListView.ItemTapped += PatientListView_ItemTapped;
         }
 
+        private async void DocumentsButton_Clicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new DocumentsPage(_userData));
+        }
+
         private async void PatientListView_ItemTapped(object sender, ItemTappedEventArgs e)
         {
             var user = e.Item as User;
-            Patient patient = new Patient(user);
-            await Navigation.PushAsync(new FollowPatientPage(_userData, patient));
+            if(user != null)
+            {
+                Patient patient = new Patient(user);
+                await Navigation.PushAsync(new FollowPatientPage(_userData, patient));
+            }
         }
 
         private void CreateMyPatient()
@@ -136,6 +113,18 @@ namespace ITI.Archi_Vite.Forms
             {
                 _myPatient.Add(dictionaryPatient);
             }
+        }
+		private bool PageForPatient()
+		{
+			foreach(var patient in _userData.Follow.Keys )
+			{
+				if (patient.UserId == _userData.User.UserId) return true;
+			}
+			return false;
+		}
+        private async void ProfilButtonClicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new ProfilPage(_userData, _userData.User));
         }
     }
 }

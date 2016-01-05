@@ -15,54 +15,19 @@ namespace ITI.Archi_Vite.Forms
         public MessageListPage(Data userData)
         {
             _userData = userData;
-            Button profilButton = new Button
-            {
-                Text = "Mon Profil",
-                BackgroundColor = Color.White,
-                BorderColor = Color.Black,
-				TextColor = Color.Black,
-                FontSize = 30,
-            };
-            profilButton.Clicked += async (sender, e) =>
-            {
-                await Navigation.PushAsync(new ProfilPage(_userData, _userData.User));
-            };
-            Button followButton = new Button
-            {
-                Text = "Mes Suivis",
-                BackgroundColor = Color.Gray,
-                BorderColor = Color.Black,
-                FontSize = 30,
-                FontAttributes = FontAttributes.Bold,
-            };
 
-            followButton.Clicked += FollowButtonClicked;
+            MultibleButtonView button = new MultibleButtonView(_userData);
 
-            Button documentsButton = new Button
-            {
-                Text = "Mes Documents",
-                BackgroundColor = Color.White,
-                BorderColor = Color.Black,
-                FontSize = 30,
-                TextColor = Color.Black
-            };
-            StackLayout buttonStack = new StackLayout
-            {
+            button.DocumentsIsDisable();
+            button.FollowButton.Clicked += FollowButtonClicked;
+            button.ProfilButton.Clicked += ProfilButtonClicked;
 
-                Children = {
-                    profilButton,
-                    followButton,
-                    documentsButton
-                },
-                Orientation = StackOrientation.Horizontal,
-                HorizontalOptions = LayoutOptions.Start
-
-            };
             Label myFollow = new Label
             {
-                Text = "Mes Suivis",
+                Text = "Mes Messages",
                 FontSize = 50,
-                HorizontalOptions = LayoutOptions.Center
+                HorizontalOptions = LayoutOptions.Center,
+                TextColor = Color.Gray
             };
             CreateMyMessage();
             ListView messageListView = new ListView
@@ -74,21 +39,37 @@ namespace ITI.Archi_Vite.Forms
                 {
                     Label title = new Label();
                     title.SetBinding(Label.TextProperty, "Title");
-					title.FontSize = 25;
-					title.TextColor = Color.Black;
+					title.FontSize = 20;
+					title.TextColor = Color.Gray;
+
 					
                     Label senderName = new Label();
-                    senderName.SetBinding(Label.TextProperty, "SenderFullName");
-					senderName.FontSize = 25;
-					senderName.TextColor = Color.Black;
+                    senderName.SetBinding(Label.TextProperty, "SenderName");
+					senderName.FontSize = 20;
+					senderName.TextColor = Color.Gray;
+
 
                     Label patientName = new Label();
-                    senderName.SetBinding(Label.TextProperty, "PatientFullName");
-					senderName.FontSize = 25;
-					senderName.TextColor = Color.Black;
+                    patientName.SetBinding(Label.TextProperty, "PatientFullName");
+                    patientName.FontSize = 20;
+					patientName.TextColor = Color.Gray;
+
+
+					Label patient = new Label();
+					patient.Text = "Patient : "; 
+					patient.FontSize = 20;
+					patient.TextColor = Color.Gray;
 
 					Label spaceLabel = new Label();
 					spaceLabel.Text = "  ";
+					spaceLabel.FontSize = 20;
+					spaceLabel.TextColor = Color.Gray;
+
+					Label pro = new Label();
+					pro.Text = " De : ";
+					pro.FontSize = 20;
+					pro.TextColor = Color.Gray;
+
 
                     return new ViewCell
                     {
@@ -105,11 +86,12 @@ namespace ITI.Archi_Vite.Forms
                                     Spacing = 0,
                                     Children =
                                     {
-                                        senderName,
+										patient,
+										patientName,
 										spaceLabel,
                                     	title,
-										spaceLabel,
-                                        patientName
+										pro,
+										senderName
                                     },
                                     Orientation = StackOrientation.Horizontal,
                                     VerticalOptions = LayoutOptions.Center,
@@ -122,16 +104,39 @@ namespace ITI.Archi_Vite.Forms
                 })
 
             };
+			Button document = new Button
+			{
+				Text = "Voir mes documents",
+				FontSize = 40,
+				BackgroundColor = Color.FromHex("439DFE"),
+				VerticalOptions = LayoutOptions.End
+			};
+			document.Clicked += Document_Clicked;
             this.BackgroundColor = Color.White;
             this.Content = new StackLayout
             {
                 Children =
                 {
-                    buttonStack,
+                    button.Content,
                     myFollow,
                     messageListView
                 }
             };
+            messageListView.ItemTapped += MessageListView_ItemTapped;
+        }
+
+        private async void Document_Clicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new DocumentsPage(_userData));
+        }
+
+        private async void MessageListView_ItemTapped(object sender, ItemTappedEventArgs e)
+        {
+            var message = e.Item as Message;
+            if(message != null)
+            {
+                await Navigation.PushAsync(new MessagePage(_userData, message));
+            }
         }
 
         private void CreateMyMessage()
@@ -146,7 +151,7 @@ namespace ITI.Archi_Vite.Forms
                 Patient patient = new Patient(_userData.User);
                 await Navigation.PushAsync(new FollowPatientPage(_userData, patient));
             }
-            else await Navigation.PushAsync(new PatientList(_userData));
+            else await Navigation.PushAsync(new PatientListPage(_userData));
         }
 
         private bool PageForPatient()
@@ -156,6 +161,10 @@ namespace ITI.Archi_Vite.Forms
                 if (patient.UserId == _userData.User.UserId) return true;
             }
             return false;
+        }
+        private async void ProfilButtonClicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new ProfilPage(_userData, _userData.User));
         }
     }
 }

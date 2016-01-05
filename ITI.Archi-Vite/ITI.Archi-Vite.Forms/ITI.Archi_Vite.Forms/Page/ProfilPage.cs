@@ -12,59 +12,30 @@ namespace ITI.Archi_Vite.Forms
     {
 		Data _userData;
         User _user;
+
 		public ProfilPage(Data userData, User user)
         {
 			_userData = userData;
             _user = user;
-			Button profilButton = new Button {
-				Text = "Mon Profil",
-				BackgroundColor = Color.Gray,
-				BorderColor = Color.Black,
-				FontSize = 30,
-				FontAttributes = FontAttributes.Bold,
-			};
 
-			Button followButton = new Button {
-				Text = "Mes Suivis",
-				BackgroundColor = Color.White,
-				BorderColor = Color.Black,
-				FontSize = 30,
-				TextColor = Color.Black
-			};
-            if (PageForPatient()) followButton.Text = "Mon Suivis";
+            MultibleButtonView button = new MultibleButtonView(_userData);
 
-            followButton.Clicked += FollowButtonClicked;
+			button.ProfilIsDisable ();
+            button.FollowButton.Clicked += FollowButtonClicked;
+            button.DocumentButton.Clicked += Document_Clicked;   
 
-            Button documentsButton = new Button {
-				Text = "Mes Documents",
-				BackgroundColor = Color.White,
-				BorderColor = Color.Black,
-				FontSize = 30,
-				TextColor = Color.Black
-			};
-
-			StackLayout buttonStack = new StackLayout {
-
-				Children = {
-					profilButton,
-					followButton,
-					documentsButton
-				},
-				Orientation = StackOrientation.Horizontal,					
-				HorizontalOptions = LayoutOptions.Start
-
-			};
 			Label title = new Label {
 				Text = "Profil",
 				FontSize = 40,
 				HorizontalOptions = LayoutOptions.Center
 			};
+
 			Label name = new Label {
 				Text = _user.FirstName + "  " + _user.LastName,
 				FontSize = 30,
-				HorizontalOptions = LayoutOptions.Center
-				
+				HorizontalOptions = LayoutOptions.Center	
 			};
+
 			Label phonenumber = new Label
 			{
 				Text = "Numero : " + _user.PhoneNumber ,
@@ -72,18 +43,21 @@ namespace ITI.Archi_Vite.Forms
 				HorizontalOptions = LayoutOptions.Center
 
             };
+
 			Label adresse = new Label
 			{
 				Text = "Adresse : "+ _user.Adress,
                 FontSize = 30,
                 HorizontalOptions = LayoutOptions.Center
 			};
+
 			Label postCode = new Label
 			{
 				Text = _user.Postcode.ToString(),
 				FontSize = 30,
 				HorizontalOptions = LayoutOptions.Center
 			};
+
 			Label city = new Label
 			{
 				Text = _user.City,
@@ -92,28 +66,41 @@ namespace ITI.Archi_Vite.Forms
 			};
 			Image logo = new Image
 			{
-				Source = _user.Photo,
-				HorizontalOptions = LayoutOptions.FillAndExpand,
+				Source = new UriImageSource
+                {
+                    Uri = new Uri(_user.Photo),
+                    CachingEnabled = true,
+                    CacheValidity = new TimeSpan(5, 0, 0, 0)
+                },
+                HorizontalOptions = LayoutOptions.FillAndExpand,
 			};
 
             Button Suivis = new Button
             {
-                Text = "Voir mes suivi",
+                Text = "Voir mes Suivis",
                 FontSize = 40,
                 BackgroundColor = Color.FromHex("439DFE"),
-                VerticalOptions = LayoutOptions.End
+                VerticalOptions = LayoutOptions.EndAndExpand
             };
-            Suivis.Clicked += FollowButtonClicked;
-            if (PageForPatient()) Suivis.Text = "Voir mon Suivis";
 
-            Button messages = new Button
+            Suivis.Clicked += FollowButtonClicked;
+
+            if (PageForPatient())
+                Suivis.Text = "Voir mon Suivi";
+            else if (!UserAccount())
+                Suivis.Text = "Retour à mon suivi";
+
+            Button document = new Button
 			{
-				Text = "Voir mes messages",
+				Text = "Voir mes documents",
 				FontSize = 40,
 				BackgroundColor = Color.FromHex("439DFE"),
-				VerticalOptions = LayoutOptions.End
+				VerticalOptions = LayoutOptions.EndAndExpand
 			};
-            messages.Clicked += Messages_Clicked;
+            document.Clicked += Document_Clicked;
+
+            if (!UserAccount())
+                document.IsVisible = false;
 
             Button modify = new Button
             {
@@ -122,18 +109,25 @@ namespace ITI.Archi_Vite.Forms
                 BackgroundColor = Color.FromHex("439DFE"),
 				VerticalOptions = LayoutOptions.EndAndExpand
             };
-			modify.Clicked += async (sender, e) => 
-			{
-				await Navigation.PushAsync(new ModifyProfil(_userData));
-			};
-
+            modify.Clicked += async (sender, e) =>
+            {
+                await Navigation.PushAsync(new ModifyProfil(_userData));
+            };
             if (!UserAccount()) modify.IsVisible = false;
+            Button deconnection = new Button
+            {
+                Text = "Se déconnecter",
+                FontSize = 40,
+                BackgroundColor = Color.FromHex("439DFE"),
+                VerticalOptions = LayoutOptions.EndAndExpand
+            };
+            deconnection.Clicked += Deconnection_Clicked;
 
             Content = new StackLayout
             {
 
                 Children = {
-					buttonStack,
+					button.Content,
 					title,
 					name,
 					phonenumber,
@@ -142,16 +136,23 @@ namespace ITI.Archi_Vite.Forms
 					city,
 					logo,
                     Suivis,
-					messages,
-                    modify
+					document,
+                    modify,
+                    deconnection
                 },
             };
             this.BackgroundColor = Color.White;
         }
 
-        private async void Messages_Clicked(object sender, EventArgs e)
+        private async void Deconnection_Clicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new MessageListPage(_userData));
+			DependencyService.Get<ISaveLoadAndDelete>().DeleteData("user.txt");
+            await Navigation.PushAsync(new ConnectionPage());
+        }
+
+        private async void Document_Clicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new DocumentsPage(_userData));
         }
 
         private async void FollowButtonClicked (object sender, EventArgs e)
@@ -161,7 +162,7 @@ namespace ITI.Archi_Vite.Forms
 				Patient patient = new Patient(_userData.User);
 				await Navigation.PushAsync(new FollowPatientPage(_userData, patient));
 			}
-			else await Navigation.PushAsync(new PatientList(_userData));
+			else await Navigation.PushAsync(new PatientListPage(_userData));
 		}
 
         private bool UserAccount()
