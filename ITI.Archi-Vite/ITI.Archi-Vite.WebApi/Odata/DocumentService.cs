@@ -12,56 +12,51 @@ namespace ITI.Archi_Vite.WebApi.Controllers
         private ArchiViteContext _db = new ArchiViteContext();
         DocumentManager _doc;
 
-        public DocumentSerializable SeeDocument(int patientId, int proId)
+        public DocumentService()
         {
             _doc = new DocumentManager(_db);
+        }
+        public DocumentSerializable SeeDocument(int patientId, int proId)
+        {
             DocumentSerializable doc = _doc.SeeDocument(proId, patientId);
             return doc;
         }
 
         public DocumentSerializable SeeDocument(int patientId)
         {
-            _doc = new DocumentManager(_db);
             DocumentSerializable doc = _doc.SeeDocument(patientId);
             return doc;
         }
 
-        public  void putDoc(MessageCreator newMessage)
+        public void postMessage(int patientId, int receiverId, DateTime date)
         {
-            _doc = new DocumentManager(_db);
-            List<Professional> pro = new List<Professional>();
+            _doc.AddReciver(receiverId, patientId, date);
 
-            foreach (var proId in newMessage.ReceiverId)
-            {
-                pro.Add(_db.SelectRequest.SelectProfessional(proId));
-            }
-            _doc.CreateMessage(pro, _db.SelectRequest.SelectUser(newMessage.SenderId), newMessage.Title, newMessage.Content, _db.SelectRequest.SelectPatient(newMessage.PatientId));
         }
 
-        public void putDoc(PrescriptionCreator newPrescription)
+        public void putMessage(List<Professional> Receivers, Professional Sender, string Title, string Contents, Patient Patient)
         {
-            _doc = new DocumentManager(_db);
-            List<Professional> pro = new List<Professional>();
-            foreach (var proId in newPrescription.Receivers)
-            {
-                pro.Add(_db.SelectRequest.SelectProfessional(proId));
-            }
-            _doc.CreatePrescription(pro, _db.SelectRequest.SelectUser(newPrescription.Sender), _db.SelectRequest.SelectPatient(newPrescription.Patient), newPrescription.Title, newPrescription.DocPath);
+            _doc.CreateMessage(Receivers, Sender, Title, Contents, Patient);
         }
 
-        public void postDocument(ReciverModification newDoc)
+        public void deleteMessage(int reciverId, int patientid, DateTime date)
         {
-            _doc = new DocumentManager(_db);
-            DocumentSerializable patientDoc = _doc.SeeDocument(newDoc.PatientId);
-            _doc.AddReciver(newDoc.RecieverId, newDoc.PatientId, newDoc.Date);
+            _doc.DeleteReciever(reciverId, patientid, date);
         }
 
-        public void deleteDocument(ReciverModification doc)
+        public void putPrescription(List<Professional> Receivers, Professional Sender, Patient Patient, string Title, string DocPath)
         {
-            _doc = new DocumentManager(_db);
-            DocumentSerializable patientDoc = _doc.SeeDocument(doc.PatientId);
+            _doc.CreatePrescription(Receivers, Sender, Patient, Title, DocPath);
+        }
 
-            _doc.DeleteReciever(doc.RecieverId, doc.PatientId, doc.Date);
+        public void postPrescripton(int reciverId, int patientid, DateTime date)
+        {
+            _doc.AddReciver(reciverId, patientid, date);
+        }
+
+        public void deletePrescription(Prescription prescription, string FilePath)
+        {
+            _doc.DeleteDoc(prescription, FilePath);
         }
     }
     
