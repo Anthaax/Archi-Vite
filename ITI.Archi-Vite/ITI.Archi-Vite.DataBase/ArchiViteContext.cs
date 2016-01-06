@@ -14,7 +14,7 @@ namespace ITI.Archi_Vite.DataBase
         readonly SuppressionRequest _sr;
         readonly SelectRequest _selectRequest;
         public ArchiViteContext()
-            :base("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=ArchiVite;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False")
+            :base(@"Data Source=(localdb)\.\archivite;Initial Catalog=ArchiVite;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False")
         {
             _ar = new AddRequest(this);
             _up = new UpdateRequest(this);
