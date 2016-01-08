@@ -27,10 +27,10 @@ namespace ITI.Archi_Vite.WebApi.Controllers
         }
 
         // GET: api/Users/5
-        [ResponseType(typeof(Data))]
+        [ResponseType(typeof(User))]
         public async Task<IHttpActionResult> GetUser(int id)
         {
-            Data swag = Do.getUser(id);
+            User swag = Do.getUser(id);
             if (swag == null)
             {
                 return NotFound();
@@ -39,16 +39,16 @@ namespace ITI.Archi_Vite.WebApi.Controllers
             return Ok(swag);
         }
 
-        [ResponseType(typeof(User))]
+        [ResponseType(typeof(Data))]
         public async Task<IHttpActionResult> GetUser(string pseudo, string password)
         {
-            Do.getUser(pseudo, password);
-            if (User == null)
+            Data data = Do.getUser(pseudo, password);
+            if (data == null)
             {
                 return NotFound();
             }
 
-            return Ok(User);
+            return Ok(data);
         }
 
         // POST: api/Message

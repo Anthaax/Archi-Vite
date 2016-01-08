@@ -8,6 +8,7 @@ using ITI.Archi_Vite.Core;
 using System.Data.Entity;
 using ITI.Archi_Vite.DataBase;
 using ITI.Archi_Vite.WebApi.Controllers;
+using ITI.Archi_Vite.WebApi;
 
 namespace ITI.Archi_Vite.DataBase.Test
 {
@@ -20,6 +21,8 @@ namespace ITI.Archi_Vite.DataBase.Test
         DocumentService _documentService;
         PatientService _patientService;
         ProfessionalService _professionalService;
+        Data _data; 
+        
         public WebApiTest()
         {
             _professionalService = new ProfessionalService();
@@ -30,27 +33,45 @@ namespace ITI.Archi_Vite.DataBase.Test
         }
 
         [Test]
-        public void GetUser()
+        public void GetUserWithId()
         {
+            using (ArchiViteContext context = new ArchiViteContext())
+            {
+                User u = _userService.getUser(context.SelectRequest.SelectUser("clementR","clementR").UserId);
+                Assert.AreEqual(u.LastName, "Rousseau");
+                int id = u.UserId;
 
-            User u = _userService.getUser("ClementR", "ClementR");
-            Assert.AreEqual(u.LastName, "Rousseau");
-            int id = u.UserId;
+                User u2 = _userService.getUser(id);
+                Assert.AreEqual(u.LastName, "Rousseau");
+            }
+        }
 
-            User u2 = _userService.getUser(id);
-            Assert.AreEqual(u.LastName, "Rousseau");
+        [Test]
+        public void GetUserWithPseudoAndPassword()
+        {
+            using (ArchiViteContext context = new ArchiViteContext())
+            {
+                _data = _userService.getUser("clementR", "clementR");
+                Assert.AreEqual(_data.User, context.SelectRequest.SelectUser("clementR", "clementR"));
+                Assert.AreEqual(_data.Followers, context.SelectRequest.SelectAllFollow(context.SelectRequest.SelectUser("clemenR", "clementR").UserId));
+
+            }
         }
 
         [Test]
         public void PostUser()
         {
-            User u = _userService.getUser("ClementR", "ClementR");
-            u.City = "Paris";
-            _userService.PostUser(u);
-            Assert.AreEqual(u.City, ("Paris"));
-            u.City = "Ivry-sur-Seine";
-            _userService.PostUser(u);
-            Assert.AreEqual(u.City, ("Ivry-sur-Seine"));
+            using (ArchiViteContext context = new ArchiViteContext())
+            {
+                int id = context.SelectRequest.SelectUser("clementR", "clementR").UserId;
+                User u = _userService.getUser(id);
+                u.City = "Paris";
+                _userService.PostUser(u);
+                Assert.AreEqual(u.City, ("Paris"));
+                u.City = "Ivry-sur-Seine";
+                _userService.PostUser(u);
+                Assert.AreEqual(u.City, ("Ivry-sur-Seine"));
+            }
 
         }
 
@@ -289,10 +310,10 @@ namespace ITI.Archi_Vite.DataBase.Test
                 List<Professional> listPro = new List<Professional>();
                 listPro.Add(context.SelectRequest.SelectProfessional("ClementR", "ClementR"));
                 listPro.Add(context.SelectRequest.SelectProfessional("SimonF", "SimonF"));
-                Professional Sender = context.SelectRequest.SelectProfessional("OlivierS", "OlivierS");
+                User Sender = context.SelectRequest.SelectUser("OlivierS", "OlivierS");
                 string Title = "My Title";
                 Patient P = context.SelectRequest.SelectPatient("GuillaumeF", "GuillaumeF");
-                string DocPath = P.PatientId + "$" + Sender.ProfessionalId;
+                string DocPath = P.PatientId + "$" + Sender.UserId;
 
                 _documentService.putPrescription(listPro, Sender, P, Title, DocPath);
                 DocumentSerializable document = dm.SeeDocument(context.SelectRequest.SelectProfessional("OlivierS", "OlivierS"), context.SelectRequest.SelectPatient("GuillaumeF", "GuillaumeF"));
@@ -309,10 +330,10 @@ namespace ITI.Archi_Vite.DataBase.Test
                 List<Professional> listPro = new List<Professional>();
                 listPro.Add(context.SelectRequest.SelectProfessional("ClementR", "ClementR"));
                 listPro.Add(context.SelectRequest.SelectProfessional("SimonF", "SimonF"));
-                Professional Sender = context.SelectRequest.SelectProfessional("OlivierS", "OlivierS");
+                User Sender = context.SelectRequest.SelectUser("OlivierS", "OlivierS");
                 string Title = "My Title2";
                 Patient P = context.SelectRequest.SelectPatient("GuillaumeF", "GuillaumeF");
-                string DocPath = P.PatientId + "$" + Sender.ProfessionalId;
+                string DocPath = P.PatientId + "$" + Sender.UserId;
 
                 _documentService.putPrescription(listPro, Sender, P, Title, DocPath);
 

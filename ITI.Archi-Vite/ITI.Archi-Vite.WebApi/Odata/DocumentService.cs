@@ -34,7 +34,7 @@ namespace ITI.Archi_Vite.WebApi.Controllers
 
         }
 
-        public void putMessage(List<Professional> Receivers, Professional Sender, string Title, string Contents, Patient Patient)
+        public void putMessage(List<Professional> Receivers, User Sender, string Title, string Contents, Patient Patient)
         {
             _doc.CreateMessage(Receivers, Sender, Title, Contents, Patient);
         }
@@ -44,7 +44,7 @@ namespace ITI.Archi_Vite.WebApi.Controllers
             _doc.DeleteReciever(reciverId, patientid, date);
         }
 
-        public void putPrescription(List<Professional> Receivers, Professional Sender, Patient Patient, string Title, string DocPath)
+        public void putPrescription(List<Professional> Receivers, User Sender, Patient Patient, string Title, string DocPath)
         {
             _doc.CreatePrescription(Receivers, Sender, Patient, Title, DocPath);
         }

@@ -11,23 +11,31 @@ namespace ITI.Archi_Vite.WebApi.Controllers
     {
         private ArchiViteContext _db = new ArchiViteContext();
 
-        public Data getUser(int id)
+        public User getUser(int id)
         {
+            User user = _db.SelectRequest.SelectUser(id);
+            return user;
+        }
+
+
+        public Data getUser(string pseudo, string password)
+        {
+            int id = _db.SelectRequest.SelectUser(pseudo, password).UserId;
             DocumentManager _doc = new DocumentManager(_db);
             DocumentSerializable doc;
-            Dictionary<Patient,Professional[]> follower = _db.SelectRequest.SelectAllFollow(id);
+            Dictionary<Patient, Professional[]> follower = _db.SelectRequest.SelectAllFollow(id);
             User user = _db.SelectRequest.SelectUser(id);
             Professional test = _db.SelectRequest.SelectProfessional(id);
             if (test == null)
             {
-                 doc = _doc.SeeDocument(id);
+                doc = _doc.SeeDocument(id);
             }
             else
             {
 
                 doc = new DocumentSerializable(new List<Message>(), new List<Prescription>());
 
-//                follower.Select(p => follower.Keys).
+                //                follower.Select(p => follower.Keys).
 
                 foreach (var patient in follower)
                 {
@@ -45,12 +53,6 @@ namespace ITI.Archi_Vite.WebApi.Controllers
 
             Data swag = new Data(doc, follower, user);
             return swag;
-        }
-
-        public User getUser(string pseudo, string password)
-        {
-            User user = _db.SelectRequest.SelectUser(pseudo, password);
-            return user;
         }
 
         public void PostUser(User user)
