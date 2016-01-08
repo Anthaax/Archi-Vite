@@ -19,6 +19,7 @@ namespace ITI.Archi_Vite.Forms
         CameraViewModel _cameraview;
         Image _photo;
         DataConvertor _convertor = new DataConvertor();
+        string _docpath;
         public CreatePrescription(Data userData, Patient patient, List<Professional> recievers, string title, string docPath)
         {
             _userData = userData;
@@ -27,6 +28,7 @@ namespace ITI.Archi_Vite.Forms
 				_recievers = recievers;
 			else
 				_recievers = new List<Professional>();
+            _docpath = docPath;
             _cameraview = new CameraViewModel();
             MultibleButtonView button = new MultibleButtonView(_userData);
 
@@ -105,9 +107,6 @@ namespace ITI.Archi_Vite.Forms
                 HorizontalOptions = LayoutOptions.Start
 
             };
-            _photo = new Image
-            {
-            };
 
             Button create = new Button
             {
@@ -167,11 +166,15 @@ namespace ITI.Archi_Vite.Forms
         {
             await _cameraview.TakePicture();
             _photo.Source = _cameraview.ImageSource;
+            _docpath =TostringSource(_photo);
         }
 
         private async void Add_Clicked(object sender, EventArgs e)
         {
-			await Navigation.PushAsync(new AddReciverPage(_userData, _patient, null, _title.Text, TostringSource(_photo), false));
+            if(_docpath == null)
+			    await Navigation.PushAsync(new AddReciverPage(_userData, _patient, null, _title.Text, _docpath, false));
+            else
+                await Navigation.PushAsync(new AddReciverPage(_userData, _patient, null, _title.Text, TostringSource(_photo), false));
         }
 
         private async void Back_Clicked(object sender, EventArgs e)

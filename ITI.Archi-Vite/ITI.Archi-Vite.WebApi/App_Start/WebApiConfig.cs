@@ -20,8 +20,6 @@ namespace ITI.Archi_Vite.WebApi
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
-            config.Formatters.JsonFormatter.SerializerSettings.ContractResolver =
-            new DefaultContractResolver { IgnoreSerializableAttribute = true };
         }
     }
 }
