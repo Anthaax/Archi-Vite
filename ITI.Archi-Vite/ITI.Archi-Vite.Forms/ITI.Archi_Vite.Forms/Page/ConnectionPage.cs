@@ -37,7 +37,7 @@ namespace ITI.Archi_Vite.Forms
                 FontSize = 40,
                 HorizontalTextAlignment = TextAlignment.Center,
                 HorizontalOptions = LayoutOptions.FillAndExpand,
-                VerticalOptions = LayoutOptions.Center,
+                VerticalOptions = LayoutOptions.Start,
                 TextColor = Color.Gray
             };
             pseudo.TextChanged += EntryTextChanged;
@@ -48,7 +48,7 @@ namespace ITI.Archi_Vite.Forms
                 FontSize = 40,
                 HorizontalTextAlignment = TextAlignment.Center,
                 HorizontalOptions = LayoutOptions.FillAndExpand,
-                VerticalOptions = LayoutOptions.Center,
+                VerticalOptions = LayoutOptions.Start,
             };
             password.TextChanged += EntryTextChanged;
             Button send = new Button
@@ -57,7 +57,7 @@ namespace ITI.Archi_Vite.Forms
                 FontSize = 40,
                 BackgroundColor = Color.FromHex("439DFE"),
                 HorizontalOptions = LayoutOptions.FillAndExpand,
-				VerticalOptions = LayoutOptions.End,
+				VerticalOptions = LayoutOptions.FillAndExpand,
             };
             send.Clicked += async (sender, e) =>
             {
@@ -90,14 +90,14 @@ namespace ITI.Archi_Vite.Forms
 
         private async void AutoConnection()
         {
-            var client = new HttpClient(new NativeMessageHandler())
+            using (var client = new HttpClient(new NativeMessageHandler()))
             {
-                BaseAddress = new Uri("http://10.8.110.152:8080/"),
-				Timeout = new TimeSpan(0,0,20)
-            };
-            var response = await client.GetAsync("api/Users/35");
-			string s = await response.Content.ReadAsStringAsync ();
-			User u = JsonConvert.DeserializeObject<User> (s);
+                client.BaseAddress = new Uri("http://10.8.110.152:8080/");
+                client.Timeout = new TimeSpan(0, 0, 20);
+                var response = await client.GetAsync("api/Users/35");
+                //    string s = await response.Content.ReadAsStringAsync();
+                //    User u = JsonConvert.DeserializeObject<User>(s);
+            }
             LoadUserData();
             if(_dataForUser != null)
             {

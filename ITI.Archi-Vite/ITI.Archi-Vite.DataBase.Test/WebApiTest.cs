@@ -289,10 +289,10 @@ namespace ITI.Archi_Vite.DataBase.Test
                 List<Professional> listPro = new List<Professional>();
                 listPro.Add(context.SelectRequest.SelectProfessional("ClementR", "ClementR"));
                 listPro.Add(context.SelectRequest.SelectProfessional("SimonF", "SimonF"));
-                Professional Sender = context.SelectRequest.SelectProfessional("OlivierS", "OlivierS");
+                User Sender = context.SelectRequest.SelectUser("OlivierS", "OlivierS");
                 string Title = "My Title";
                 Patient P = context.SelectRequest.SelectPatient("GuillaumeF", "GuillaumeF");
-                string DocPath = P.PatientId + "$" + Sender.ProfessionalId;
+                string DocPath = P.PatientId + "$" + Sender.UserId;
 
                 _documentService.putPrescription(listPro, Sender, P, Title, DocPath);
                 DocumentSerializable document = dm.SeeDocument(context.SelectRequest.SelectProfessional("OlivierS", "OlivierS"), context.SelectRequest.SelectPatient("GuillaumeF", "GuillaumeF"));
@@ -309,10 +309,10 @@ namespace ITI.Archi_Vite.DataBase.Test
                 List<Professional> listPro = new List<Professional>();
                 listPro.Add(context.SelectRequest.SelectProfessional("ClementR", "ClementR"));
                 listPro.Add(context.SelectRequest.SelectProfessional("SimonF", "SimonF"));
-                Professional Sender = context.SelectRequest.SelectProfessional("OlivierS", "OlivierS");
+                User Sender = context.SelectRequest.SelectUser("OlivierS", "OlivierS");
                 string Title = "My Title2";
                 Patient P = context.SelectRequest.SelectPatient("GuillaumeF", "GuillaumeF");
-                string DocPath = P.PatientId + "$" + Sender.ProfessionalId;
+                string DocPath = P.PatientId + "$" + Sender.UserId;
 
                 _documentService.putPrescription(listPro, Sender, P, Title, DocPath);
 
