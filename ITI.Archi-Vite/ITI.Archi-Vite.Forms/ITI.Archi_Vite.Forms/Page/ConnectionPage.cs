@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.IO;
 using Polenter.Serialization;
+using ModernHttpClient;
 
 namespace ITI.Archi_Vite.Forms
 {
@@ -89,6 +90,14 @@ namespace ITI.Archi_Vite.Forms
 
         private async void AutoConnection()
         {
+            var client = new HttpClient(new NativeMessageHandler())
+            {
+                BaseAddress = new Uri("http://10.8.110.152:8080/"),
+				Timeout = new TimeSpan(0,0,20)
+            };
+            var response = await client.GetAsync("api/Users/35");
+			string s = await response.Content.ReadAsStringAsync ();
+			User u = JsonConvert.DeserializeObject<User> (s);
             LoadUserData();
             if(_dataForUser != null)
             {

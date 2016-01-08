@@ -26,6 +26,7 @@ namespace ITI.Archi_Vite.Forms.Droid
 		
 		public static void UpdateIdValues()
 		{
+			global::ModernHttpClient.Resource.String.library_name = global::ITI.Archi_Vite.Forms.Droid.Resource.String.library_name;
 			global::Xamarin.Forms.Platform.Resource.Animation.abc_fade_in = global::ITI.Archi_Vite.Forms.Droid.Resource.Animation.abc_fade_in;
 			global::Xamarin.Forms.Platform.Resource.Animation.abc_fade_out = global::ITI.Archi_Vite.Forms.Droid.Resource.Animation.abc_fade_out;
 			global::Xamarin.Forms.Platform.Resource.Animation.abc_grow_fade_in_from_bottom = global::ITI.Archi_Vite.Forms.Droid.Resource.Animation.abc_grow_fade_in_from_bottom;
