@@ -30,7 +30,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -39,7 +38,6 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
@@ -107,26 +105,34 @@
     <Compile Include="Controllers\DocumentController.cs" />
     <Compile Include="Controllers\FollowersController.cs" />
     <Compile Include="Controllers\MessageController.cs" />
-    <Compile Include="Odata\Data.cs" />
-    <Compile Include="Odata\DocumentService.cs" />
-    <Compile Include="Odata\FollowerService.cs" />
-    <Compile Include="Odata\PatientService.cs" />
-    <Compile Include="Odata\ProfessionalService.cs" />
-    <Compile Include="Odata\ReciverModification.cs" />
+    <Compile Include="Services\Data.cs" />
+    <Compile Include="Services\DocumentService.cs" />
+    <Compile Include="Services\FollowerService.cs" />
+    <Compile Include="Services\PatientService.cs" />
+    <Compile Include="Services\ProfessionalService.cs" />
+    <Compile Include="Services\ReciverModification.cs" />
     <Compile Include="Controllers\PrescriptionController.cs" />
-    <Compile Include="Odata\MessageCreator.cs" />
+    <Compile Include="Services\MessageCreator.cs" />
     <Compile Include="Controllers\PatientsController.cs" />
     <Compile Include="Controllers\ProfessionalsController.cs" />
-    <Compile Include="Odata\FollowerCreation.cs" />
-    <Compile Include="Odata\PatientCreation.cs" />
-    <Compile Include="Odata\PrescriptionCreator.cs" />
-    <Compile Include="Odata\ProfessionalCreation.cs" />
+    <Compile Include="Services\FollowerCreation.cs" />
+    <Compile Include="Services\PatientCreation.cs" />
+    <Compile Include="Services\PrescriptionCreator.cs" />
+    <Compile Include="Services\ProfessionalCreation.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Odata\UserService.cs" />
+    <Compile Include="Services\UserService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Xml\Dictionary.cs" />
+    <Compile Include="Xml\FromXml.cs" />
+    <Compile Include="Xml\ToXml.cs" />
+    <Compile Include="Xml\DataXML.cs" />
+    <Compile Include="Xml\DocumentSerializableXML.cs" />
+    <Compile Include="Xml\DocumentsXML.cs" />
+    <Compile Include="Xml\MessageXML.cs" />
+    <Compile Include="Xml\PrescriptionXML.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

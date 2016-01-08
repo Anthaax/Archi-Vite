@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using System.IO;
 using Polenter.Serialization;
 using ModernHttpClient;
+using System.Xml.Serialization;
 
 namespace ITI.Archi_Vite.Forms
 {
@@ -21,6 +22,7 @@ namespace ITI.Archi_Vite.Forms
 		Data _dataForUser;
         DataJsonConvertor _jsonCovertor = new DataJsonConvertor();
         DataConvertor _convertor = new DataConvertor();
+        FromXML _xml = new FromXML();
         public ConnectionPage()
         {
 			AutoConnection();
@@ -63,14 +65,9 @@ namespace ITI.Archi_Vite.Forms
             {
                 if (pseudo.Text != null && password.Text != null)
                 {
-                    //User newUser = await ConnectionGestion(pseudo.Text, password.Text);
-
-                    if (CanPutUserData(pseudo.Text, password.Text))
-                    {
+                    ConnectionGestion(pseudo.Text, password.Text);
 						SaveUserData();
 						await Navigation.PushAsync(new ProfilPage(_dataForUser, _dataForUser.User));
-                    }
-                    else await DisplayAlert("Error", "Les champ doivent etre valides", "Ok");
                 }
                 else await DisplayAlert ("Error", "Les champ doivent etre valides", "Ok");
 
@@ -90,19 +87,20 @@ namespace ITI.Archi_Vite.Forms
 
         private async void AutoConnection()
         {
-            using (var client = new HttpClient(new NativeMessageHandler()))
-            {
-                client.BaseAddress = new Uri("http://10.8.110.152:8080/");
-                client.Timeout = new TimeSpan(0, 0, 20);
-                var response = await client.GetAsync("api/Users/35");
-                //    string s = await response.Content.ReadAsStringAsync();
-                //    User u = JsonConvert.DeserializeObject<User>(s);
-            }
             LoadUserData();
             if(_dataForUser != null)
             {
                 await Navigation.PushAsync(new ProfilPage(_dataForUser, _dataForUser.User));
             }
+        }
+
+        private DataJson XmlDeseriliaze(string s)
+        {
+            DataXml data = new DataXml();
+            XmlSerializer ser = new XmlSerializer(data.GetType());
+            TextReader text = new StringReader(s);
+            data = (DataXml)ser.Deserialize(text);
+            return _xml.FromXml(data);
         }
 
         private void EntryTextChanged(object sender, TextChangedEventArgs e)
@@ -113,20 +111,17 @@ namespace ITI.Archi_Vite.Forms
                 entry.TextColor = Color.Gray;
             }
         }
-        private async Task<User> ConnectionGestion(string pseudo, string password)
+        private async void ConnectionGestion(string pseudo, string password)
         {
-            using (var client = new HttpClient())
+            using (var client = new HttpClient(new NativeMessageHandler()))
             {
-				string baseUrl = "http://10.0.2.2";
-                client.BaseAddress = new Uri(baseUrl);
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-				string url = "api/Users/?pseudo=GuillaumeF&password=GuillaumeF";
-				string completeUrl = string.Format(url, pseudo, password);
-				string content = await client.GetStringAsync (url);
-				return null;
+                client.BaseAddress = new Uri("http://10.8.110.152:8080/");
+                client.Timeout = new TimeSpan(0, 0, 20);
+                var response = await client.GetAsync("api/Users/?pseudo=GuillaumeF&password=GuillaumeF");
+                string s = await response.Content.ReadAsStringAsync();
+                DataJson u = XmlDeseriliaze(s);
+                _dataForUser = _jsonCovertor.DataJsonToData(u);
             }
-                
         }
 		private bool CanPutUserData(string pseudo, string password)
 		{

@@ -51,9 +51,9 @@ namespace ITI.Archi_Vite.DataBase.Test
         {
             using (ArchiViteContext context = new ArchiViteContext())
             {
-                _data = _userService.getUser("clementR", "clementR");
-                Assert.AreEqual(_data.User, context.SelectRequest.SelectUser("clementR", "clementR"));
-                Assert.AreEqual(_data.Followers, context.SelectRequest.SelectAllFollow(context.SelectRequest.SelectUser("clemenR", "clementR").UserId));
+                _data = _userService.getUser("ClementR", "ClementR");
+                Assert.AreEqual(_data.User.UserId, context.SelectRequest.SelectUser("ClementR", "ClementR").UserId);
+                Assert.AreEqual(_data.Followers.Count, context.SelectRequest.SelectAllFollow(context.SelectRequest.SelectUser("ClementR", "ClementR").UserId).Count);
 
             }
         }

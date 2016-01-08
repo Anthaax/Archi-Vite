@@ -10,6 +10,8 @@ using System.Xml.Serialization;
 
 namespace ITI.Archi_Vite.DataBase
 {
+    [Serializable]
+
     [DataContract]
     public class Professional
     {
@@ -26,6 +28,7 @@ namespace ITI.Archi_Vite.DataBase
         [DataMember]
         public User User { get; set; }
         [NotMapped]
+        [XmlIgnore]
         public ICollection<Follower> Followers { get; set; }
     }
 }

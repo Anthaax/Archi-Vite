@@ -25,7 +25,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -34,7 +33,6 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Android|AnyCPU' ">
     <Optimize>false</Optimize>
@@ -79,6 +77,8 @@
     <Compile Include="Page\FollowPatientPage.cs" />
     <Compile Include="ViewModel\CameraViewModel.cs" />
     <Compile Include="View\MultibleButtonView.cs" />
+    <Compile Include="XML\DataXml.cs" />
+    <Compile Include="XML\FromXML.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

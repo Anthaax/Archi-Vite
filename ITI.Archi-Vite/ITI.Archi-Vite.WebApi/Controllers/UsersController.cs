@@ -11,6 +11,8 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using ITI.Archi_Vite.DataBase;
 using ITI.Archi_Vite.Core;
+using System.Xml.Serialization;
+using System.IO;
 
 namespace ITI.Archi_Vite.WebApi.Controllers
 {
@@ -39,7 +41,7 @@ namespace ITI.Archi_Vite.WebApi.Controllers
             return Ok(swag);
         }
 
-        [ResponseType(typeof(Data))]
+        [ResponseType(typeof(string))]
         public async Task<IHttpActionResult> GetUser(string pseudo, string password)
         {
             Data data = Do.getUser(pseudo, password);
@@ -47,8 +49,7 @@ namespace ITI.Archi_Vite.WebApi.Controllers
             {
                 return NotFound();
             }
-
-            return Ok(data);
+            return Ok(Do.SeriliazeData(data));
         }
 
         // POST: api/Message

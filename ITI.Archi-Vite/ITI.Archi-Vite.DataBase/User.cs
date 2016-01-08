@@ -9,12 +9,11 @@ using System.Threading.Tasks;
 
 namespace ITI.Archi_Vite.DataBase
 {
+    [Serializable]
+
     [DataContract]
     public class User
     {
-        public User()
-        {
-        }
         [DataMember]
         public int UserId { get; set; }
         [Required]

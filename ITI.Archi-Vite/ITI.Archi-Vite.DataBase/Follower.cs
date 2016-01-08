@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 
 namespace ITI.Archi_Vite.DataBase
 {
+    [Serializable]
+
     [DataContract]
     public class Follower
     {

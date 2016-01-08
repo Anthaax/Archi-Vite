@@ -73,21 +73,11 @@ namespace ITI.Archi_Vite.Forms
                 if (professionals[i] != null)
                 {
 					proImage[i] = InitializePhoto(proImage[i], i, professionals);
-                    proImage[i].Source = new UriImageSource
-                    {
-                        Uri = new Uri(professionals[i].Photo),
-                        CachingEnabled = true,
-                        CacheValidity = new TimeSpan(5, 0, 0, 0)
-                    };
+                    proImage[i].Source = professionals[i].Photo;
                 }
                 else
                 {
-                    proImage[i].Source = new UriImageSource
-                    {
-                        Uri = new Uri("http://3.bp.blogspot.com/_9Q_36sq8aPo/S0D4__i1w1I/AAAAAAAAACo/cgLl5IYQtjA/s400/croix.png"),
-                        CachingEnabled = true,
-                        CacheValidity = new TimeSpan(5, 0, 0, 0)
-                    };
+                    proImage[i].Source = "http://3.bp.blogspot.com/_9Q_36sq8aPo/S0D4__i1w1I/AAAAAAAAACo/cgLl5IYQtjA/s400/croix.png";
                     proImage[i].Scale = 0.75;
                 }
                 AbsoluteLayout.SetLayoutFlags(proImage[i], AbsoluteLayoutFlags.PositionProportional);
@@ -105,21 +95,11 @@ namespace ITI.Archi_Vite.Forms
                 {
 					proImage[i].Scale = 0.75;
 					proImage[i] = InitializePhoto(proImage[i], i, professionals);
-                    proImage[i].Source = new UriImageSource
-                    {
-                        Uri = new Uri(professionals[i].Photo),
-                        CachingEnabled = true,
-                        CacheValidity = new TimeSpan(5, 0, 0, 0)
-                    };
+                    proImage[i].Source = professionals[i].Photo;
                 }
                 else
                 {
-                    proImage[i].Source = new UriImageSource
-                    {
-                        Uri = new Uri("http://3.bp.blogspot.com/_9Q_36sq8aPo/S0D4__i1w1I/AAAAAAAAACo/cgLl5IYQtjA/s400/croix.png"),
-                        CachingEnabled = true,
-                        CacheValidity = new TimeSpan(5, 0, 0, 0)
-                    };
+                    proImage[i].Source = "http://3.bp.blogspot.com/_9Q_36sq8aPo/S0D4__i1w1I/AAAAAAAAACo/cgLl5IYQtjA/s400/croix.png";
                     proImage[i].Scale = 0.75;
                 }
                 AbsoluteLayout.SetLayoutFlags(proImage[i], AbsoluteLayoutFlags.PositionProportional);
@@ -136,12 +116,7 @@ namespace ITI.Archi_Vite.Forms
                 {
 					proImage [i].Scale = 0.75;
 					proImage[i] = InitializePhoto(proImage[i], i, professionals);
-                    proImage[i].Source = new UriImageSource
-                    {
-                        Uri = new Uri(professionals[i].Photo),
-                        CachingEnabled = true,
-                        CacheValidity = new TimeSpan(5, 0, 0, 0)
-                    };
+                    proImage[i].Source = professionals[i].Photo;
                 }
                 else
                 {
@@ -160,21 +135,11 @@ namespace ITI.Archi_Vite.Forms
                 {
 					proImage [i].Scale = 0.75;
 					proImage[i] = InitializePhoto(proImage[i], i, professionals);
-                    proImage[i].Source = new UriImageSource
-                    {
-                        Uri = new Uri(professionals[i].Photo),
-                        CachingEnabled = true,
-                        CacheValidity = new TimeSpan(5, 0, 0, 0)
-                    };
+                    proImage[i].Source = professionals[i].Photo;
                 }
                 else
                 {
-                    proImage[i].Source = new UriImageSource
-                    {
-                        Uri = new Uri("http://3.bp.blogspot.com/_9Q_36sq8aPo/S0D4__i1w1I/AAAAAAAAACo/cgLl5IYQtjA/s400/croix.png"),
-                        CachingEnabled = true,
-                        CacheValidity = new TimeSpan(5, 0, 0, 0)
-                    };
+                    proImage[i].Source = "http://3.bp.blogspot.com/_9Q_36sq8aPo/S0D4__i1w1I/AAAAAAAAACo/cgLl5IYQtjA/s400/croix.png";
                     proImage[i].Scale = 0.75;
                 }
                 AbsoluteLayout.SetLayoutFlags(proImage[i], AbsoluteLayoutFlags.PositionProportional);

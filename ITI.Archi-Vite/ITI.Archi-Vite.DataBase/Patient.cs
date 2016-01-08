@@ -10,6 +10,7 @@ using System.Runtime.Serialization;
 
 namespace ITI.Archi_Vite.DataBase
 {
+    [Serializable]
     [DataContract]
     public class Patient
     {
@@ -25,6 +26,7 @@ namespace ITI.Archi_Vite.DataBase
         [ForeignKey("PatientId")]
         public User User { get; set; }
         [NotMapped]
+        [XmlIgnore]
         public ICollection<Follower> Followers { get; set; }
     }
 }

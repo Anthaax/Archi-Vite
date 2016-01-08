@@ -124,7 +124,7 @@ namespace ITI.Archi_Vite.DataBase
                                         .Include(c => c.Patient.User)
                                         .Where(t => t.ProfessionnalId.Equals(id))
                                         .ToList();
-            if (senderFollow == null)
+            if (senderFollow.Count == 0)
             {
                 senderFollow = _context.Follower
                                         .Include(c => c.Patient)
@@ -133,14 +133,19 @@ namespace ITI.Archi_Vite.DataBase
                                         .Include(c => c.Patient.User)
                                         .Where(t => t.PatientId.Equals(id))
                                         .ToList();
+                patientList.Add(senderFollow.First().Patient);
             }
-                foreach (var follow in senderFollow)
+            else
             {
-                if (follow.ProfessionnalId == id)
+                foreach (var follow in senderFollow)
                 {
-                    patientList.Add(follow.Patient);
+                    if (follow.ProfessionnalId == id )
+                    {
+                        patientList.Add(follow.Patient);
+                    }
                 }
             }
+            
             Follows = PatientAdd(patientList);            
             return Follows;
         }

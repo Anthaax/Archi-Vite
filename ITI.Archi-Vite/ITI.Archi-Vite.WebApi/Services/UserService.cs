@@ -4,13 +4,16 @@ using System.Linq;
 using System.Web;
 using ITI.Archi_Vite.DataBase;
 using ITI.Archi_Vite.Core;
+using System.Xml.Serialization;
+using System.IO;
 
-namespace ITI.Archi_Vite.WebApi.Controllers
+namespace ITI.Archi_Vite.WebApi
 {
     public class UserService
     {
         private ArchiViteContext _db = new ArchiViteContext();
-
+        FromXml _fXML = new FromXml();
+        ToXml _tXML = new ToXml();
         public User getUser(int id)
         {
             User user = _db.SelectRequest.SelectUser(id);
@@ -40,11 +43,11 @@ namespace ITI.Archi_Vite.WebApi.Controllers
                 foreach (var patient in follower)
                 {
 
-                    foreach (var message in _doc.SeeDocument(patient.Key.PatientId, id).Messages)
+                    foreach (var message in _doc.SeeDocument(id, patient.Key.PatientId).Messages)
                     {
                         doc.Messages.Add(message);
                     }
-                    foreach (var prescription in _doc.SeeDocument(patient.Key.PatientId, id).Prescriptions)
+                    foreach (var prescription in _doc.SeeDocument(id, patient.Key.PatientId).Prescriptions)
                     {
                         doc.Prescriptions.Add(prescription);
                     }
@@ -58,6 +61,25 @@ namespace ITI.Archi_Vite.WebApi.Controllers
         public void PostUser(User user)
         {
             _db.UpdateRequest.CheckUserInfo(user);
+        }
+        public string SeriliazeData(Data data)
+        {
+            try
+            {
+                DataXml d = _tXML.ToXML(data);
+                XmlSerializer ser = new XmlSerializer(d.GetType());
+                using (StringWriter textWriter = new StringWriter())
+                {
+                    ser.Serialize(textWriter, d);
+                    string s = textWriter.ToString();
+                    return s;
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+            
         }
     }
 }
