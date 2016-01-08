@@ -117,7 +117,6 @@ namespace ITI.Archi_Vite.DataBase
             Dictionary<Patient, Professional[]> Follows = new Dictionary<Patient, Professional[]>();
             List<Patient> patientList = new List<Patient>();
             
-
             var senderFollow = _context.Follower
                                         .Include(c => c.Patient)
                                         .Include(c => c.Professionnal)
@@ -125,6 +124,16 @@ namespace ITI.Archi_Vite.DataBase
                                         .Include(c => c.Patient.User)
                                         .Where(t => t.ProfessionnalId.Equals(id))
                                         .ToList();
+            if (senderFollow == null)
+            {
+                senderFollow = _context.Follower
+                                        .Include(c => c.Patient)
+                                        .Include(c => c.Professionnal)
+                                        .Include(c => c.Professionnal.User)
+                                        .Include(c => c.Patient.User)
+                                        .Where(t => t.PatientId.Equals(id))
+                                        .ToList();
+            }
                 foreach (var follow in senderFollow)
             {
                 if (follow.ProfessionnalId == id)

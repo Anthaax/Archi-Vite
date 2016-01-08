@@ -27,16 +27,16 @@ namespace ITI.Archi_Vite.WebApi.Controllers
         }
 
         // GET: api/Users/5
-        [ResponseType(typeof(User))]
+        [ResponseType(typeof(Data))]
         public async Task<IHttpActionResult> GetUser(int id)
         {
-            User user = Do.getUser(id);
-            if (user == null)
+            Data swag = Do.getUser(id);
+            if (swag == null)
             {
                 return NotFound();
             }
 
-            return Ok(user);
+            return Ok(swag);
         }
 
         [ResponseType(typeof(User))]
