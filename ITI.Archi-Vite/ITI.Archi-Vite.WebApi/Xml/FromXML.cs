@@ -9,7 +9,7 @@ namespace ITI.Archi_Vite.WebApi
 {
     public class FromXml
     {
-        public Data FromXML(DataXml dataXML)
+        public Data FromXML(DataXML dataXML)
         {
             Data d = new Data(CreateDocument(dataXML.Documents), CreateDictionary(dataXML.Patients, dataXML.Professionals), dataXML.User);
             return d;
@@ -25,14 +25,14 @@ namespace ITI.Archi_Vite.WebApi
             return d;
         }
 
-        private DocumentSerializable CreateDocument(DocumentSerializableXml documents)
+        private DocumentSerializable CreateDocument(DocumentSerializableXML documents)
         {
             DocumentSerializable d = 
                 new DocumentSerializable(CreateMessageList(documents.Message), CreatePrescriptionList(documents.Prescription));
             return d;
         }
 
-        private List<Message> CreateMessageList(List<MessageXml> messages)
+        private List<Message> CreateMessageList(List<MessageXML> messages)
         {
             List<Message> m = new List<Message>();
             foreach (var message in messages)
@@ -42,13 +42,13 @@ namespace ITI.Archi_Vite.WebApi
             return m;
         }
 
-        private Message CreateMessage(MessageXml message)
+        private Message CreateMessage(MessageXML message)
         {
             Message m = new Message(message.Title, message.Contents, message.Sender, message.Recievers, message.Patient);
             return m;
         }
 
-        private List<Prescription> CreatePrescriptionList(List<PrescriptionXml> prescriptions)
+        private List<Prescription> CreatePrescriptionList(List<PrescriptionXML> prescriptions)
         {
             List<Prescription> m = new List<Prescription>();
             foreach (var prescription in prescriptions)
@@ -58,7 +58,7 @@ namespace ITI.Archi_Vite.WebApi
             return m;
         }
 
-        private Prescription CreatePrescription(PrescriptionXml prescription)
+        private Prescription CreatePrescription(PrescriptionXML prescription)
         {
             Prescription p = new Prescription(prescription.Title, prescription.DocPath, prescription.Sender, prescription.Recievers, prescription.Patient);
             return p;

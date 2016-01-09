@@ -3,7 +3,7 @@
 namespace ITI.Archi_Vite.WebApi
 {
     [Serializable]
-    public class MessageXml : DocumentsXml
+    public class MessageXML : DocumentsXML
     {
         public string Contents { get; set; }		
     }

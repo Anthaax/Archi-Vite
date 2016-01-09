@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace ITI.Archi_Vite.Forms
+namespace ITI.Archi_Vite.WebApi
 {
-    public class PatientJson : UserJson
+    public class PatientXML : UserXML
     {
         public int PatientId { get; set; }
 

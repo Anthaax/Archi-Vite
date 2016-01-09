@@ -8,9 +8,9 @@ namespace ITI.Archi_Vite.WebApi
 {
     public class ToXml
     {
-        public DataXml ToXML(Data data)
+        public DataXML ToXML(Data data)
         {
-            DataXml d = new DataXml();
+            DataXML d = new DataXML();
             d.User = data.User;
             d.Patients = data.Followers.Keys.ToList();
             d.Professionals = data.Followers.Values.ToList();
@@ -18,17 +18,17 @@ namespace ITI.Archi_Vite.WebApi
             return d;
         }
 
-        private DocumentSerializableXml CreateDocuments(DocumentSerializable documents)
+        private DocumentSerializableXML CreateDocuments(DocumentSerializable documents)
         {
-            DocumentSerializableXml d = new DocumentSerializableXml();
+            DocumentSerializableXML d = new DocumentSerializableXML();
             d.Message = CreateMessagesList(documents.Messages);
             d.Prescription = CreatePrescriptionList(documents.Prescriptions);
             return d;
         }
 
-        private List<PrescriptionXml> CreatePrescriptionList(List<Prescription> prescriptions)
+        private List<PrescriptionXML> CreatePrescriptionList(List<Prescription> prescriptions)
         {
-            List<PrescriptionXml> p = new List<PrescriptionXml>();
+            List<PrescriptionXML> p = new List<PrescriptionXML>();
             foreach (var pres in prescriptions)
             {
                 p.Add(CreatePrescription(pres));
@@ -36,9 +36,9 @@ namespace ITI.Archi_Vite.WebApi
             return p;
         }
 
-        private PrescriptionXml CreatePrescription(Prescription pres)
+        private PrescriptionXML CreatePrescription(Prescription pres)
         {
-            PrescriptionXml p = new PrescriptionXml()
+            PrescriptionXML p = new PrescriptionXML()
             {
                 Date = pres.Date,
                 DocPath = pres.DocPath,
@@ -50,9 +50,9 @@ namespace ITI.Archi_Vite.WebApi
             return p;
         }
 
-        private List<MessageXml> CreateMessagesList(List<Message> messages)
+        private List<MessageXML> CreateMessagesList(List<Message> messages)
         {
-            List<MessageXml> m = new List<MessageXml>();
+            List<MessageXML> m = new List<MessageXML>();
             foreach (var message in messages)
             {
                 m.Add(CreateMessage(message));
@@ -60,9 +60,9 @@ namespace ITI.Archi_Vite.WebApi
             return m;
         }
 
-        private MessageXml CreateMessage(Message message)
+        private MessageXML CreateMessage(Message message)
         {
-            MessageXml m = new MessageXml()
+            MessageXML m = new MessageXML()
             {
                 Contents = message.Contents,
                 Date = message.Date,

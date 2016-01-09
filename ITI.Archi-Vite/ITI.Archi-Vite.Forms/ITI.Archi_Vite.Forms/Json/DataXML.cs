@@ -1,16 +1,17 @@
-﻿using System.Collections.Generic;
-using ITI.Archi_Vite.DataBase;
-using System;
+﻿using System;
+using System.Collections.Generic;
+using Newtonsoft.Json;
 
-namespace ITI.Archi_Vite.WebApi
+namespace ITI.Archi_Vite.Forms
 {
-    [Serializable]
     public class DataXML
     {
+
         public List<PatientXML> Patients { get; set; }
         public List<ProfessionalXML[]> Professionals { get; set; }
         public UserXML User { get; set; }
         public DocumentSerializableXML Documents { get; set; }
+        public DocumentSerializableXML DocumentAdded { get; set; }
     }
 }
 

@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace ITI.Archi_Vite.Forms
 {
-    public class PrescriptionJson : DocumentsJson
+    public class DocumentSerializableXML
     {
-        public string DocPath { get; set; }
+        public List<MessageXML> Message { get; set; }
+        public List<PrescriptionXML> Prescription { get; set; }
     }
 }

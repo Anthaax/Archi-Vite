@@ -6,7 +6,7 @@ namespace ITI.Archi_Vite.WebApi
 {
     [Serializable]
 
-    public abstract class DocumentsXml
+    public abstract class DocumentsXML
     {
         public List<Professional> Recievers { get; set; }
         public Patient Patient { get; set; }

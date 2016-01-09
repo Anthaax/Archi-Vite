@@ -9,9 +9,9 @@ namespace ITI.Archi_Vite.Forms
     public interface ISaveLoadAndDelete
     {
         void SaveText(string filename, string text);
-        void SaveData(string fileName, DataJson saveData);
+        void SaveData(string fileName, DataXML saveData);
         string LoadText(string filename);
-        DataJson LoadData(string fileName);
+        DataXML LoadData(string fileName);
         void DeleteData(string fileName);
 
     }

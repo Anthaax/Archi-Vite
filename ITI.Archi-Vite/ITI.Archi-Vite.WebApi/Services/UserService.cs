@@ -66,7 +66,7 @@ namespace ITI.Archi_Vite.WebApi
         {
             try
             {
-                DataXml d = _tXML.ToXML(data);
+                DataXML d = _tXML.ToXML(data);
                 XmlSerializer ser = new XmlSerializer(d.GetType());
                 using (StringWriter textWriter = new StringWriter())
                 {

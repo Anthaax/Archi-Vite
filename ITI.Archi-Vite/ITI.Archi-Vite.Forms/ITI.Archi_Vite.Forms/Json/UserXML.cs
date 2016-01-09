@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ITI.Archi_Vite.Forms
 {
-    public class UserJson
+    public class UserXML
     {
         public int UserId { get; set; }
         public string FirstName { get; set; }

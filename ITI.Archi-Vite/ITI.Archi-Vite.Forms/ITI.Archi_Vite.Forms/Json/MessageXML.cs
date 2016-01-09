@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ITI.Archi_Vite.Forms
 {
-    public class MessageJson : DocumentsJson
+    public class MessageXML : DocumentsXML
     {
         public string Contents { get; set; }		
     }

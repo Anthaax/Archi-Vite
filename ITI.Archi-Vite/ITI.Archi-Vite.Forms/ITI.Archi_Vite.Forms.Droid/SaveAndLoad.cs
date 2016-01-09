@@ -34,16 +34,16 @@ namespace ITI.Archi_Vite.Forms.Droid
             var filePath = Path.Combine(documentsPath, filename);
             return System.IO.File.ReadAllText(filePath);
         }
-        public DataJson LoadData(string filename)
+        public DataXML LoadData(string filename)
         {
-            DataJson data;
+            DataXML data;
             var documentsPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
             var filePath = Path.Combine(documentsPath, filename);
             var serializer = new SharpSerializer();
             Stream fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read);
             try
             {
-                data = (DataJson)serializer.Deserialize(fileStream);
+                data = (DataXML)serializer.Deserialize(fileStream);
             }
 			catch (Exception e)
             {
@@ -56,7 +56,7 @@ namespace ITI.Archi_Vite.Forms.Droid
             return data;
         }
 
-        public void SaveData(string filename, DataJson saveData)
+        public void SaveData(string filename, DataXML saveData)
         {
             var documentsPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
             var filePath = Path.Combine(documentsPath, filename);

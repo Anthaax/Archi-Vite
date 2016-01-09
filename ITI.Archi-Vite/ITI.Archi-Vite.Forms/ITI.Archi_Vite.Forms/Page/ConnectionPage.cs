@@ -94,12 +94,12 @@ namespace ITI.Archi_Vite.Forms
             }
         }
 
-        private DataJson XmlDeseriliaze(string s)
+        private DataXML XmlDeseriliaze(string s)
         {
-            DataXml data = new DataXml();
+            DataXML data = new DataXML();
             XmlSerializer ser = new XmlSerializer(data.GetType());
             TextReader text = new StringReader(s);
-            data = (DataXml)ser.Deserialize(text);
+            data = (DataXML)ser.Deserialize(text);
             return _xml.FromXml(data);
         }
 
@@ -119,7 +119,7 @@ namespace ITI.Archi_Vite.Forms
                 client.Timeout = new TimeSpan(0, 0, 20);
                 var response = await client.GetAsync("api/Users/?pseudo=GuillaumeF&password=GuillaumeF");
                 string s = await response.Content.ReadAsStringAsync();
-                DataJson u = XmlDeseriliaze(s);
+                DataXML u = XmlDeseriliaze(s);
                 _dataForUser = _jsonCovertor.DataJsonToData(u);
             }
         }
@@ -238,7 +238,7 @@ namespace ITI.Archi_Vite.Forms
 
         public void SaveUserData()
         {
-            DataJson json = _convertor.DataToDataJson(_dataForUser);
+            DataXML json = _convertor.DataToDataJson(_dataForUser);
 			DependencyService.Get<ISaveLoadAndDelete>().SaveData("user.txt", json);
         }
 
@@ -246,7 +246,7 @@ namespace ITI.Archi_Vite.Forms
         {
             try
             {
-				DataJson json = DependencyService.Get<ISaveLoadAndDelete>().LoadData("user.txt");
+				DataXML json = DependencyService.Get<ISaveLoadAndDelete>().LoadData("user.txt");
 				if(json != null)
                 	_dataForUser = _jsonCovertor.DataJsonToData(json);
 				else return false;

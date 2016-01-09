@@ -8,23 +8,20 @@ namespace ITI.Archi_Vite.Forms
 {
     public class DataConvertor
     {
-        public DataJson DataToDataJson(Data json)
+        public DataXML DataToDataJson(Data userData)
         {
-            UserJson curentUser = CreateUser(json.User);
-            Dictionary<PatientJson, ProfessionalJson[]> follow = CreateDictionary(json.Follow);
-            DocumentSerializableJson documents = CreateDocumentSerializable(json.Documents);
-            DocumentSerializableJson documentsAdded = CreateDocumentSerializable(json.DocumentsAdded);
-            DataJson d = new DataJson();
-            d.Documents = documents;
-            d.Follow = follow;
-            d.User = curentUser;
-            d.DocumentAdded = documentsAdded;
+            DataXML d = new DataXML();
+            d.Documents = CreateDocumentSerializable(userData.Documents); ;
+            d.Patients = CreatePatientList(userData.Follow.Keys.ToList());
+            d.Professionals = CreateArrayProList(userData.Follow.Values.ToList());
+            d.User = CreateUser(userData.User);
+            d.DocumentAdded = CreateDocumentSerializable(userData.DocumentsAdded);
             return d;
         }
 
-        private UserJson CreateUser(User user)
+        private UserXML CreateUser(User user)
         {
-            UserJson u = new UserJson();
+            UserXML u = new UserXML();
             u.Adress = user.Adress;
             u.Birthdate = user.Birthdate;
             u.City = user.City;
@@ -38,9 +35,9 @@ namespace ITI.Archi_Vite.Forms
             u.UserId = user.UserId;
             return u;
         }
-        private UserJson CreateUser(int userId, string firstName, string lastName, DateTime birthdate, string adress, string city, int postcode, string pseudo, string password, int phoneNumber, string Photo)
+        private UserXML CreateUser(int userId, string firstName, string lastName, DateTime birthdate, string adress, string city, int postcode, string pseudo, string password, int phoneNumber, string Photo)
         {
-            UserJson u = new UserJson();
+            UserXML u = new UserXML();
             u.Adress = adress;
             u.Birthdate = birthdate;
             u.City = city;
@@ -54,9 +51,9 @@ namespace ITI.Archi_Vite.Forms
             u.UserId = userId;
             return u;
         }
-        private PatientJson CreatePatient(int userId, string firstName, string lastName, DateTime birthdate, string adress, string city, int postcode, string pseudo, string password, int phoneNumber, string Photo)
+        private PatientXML CreatePatient(int userId, string firstName, string lastName, DateTime birthdate, string adress, string city, int postcode, string pseudo, string password, int phoneNumber, string Photo)
         {
-            PatientJson p = new PatientJson();
+            PatientXML p = new PatientXML();
             p.Adress = adress;
             p.Birthdate = birthdate;
             p.City = city;
@@ -71,9 +68,9 @@ namespace ITI.Archi_Vite.Forms
             p.UserId = userId;
             return p;
         }
-        private ProfessionalJson CreatePro(int userId, string firstName, string lastName, DateTime birthdate, string adress, string city, int postcode, string pseudo, string password, int phoneNumber, string Photo, string role)
+        private ProfessionalXML CreatePro(int userId, string firstName, string lastName, DateTime birthdate, string adress, string city, int postcode, string pseudo, string password, int phoneNumber, string Photo, string role)
         {
-            ProfessionalJson p = new ProfessionalJson();
+            ProfessionalXML p = new ProfessionalXML();
             p.Adress = adress;
             p.Birthdate = birthdate;
             p.City = city;
@@ -89,42 +86,34 @@ namespace ITI.Archi_Vite.Forms
             p.Role = role;
             return p;
         }
-        private Dictionary<PatientJson, ProfessionalJson[]> CreateDictionary(Dictionary<Patient, Professional[]> follow)
+        private List<PatientXML> CreatePatientList(List<Patient> patientJson)
         {
-            List<Patient> f = follow.Keys.ToList();
-            List<Professional[]> p = follow.Values.ToList();
-            List<PatientJson> fJson = CreatePatientList(f);
-            List<ProfessionalJson[]> pJson = CreateArrayProList(p);
-            return CreateDictionaryWithList(fJson, pJson);
-        }
-        private List<PatientJson> CreatePatientList(List<Patient> patientJson)
-        {
-            List<PatientJson> f = new List<PatientJson>();
+            List<PatientXML> f = new List<PatientXML>();
             foreach (var pJson in patientJson)
             {
-                PatientJson p = CreatePatient(pJson.UserId, pJson.FirstName, pJson.LastName, pJson.Birthdate, pJson.Adress, pJson.City, pJson.Postcode, pJson.Pseudo, pJson.Password, pJson.PhoneNumber, pJson.Photo);
+                PatientXML p = CreatePatient(pJson.UserId, pJson.FirstName, pJson.LastName, pJson.Birthdate, pJson.Adress, pJson.City, pJson.Postcode, pJson.Pseudo, pJson.Password, pJson.PhoneNumber, pJson.Photo);
                 f.Add(p);
             }
             return f;
         }
-        private List<ProfessionalJson[]> CreateArrayProList(List<Professional[]> proJson)
+        private List<ProfessionalXML[]> CreateArrayProList(List<Professional[]> proJson)
         {
-            List<ProfessionalJson[]> f = new List<ProfessionalJson[]>();
+            List<ProfessionalXML[]> f = new List<ProfessionalXML[]>();
             foreach (var pJson in proJson)
             {
-                ProfessionalJson[] p = CreateProArray(pJson);
+                ProfessionalXML[] p = CreateProArray(pJson);
 				f.Add (p);
             }
             return f;
         }
-        private ProfessionalJson[] CreateProArray(Professional[] proJson)
+        private ProfessionalXML[] CreateProArray(Professional[] proJson)
         {
-            ProfessionalJson[] p = new ProfessionalJson[10];
+            ProfessionalXML[] p = new ProfessionalXML[10];
             for (int i = 0; i < proJson.Length; i++)
             {
                 if (proJson[i] != null)
                 {
-                    ProfessionalJson pro = CreatePro(proJson[i].UserId, proJson[i].FirstName, proJson[i].LastName, proJson[i].Birthdate, proJson[i].Adress, proJson[i].City, proJson[i].Postcode, proJson[i].Pseudo, proJson[i].Password, proJson[i].PhoneNumber, proJson[i].Photo, proJson[i].Role);
+                    ProfessionalXML pro = CreatePro(proJson[i].UserId, proJson[i].FirstName, proJson[i].LastName, proJson[i].Birthdate, proJson[i].Adress, proJson[i].City, proJson[i].Postcode, proJson[i].Pseudo, proJson[i].Password, proJson[i].PhoneNumber, proJson[i].Photo, proJson[i].Role);
                     p.SetValue(pro, i);
                 }
                 else
@@ -134,36 +123,36 @@ namespace ITI.Archi_Vite.Forms
             }
             return p;
         }
-        private Dictionary<PatientJson, ProfessionalJson[]> CreateDictionaryWithList(List<PatientJson> p, List<ProfessionalJson[]> pro)
+        private Dictionary<PatientXML, ProfessionalXML[]> CreateDictionaryWithList(List<PatientXML> p, List<ProfessionalXML[]> pro)
         {
-            Dictionary<PatientJson, ProfessionalJson[]> dico = new Dictionary<PatientJson, ProfessionalJson[]>();
+            Dictionary<PatientXML, ProfessionalXML[]> dico = new Dictionary<PatientXML, ProfessionalXML[]>();
             for (int i = 0; i < p.Count; i++)
             {
                 dico.Add(p[i], pro[i]);
             }
             return dico;
         }
-        private DocumentSerializableJson CreateDocumentSerializable(DocumentSerializable json)
+        private DocumentSerializableXML CreateDocumentSerializable(DocumentSerializable json)
         {
-            List<MessageJson> m = CreateMessageList(json.Messages);
-            List<PrescriptionJson> p = CreatePrescriptionList(json.Prescriptions);
-            DocumentSerializableJson d = new DocumentSerializableJson();
+            List<MessageXML> m = CreateMessageList(json.Messages);
+            List<PrescriptionXML> p = CreatePrescriptionList(json.Prescriptions);
+            DocumentSerializableXML d = new DocumentSerializableXML();
             d.Message = m;
             d.Prescription = p;
             return d;
         }
-        private List<MessageJson> CreateMessageList(List<Message> mJson)
+        private List<MessageXML> CreateMessageList(List<Message> mJson)
         {
-            List<MessageJson> m = new List<MessageJson>();
+            List<MessageXML> m = new List<MessageXML>();
             foreach (var message in mJson)
             {
                 m.Add(CreateMessage(message));
             }
             return m;
         }
-        private List<PrescriptionJson> CreatePrescriptionList(List<Prescription> mJson)
+        private List<PrescriptionXML> CreatePrescriptionList(List<Prescription> mJson)
         {
-            List<PrescriptionJson> m = new List<PrescriptionJson>();
+            List<PrescriptionXML> m = new List<PrescriptionXML>();
             foreach (var message in mJson)
             {
                 m.Add(CreatePrescription(message));
@@ -171,12 +160,12 @@ namespace ITI.Archi_Vite.Forms
             return m;
         }
 
-        private PrescriptionJson CreatePrescription(Prescription mJson)
+        private PrescriptionXML CreatePrescription(Prescription mJson)
         {
-            UserJson p = CreateUser(mJson.Sender.UserId, mJson.Sender.FirstName, mJson.Sender.LastName, mJson.Sender.Birthdate, mJson.Sender.Adress, mJson.Sender.City, mJson.Sender.Postcode, mJson.Sender.Pseudo, mJson.Sender.Password, mJson.Sender.PhoneNumber, mJson.Sender.Photo);
-            PatientJson pa = CreatePatient(mJson.Patient.UserId, mJson.Patient.FirstName, mJson.Patient.LastName, mJson.Patient.Birthdate, mJson.Patient.Adress, mJson.Patient.City, mJson.Patient.Postcode, mJson.Patient.Pseudo, mJson.Patient.Password, mJson.Patient.PhoneNumber, mJson.Patient.Photo);
-            List<ProfessionalJson> pro = CreateListPro(mJson.Recievers);
-            PrescriptionJson m = new PrescriptionJson();
+            UserXML p = CreateUser(mJson.Sender.UserId, mJson.Sender.FirstName, mJson.Sender.LastName, mJson.Sender.Birthdate, mJson.Sender.Adress, mJson.Sender.City, mJson.Sender.Postcode, mJson.Sender.Pseudo, mJson.Sender.Password, mJson.Sender.PhoneNumber, mJson.Sender.Photo);
+            PatientXML pa = CreatePatient(mJson.Patient.UserId, mJson.Patient.FirstName, mJson.Patient.LastName, mJson.Patient.Birthdate, mJson.Patient.Adress, mJson.Patient.City, mJson.Patient.Postcode, mJson.Patient.Pseudo, mJson.Patient.Password, mJson.Patient.PhoneNumber, mJson.Patient.Photo);
+            List<ProfessionalXML> pro = CreateListPro(mJson.Recievers);
+            PrescriptionXML m = new PrescriptionXML();
             m.DocPath = mJson.DocPath;
             m.Data = mJson.Date;
             m.Patient = pa;
@@ -186,12 +175,12 @@ namespace ITI.Archi_Vite.Forms
             return m;
         }
 
-        private MessageJson CreateMessage(Message mJson)
+        private MessageXML CreateMessage(Message mJson)
         {
-            UserJson p = CreateUser(mJson.Sender.UserId, mJson.Sender.FirstName, mJson.Sender.LastName, mJson.Sender.Birthdate, mJson.Sender.Adress, mJson.Sender.City, mJson.Sender.Postcode, mJson.Sender.Pseudo, mJson.Sender.Password, mJson.Sender.PhoneNumber, mJson.Sender.Photo);
-            PatientJson pa = CreatePatient(mJson.Patient.UserId, mJson.Patient.FirstName, mJson.Patient.LastName, mJson.Patient.Birthdate, mJson.Patient.Adress, mJson.Patient.City, mJson.Patient.Postcode, mJson.Patient.Pseudo, mJson.Patient.Password, mJson.Patient.PhoneNumber, mJson.Patient.Photo);
-            List<ProfessionalJson> pro = CreateListPro(mJson.Recievers);
-            MessageJson m = new MessageJson();
+            UserXML p = CreateUser(mJson.Sender.UserId, mJson.Sender.FirstName, mJson.Sender.LastName, mJson.Sender.Birthdate, mJson.Sender.Adress, mJson.Sender.City, mJson.Sender.Postcode, mJson.Sender.Pseudo, mJson.Sender.Password, mJson.Sender.PhoneNumber, mJson.Sender.Photo);
+            PatientXML pa = CreatePatient(mJson.Patient.UserId, mJson.Patient.FirstName, mJson.Patient.LastName, mJson.Patient.Birthdate, mJson.Patient.Adress, mJson.Patient.City, mJson.Patient.Postcode, mJson.Patient.Pseudo, mJson.Patient.Password, mJson.Patient.PhoneNumber, mJson.Patient.Photo);
+            List<ProfessionalXML> pro = CreateListPro(mJson.Recievers);
+            MessageXML m = new MessageXML();
             m.Contents = mJson.Contents;
             m.Data = mJson.Date;
             m.Patient = pa;
@@ -201,12 +190,12 @@ namespace ITI.Archi_Vite.Forms
             return m;
 
         }
-        private List<ProfessionalJson> CreateListPro(List<Professional> pJson)
+        private List<ProfessionalXML> CreateListPro(List<Professional> pJson)
         {
-            List<ProfessionalJson> p = new List<ProfessionalJson>();
+            List<ProfessionalXML> p = new List<ProfessionalXML>();
             foreach (var pro in pJson)
             {
-                ProfessionalJson pr = CreatePro(pro.UserId, pro.FirstName, pro.LastName, pro.Birthdate, pro.Adress, pro.City, pro.Postcode, pro.Pseudo, pro.Password, pro.PhoneNumber, pro.Photo, pro.Role);
+                ProfessionalXML pr = CreatePro(pro.UserId, pro.FirstName, pro.LastName, pro.Birthdate, pro.Adress, pro.City, pro.Postcode, pro.Pseudo, pro.Password, pro.PhoneNumber, pro.Photo, pro.Role);
                 p.Add(pr);
             }
             return p;
