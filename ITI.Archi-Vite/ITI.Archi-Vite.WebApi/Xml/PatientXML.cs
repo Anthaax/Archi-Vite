@@ -9,6 +9,7 @@ using Newtonsoft.Json.Linq;
 
 namespace ITI.Archi_Vite.WebApi
 {
+    [Serializable]
     public class PatientXML : UserXML
     {
         public int PatientId { get; set; }

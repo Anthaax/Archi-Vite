@@ -22,7 +22,6 @@ namespace ITI.Archi_Vite.Forms
 		Data _dataForUser;
         DataJsonConvertor _jsonCovertor = new DataJsonConvertor();
         DataConvertor _convertor = new DataConvertor();
-        FromXML _xml = new FromXML();
         public ConnectionPage()
         {
 			AutoConnection();
@@ -94,13 +93,13 @@ namespace ITI.Archi_Vite.Forms
             }
         }
 
-        private DataXML XmlDeseriliaze(string s)
+        private Data XmlDeseriliaze(string s)
         {
             DataXML data = new DataXML();
             XmlSerializer ser = new XmlSerializer(data.GetType());
             TextReader text = new StringReader(s);
             data = (DataXML)ser.Deserialize(text);
-            return _xml.FromXml(data);
+            return _jsonCovertor.DataJsonToData(data);
         }
 
         private void EntryTextChanged(object sender, TextChangedEventArgs e)
@@ -119,8 +118,8 @@ namespace ITI.Archi_Vite.Forms
                 client.Timeout = new TimeSpan(0, 0, 20);
                 var response = await client.GetAsync("api/Users/?pseudo=GuillaumeF&password=GuillaumeF");
                 string s = await response.Content.ReadAsStringAsync();
-                DataXML u = XmlDeseriliaze(s);
-                _dataForUser = _jsonCovertor.DataJsonToData(u);
+                Data u = XmlDeseriliaze(s);
+                _dataForUser = u;
             }
         }
 		private bool CanPutUserData(string pseudo, string password)

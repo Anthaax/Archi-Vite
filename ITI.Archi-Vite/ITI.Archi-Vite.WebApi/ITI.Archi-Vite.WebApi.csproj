@@ -125,14 +125,16 @@
     </Compile>
     <Compile Include="Services\UserService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Xml\Dictionary.cs" />
     <Compile Include="Xml\FromXml.cs" />
+    <Compile Include="Xml\PatientXML.cs" />
+    <Compile Include="Xml\ProfessionalXML.cs" />
     <Compile Include="Xml\ToXml.cs" />
     <Compile Include="Xml\DataXML.cs" />
     <Compile Include="Xml\DocumentSerializableXML.cs" />
     <Compile Include="Xml\DocumentsXML.cs" />
     <Compile Include="Xml\MessageXML.cs" />
     <Compile Include="Xml\PrescriptionXML.cs" />
+    <Compile Include="Xml\UserXML.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

@@ -51,14 +51,14 @@
     <Compile Include="Data\Professional.cs" />
     <Compile Include="Data\User.cs" />
     <Compile Include="Interface\ISaveAndLoad.cs" />
-    <Compile Include="Json\DataJson.cs" />
-    <Compile Include="Json\DocumentsJson.cs" />
-    <Compile Include="Json\DocumentSerializableJson.cs" />
-    <Compile Include="Json\MessageJson.cs" />
-    <Compile Include="Json\PatientJson.cs" />
-    <Compile Include="Json\ProfessionalJson.cs" />
-    <Compile Include="Json\PrescriptionJson.cs" />
-    <Compile Include="Json\UserJson.cs" />
+    <Compile Include="Json\DataXML.cs" />
+    <Compile Include="Json\DocumentsXML.cs" />
+    <Compile Include="Json\DocumentSerializableXML.cs" />
+    <Compile Include="Json\MessageXML.cs" />
+    <Compile Include="Json\PatientXML.cs" />
+    <Compile Include="Json\ProfessionalXML.cs" />
+    <Compile Include="Json\PrescriptionXML.cs" />
+    <Compile Include="Json\UserXML.cs" />
     <Compile Include="Page\AddReciverPage.cs" />
     <Compile Include="Page\ConnectionPage.cs" />
     <Compile Include="Page\CreateMessage.cs" />
@@ -77,8 +77,6 @@
     <Compile Include="Page\FollowPatientPage.cs" />
     <Compile Include="ViewModel\CameraViewModel.cs" />
     <Compile Include="View\MultibleButtonView.cs" />
-    <Compile Include="XML\DataXml.cs" />
-    <Compile Include="XML\FromXML.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -135,5 +133,7 @@
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="XML\" />
+  </ItemGroup>
 </Project>
