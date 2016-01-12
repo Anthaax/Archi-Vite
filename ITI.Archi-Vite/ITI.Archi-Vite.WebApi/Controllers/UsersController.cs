@@ -32,13 +32,13 @@ namespace ITI.Archi_Vite.WebApi.Controllers
         [ResponseType(typeof(User))]
         public async Task<IHttpActionResult> GetUser(int id)
         {
-            User swag = Do.getUser(id);
-            if (swag == null)
+            User user = Do.getUser(id);
+            if (user == null)
             {
                 return NotFound();
             }
 
-            return Ok(swag);
+            return Ok(user);
         }
 
         [ResponseType(typeof(string))]
