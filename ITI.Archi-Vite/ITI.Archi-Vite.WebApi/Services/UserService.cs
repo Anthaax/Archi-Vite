@@ -6,6 +6,7 @@ using ITI.Archi_Vite.DataBase;
 using ITI.Archi_Vite.Core;
 using System.Xml.Serialization;
 using System.IO;
+using Newtonsoft.Json;
 
 namespace ITI.Archi_Vite.WebApi
 {
@@ -67,13 +68,14 @@ namespace ITI.Archi_Vite.WebApi
             try
             {
                 DataXML d = _tXML.ToXML(data);
-                XmlSerializer ser = new XmlSerializer(d.GetType());
-                using (StringWriter textWriter = new StringWriter())
-                {
-                    ser.Serialize(textWriter, d);
-                    string s = textWriter.ToString();
-                    return s;
-                }
+                string s = JsonConvert.SerializeObject(d);
+                //using (StringWriter textWriter = new StringWriter())
+                //{
+                //    ser.Serialize(textWriter, d);
+                //    string s = textWriter.ToString();
+                //    return s;
+                //}
+                return s;
             }
             catch (Exception e)
             {

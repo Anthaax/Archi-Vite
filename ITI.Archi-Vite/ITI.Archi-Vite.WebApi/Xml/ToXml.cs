@@ -109,7 +109,10 @@ namespace ITI.Archi_Vite.WebApi
             ProfessionalXML[] p = new ProfessionalXML[pro.Length];
             for (int i = 0; i < pro.Length; i++)
             {
-                p.SetValue(CreatePro(pro[i]), i);
+                if (pro[i] == null)
+                    p.SetValue(null, i);
+                else
+                    p.SetValue(CreatePro(pro[i]), i);
             }
             return p;
         }

@@ -51,14 +51,14 @@
     <Compile Include="Data\Professional.cs" />
     <Compile Include="Data\User.cs" />
     <Compile Include="Interface\ISaveAndLoad.cs" />
-    <Compile Include="Json\DataXML.cs" />
-    <Compile Include="Json\DocumentsXML.cs" />
-    <Compile Include="Json\DocumentSerializableXML.cs" />
-    <Compile Include="Json\MessageXML.cs" />
-    <Compile Include="Json\PatientXML.cs" />
-    <Compile Include="Json\ProfessionalXML.cs" />
-    <Compile Include="Json\PrescriptionXML.cs" />
-    <Compile Include="Json\UserXML.cs" />
+    <Compile Include="XML\DataXML.cs" />
+    <Compile Include="XML\DocumentsXML.cs" />
+    <Compile Include="XML\DocumentSerializableXML.cs" />
+    <Compile Include="XML\MessageXML.cs" />
+    <Compile Include="XML\PatientXML.cs" />
+    <Compile Include="XML\ProfessionalXML.cs" />
+    <Compile Include="XML\PrescriptionXML.cs" />
+    <Compile Include="XML\UserXML.cs" />
     <Compile Include="Page\AddReciverPage.cs" />
     <Compile Include="Page\ConnectionPage.cs" />
     <Compile Include="Page\CreateMessage.cs" />
@@ -133,7 +133,5 @@
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="XML\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>

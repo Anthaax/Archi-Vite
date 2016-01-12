@@ -96,9 +96,7 @@ namespace ITI.Archi_Vite.Forms
         private Data XmlDeseriliaze(string s)
         {
             DataXML data = new DataXML();
-            XmlSerializer ser = new XmlSerializer(data.GetType());
-            TextReader text = new StringReader(s);
-            data = (DataXML)ser.Deserialize(text);
+            data = JsonConvert.DeserializeObject<DataXML>(s);
             return _jsonCovertor.DataJsonToData(data);
         }
 
@@ -112,15 +110,14 @@ namespace ITI.Archi_Vite.Forms
         }
         private async void ConnectionGestion(string pseudo, string password)
         {
-            using (var client = new HttpClient(new NativeMessageHandler()))
-            {
-                client.BaseAddress = new Uri("http://10.8.110.152:8080/");
-                client.Timeout = new TimeSpan(0, 0, 20);
-                var response = await client.GetAsync("api/Users/?pseudo=GuillaumeF&password=GuillaumeF");
-                string s = await response.Content.ReadAsStringAsync();
-                Data u = XmlDeseriliaze(s);
-                _dataForUser = u;
-            }
+            var client = new HttpClient(new NativeMessageHandler());
+            client.BaseAddress = new Uri("http://10.8.110.152:8080/");
+            client.Timeout = new TimeSpan(0, 0, 50);
+            client.MaxResponseContentBufferSize = Int64.MaxValue;
+            var response = await client.GetAsync("api/Users/?pseudo=GuillaumeF&password=GuillaumeF");
+            string s = await response.Content.ReadAsStringAsync();
+            Data u = XmlDeseriliaze(s);
+            _dataForUser = u;
         }
 		private bool CanPutUserData(string pseudo, string password)
 		{

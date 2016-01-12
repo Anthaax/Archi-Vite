@@ -49,7 +49,8 @@ namespace ITI.Archi_Vite.WebApi.Controllers
             {
                 return NotFound();
             }
-            return Ok(Do.SeriliazeData(data));
+            string s = Do.SeriliazeData(data);
+            return Ok(s);
         }
 
         // POST: api/Message
