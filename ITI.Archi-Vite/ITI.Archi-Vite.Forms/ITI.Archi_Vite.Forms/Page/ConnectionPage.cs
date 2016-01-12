@@ -64,8 +64,8 @@ namespace ITI.Archi_Vite.Forms
             {
                 if (pseudo.Text != null && password.Text != null)
                 {
+                    _dataForUser = PutUserData(pseudo.Text, password.Text);
                     //ConnectionGestion(pseudo.Text, password.Text);
-                    LoadUserData();
 					SaveUserData();
 					await Navigation.PushAsync(new ProfilPage(_dataForUser, _dataForUser.User));
                 }
@@ -123,21 +123,9 @@ namespace ITI.Archi_Vite.Forms
                 _dataForUser = u;
             }
         }
-		private bool CanPutUserData(string pseudo, string password)
+		private Data PutUserData(string pseudo, string password)
 		{
-			User[] users = new User[6];
-			User u0 = new User (1, "Antoine", "Raquillet", DateTime.Now, "72 avenue maurice thorez", "Ivry-sur-Seine", 12345, "AntoineR", "AntoineR",0616066606, "http://new.intechinfo.fr/wp-content/uploads/2015/10/RAQUILLET-Antoine.jpg");
-			User u1 = new User(2, "Simon", "Favraud", DateTime.Now, "72 avenue maurice thorez", "Ivry-sur-Seine", 12345, "SimonF", "SimonF", 0626066606, "http://i.imgur.com/9cSffeM.png");
-			User u2 = new User (3, "Clement", "Rousseau", DateTime.Now, "72 avenue maurice thorez", "Ivry-sur-Seine", 12345, "ClementR", "ClementR",0636066606, "http://i.imgur.com/silO1AR.png");
-			User u3 = new User (4, "Olivier", "Spinelli", DateTime.Now, "72 avenue maurice thorez", "Ivry-sur-Seine", 12345, "OlivierS", "OlivierS",0646066606, "http://new.intechinfo.fr/wp-content/uploads/2015/10/olivier-spinelli_portrait.png");
-			User u4 = new User (5, "Guillaume", "Fimes", DateTime.Now, "72 avenue maurice thorez", "Ivry-sur-Seine", 12345, "GuillaumeF", "GuillaumeF", 0656066606, "http://i.imgur.com/GWji92h.png");
-			User u5 = new User (6, "Maxime", "De Vogelas", DateTime.Now, "72 avenue maurice thorez", "Ivry-sur-Seine", 12345, "MaximeD", "MaximeD", 0666066606, "http://i.imgur.com/3yZF0Lz.png");
-			users[0] = u0;
-			users[1] = u1;
-			users[2] = u2;
-			users[3] = u3;
-			users[4] = u4;
-			users[5] = u5;
+            User[] users = AllUsers();
 
 			for (int i=0; i < users.Length; i++)
 			{
@@ -145,34 +133,33 @@ namespace ITI.Archi_Vite.Forms
 					_user = users[i];
 			}
 			if (_user == null)
-				return false;
+				return null;
             List<Message> m = new List<Message>();
             List<Prescription> p = new List<Prescription>();
             DocumentSerializable doc = new DocumentSerializable(m,p);
-            if(_user != u5)
+            if(_user != users[5])
             {
-                foreach (var message in CreateSerializableDocument(CreateFollowerDictionnary(users, _user), u4).Messages)
+                foreach (var message in CreateSerializableDocument(CreateFollowerDictionnary(users, _user), users[4]).Messages)
                 {
                     doc.Messages.Add(message);
                 }
-                foreach (var prescription in CreateSerializableDocument(CreateFollowerDictionnary(users, _user), u4).Prescriptions)
+                foreach (var prescription in CreateSerializableDocument(CreateFollowerDictionnary(users, _user), users[4]).Prescriptions)
                 {
                     doc.Prescriptions.Add(prescription);
                 }
             }
-            if (_user != u4 && _user != u3)
+            if (_user != users[4] && _user != users[3])
             {
-                foreach (var message in CreateSerializableDocument(CreateFollowerDictionnary(users, _user), u5).Messages)
+                foreach (var message in CreateSerializableDocument(CreateFollowerDictionnary(users, _user), users[5]).Messages)
                 {
                     doc.Messages.Add(message);
                 }
-                foreach (var prescription in CreateSerializableDocument(CreateFollowerDictionnary(users, _user), u5).Prescriptions)
+                foreach (var prescription in CreateSerializableDocument(CreateFollowerDictionnary(users, _user), users[5]).Prescriptions)
                 {
                     doc.Prescriptions.Add(prescription);
                 }
             }
-            _dataForUser = new Data(_user, CreateFollowerDictionnary(users, _user), doc);
-            return true;
+            return new Data(_user, CreateFollowerDictionnary(users, _user), doc);
 		}
 		private Dictionary<Patient, Professional[]> CreateFollowerDictionnary(User[] users, User curentUser)
 		{
@@ -239,8 +226,39 @@ namespace ITI.Archi_Vite.Forms
         public void SaveUserData()
         {
             DataXML xml = _convertor.DataToDataJson(_dataForUser);
-            string fullName = _dataForUser.User.FirstName + "$" + _dataForUser.User.LastName;
-            DependencyService.Get<ISaveLoadAndDelete>().SaveData(fullName + ".txt", xml);
+            DependencyService.Get<ISaveLoadAndDelete>().SaveData("user.txt", xml);
+            User[] u = AllUsers();
+            foreach (var user in u)
+            {
+                SaveDataOneUser(user.Pseudo, user.Password);
+            }
+        }
+
+        private User[] AllUsers()
+        {
+            User[] users = new User[6];
+            User u0 = new User(1, "Antoine", "Raquillet", DateTime.Now, "72 avenue maurice thorez", "Ivry-sur-Seine", 12345, "AntoineR", "AntoineR", 0616066606, "http://new.intechinfo.fr/wp-content/uploads/2015/10/RAQUILLET-Antoine.jpg");
+            User u1 = new User(2, "Simon", "Favraud", DateTime.Now, "72 avenue maurice thorez", "Ivry-sur-Seine", 12345, "SimonF", "SimonF", 0626066606, "http://i.imgur.com/9cSffeM.png");
+            User u2 = new User(3, "Clement", "Rousseau", DateTime.Now, "72 avenue maurice thorez", "Ivry-sur-Seine", 12345, "ClementR", "ClementR", 0636066606, "http://i.imgur.com/silO1AR.png");
+            User u3 = new User(4, "Olivier", "Spinelli", DateTime.Now, "72 avenue maurice thorez", "Ivry-sur-Seine", 12345, "OlivierS", "OlivierS", 0646066606, "http://new.intechinfo.fr/wp-content/uploads/2015/10/olivier-spinelli_portrait.png");
+            User u4 = new User(5, "Guillaume", "Fimes", DateTime.Now, "72 avenue maurice thorez", "Ivry-sur-Seine", 12345, "GuillaumeF", "GuillaumeF", 0656066606, "http://i.imgur.com/GWji92h.png");
+            User u5 = new User(6, "Maxime", "De Vogelas", DateTime.Now, "72 avenue maurice thorez", "Ivry-sur-Seine", 12345, "MaximeD", "MaximeD", 0666066606, "http://i.imgur.com/3yZF0Lz.png");
+            users[0] = u0;
+            users[1] = u1;
+            users[2] = u2;
+            users[3] = u3;
+            users[4] = u4;
+            users[5] = u5;
+            return users;
+        }
+
+        private void SaveDataOneUser(string pseudo, string password)
+        {
+            Data d = PutUserData(pseudo, password);
+            string s = d.User.FirstName + "$" + d.User.LastName;
+            DataXML xml = _convertor.DataToDataJson(d);
+            DependencyService.Get<ISaveLoadAndDelete>().SaveData(s + ".txt", xml);
+
         }
 
         public bool LoadUserData()
