@@ -20,7 +20,7 @@ namespace ITI.Archi_Vite.Forms
     {
 		User _user;
 		Data _dataForUser;
-        DataJsonConvertor _jsonCovertor = new DataJsonConvertor();
+        DataXMLConvertor _xmlCovertor = new DataXMLConvertor();
         DataConvertor _convertor = new DataConvertor();
         public ConnectionPage()
         {
@@ -64,9 +64,10 @@ namespace ITI.Archi_Vite.Forms
             {
                 if (pseudo.Text != null && password.Text != null)
                 {
-                    ConnectionGestion(pseudo.Text, password.Text);
-						SaveUserData();
-						await Navigation.PushAsync(new ProfilPage(_dataForUser, _dataForUser.User));
+                    //ConnectionGestion(pseudo.Text, password.Text);
+                    LoadUserData();
+					SaveUserData();
+					await Navigation.PushAsync(new ProfilPage(_dataForUser, _dataForUser.User));
                 }
                 else await DisplayAlert ("Error", "Les champ doivent etre valides", "Ok");
 
@@ -99,7 +100,7 @@ namespace ITI.Archi_Vite.Forms
             XmlSerializer ser = new XmlSerializer(data.GetType());
             TextReader text = new StringReader(s);
             data = (DataXML)ser.Deserialize(text);
-            return _jsonCovertor.DataJsonToData(data);
+            return _xmlCovertor.DataXMLToData(data);
         }
 
         private void EntryTextChanged(object sender, TextChangedEventArgs e)
@@ -237,17 +238,18 @@ namespace ITI.Archi_Vite.Forms
 
         public void SaveUserData()
         {
-            DataXML json = _convertor.DataToDataJson(_dataForUser);
-			DependencyService.Get<ISaveLoadAndDelete>().SaveData("user.txt", json);
+            DataXML xml = _convertor.DataToDataJson(_dataForUser);
+            string fullName = _dataForUser.User.FirstName + "$" + _dataForUser.User.LastName;
+            DependencyService.Get<ISaveLoadAndDelete>().SaveData(fullName + ".txt", xml);
         }
 
         public bool LoadUserData()
         {
             try
             {
-				DataXML json = DependencyService.Get<ISaveLoadAndDelete>().LoadData("user.txt");
-				if(json != null)
-                	_dataForUser = _jsonCovertor.DataJsonToData(json);
+                DataXML xml = DependencyService.Get<ISaveLoadAndDelete>().LoadData("user.txt");
+				if(xml != null)
+                	_dataForUser = _xmlCovertor.DataXMLToData(xml);
 				else return false;
             }
             catch (IOException)

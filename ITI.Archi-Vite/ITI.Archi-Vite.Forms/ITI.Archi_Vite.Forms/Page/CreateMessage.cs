@@ -16,6 +16,7 @@ namespace ITI.Archi_Vite.Forms
         Entry _title;
         Editor _content;
         DataConvertor _convertor = new DataConvertor();
+        DataXMLConvertor _xmlConvertor = new DataXMLConvertor();
         public CreateMessage(Data userData, Patient patient, List<Professional> recievers, string title, string content)
         {
             _userData = userData;
@@ -188,12 +189,37 @@ namespace ITI.Archi_Vite.Forms
         }
         public void SaveUserData()
         {
-            DataXML json = _convertor.DataToDataJson(_userData);
-			DependencyService.Get<ISaveLoadAndDelete>().SaveData("user.txt", json);
+            DataXML xml = _convertor.DataToDataJson(_userData);
+            string fullName = _userData.User.FirstName + "$" + _userData.User.LastName;
+            DependencyService.Get<ISaveLoadAndDelete>().SaveData("user.txt", xml);
+            DependencyService.Get<ISaveLoadAndDelete>().SaveData(fullName + ".txt", xml);
         }
         private async void ProfilButtonClicked(object sender, EventArgs e)
         {
             await Navigation.PushAsync(new ProfilPage(_userData, _userData.User));
+        }
+        public void SaveForAll()
+        {
+            foreach (var pro in _recievers)
+            {
+                string s = pro.FirstName + "$" + pro.LastName;
+                DataXML xml = DependencyService.Get<ISaveLoadAndDelete>().LoadData(s + ".txt");
+                Data d = _xmlConvertor.DataXMLToData(xml);
+                d.Documents.Messages.Add(GetMessage());
+                d.Documents.Messages.Add(GetMessage());
+                xml = _convertor.DataToDataJson(d);
+                DependencyService.Get<ISaveLoadAndDelete>().SaveData(s + ".txt", xml);
+            }
+            if (_patient.UserId != _userData.User.UserId)
+            {
+                string s = _patient.FirstName + "$" + _patient.LastName;
+                DataXML xml = DependencyService.Get<ISaveLoadAndDelete>().LoadData(s + ".txt");
+                Data d = _xmlConvertor.DataXMLToData(xml);
+                d.Documents.Messages.Add(GetMessage());
+                d.Documents.Messages.Add(GetMessage());
+                xml = _convertor.DataToDataJson(d);
+                DependencyService.Get<ISaveLoadAndDelete>().SaveData(s + ".txt", xml);
+            }
         }
     }
 }

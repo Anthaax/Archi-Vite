@@ -257,8 +257,10 @@ namespace ITI.Archi_Vite.Forms
         }
         public void SaveUserData()
         {
-            DataXML json = _convertor.DataToDataJson(_userData);
-			DependencyService.Get<ISaveLoadAndDelete>().SaveData("user.txt", json);
+            string fullName = _userData.User.FirstName + "$" + _userData.User.LastName;
+            DataXML xml = _convertor.DataToDataJson(_userData);
+            DependencyService.Get<ISaveLoadAndDelete>().SaveData(fullName + ".txt", xml);
+            DependencyService.Get<ISaveLoadAndDelete>().SaveData("user.txt", xml);
         }
         private async void ProfilButtonClicked(object sender, EventArgs e)
         {

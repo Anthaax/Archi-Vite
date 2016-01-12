@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace ITI.Archi_Vite.Forms
 {
-    public class DataJsonConvertor
+    public class DataXMLConvertor
     {
-        public Data DataJsonToData(DataXML userDataXML)
+        public Data DataXMLToData(DataXML userDataXML)
         {
             User curentUser = CreateUser(userDataXML.User);
             Dictionary<Patient, Professional[]> follow = CreateDictionary(userDataXML.Patients, userDataXML.Professionals);
