@@ -46,7 +46,6 @@ namespace ITI.Archi_Vite.Forms
                     lastName.FontSize = 40;
 
                     Image patientImage = new Image();
-					patientImage.SetBinding(Image.SourceProperty, "Photo");
                     return new ViewCell
                     {
                         View = new StackLayout
