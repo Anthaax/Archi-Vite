@@ -74,7 +74,7 @@ namespace ITI.Archi_Vite.DataBase.Test
                 }
                 dm.CreateMessage(receivers, context.SelectRequest.SelectUser("ClementR", "ClementR"), "Coucou", "J'ai un pb", context.SelectRequest.SelectPatient("GuillaumeF", "GuillaumeF"));
                 DocumentSerializable document = dm.SeeDocument(context.SelectRequest.SelectProfessional(context.SelectRequest.SelectProfessional("ClementR", "ClementR").ProfessionalId), context.SelectRequest.SelectPatient("GuillaumeF", "GuillaumeF"));
-                Assert.AreEqual(document.Messages.Count, 1);
+                Assert.AreEqual(document.Messages.Count, 2);
 
                 dm.DeleteDoc(document.Messages.First(), context.SelectRequest.SelectPatient("GuillaumeF", "GuillaumeF").PatientId+"$"+ context.SelectRequest.SelectProfessional("ClementR", "ClementR").ProfessionalId);
                 DocumentSerializable documents1 = dm.SeeDocument(context.SelectRequest.SelectProfessional(context.SelectRequest.SelectProfessional("ClementR", "ClementR").ProfessionalId), context.SelectRequest.SelectPatient("GuillaumeF", "GuillaumeF"));
@@ -150,7 +150,7 @@ namespace ITI.Archi_Vite.DataBase.Test
                 PhoneNumber = 0606066606,
                 Pseudo = "AntoineR",
                 Password = "AntoineR",
-                Photo = "yolo"
+                Photo ="RAQUILLET-Antoine.png"
             };
             User u1 = new User()
             {
@@ -163,7 +163,7 @@ namespace ITI.Archi_Vite.DataBase.Test
                 PhoneNumber = 0606066606,
                 Pseudo = "SimonF",
                 Password = "SimonF",
-                Photo = "yolo"
+                Photo = "9cSffeM.png"
             };
             User u2 = new User()
             {
@@ -176,7 +176,7 @@ namespace ITI.Archi_Vite.DataBase.Test
                 PhoneNumber = 0606066606,
                 Pseudo = "ClementR",
                 Password = "ClementR",
-                Photo = "yolo"
+                Photo = "silO1AR.png"
             };
             User u3 = new User()
             {
@@ -189,7 +189,7 @@ namespace ITI.Archi_Vite.DataBase.Test
                 PhoneNumber = 0606066606,
                 Pseudo = "OlivierS",
                 Password = "OlivierS",
-                Photo = "yolo"
+                Photo = "olivier-spinelli_portrait.png"
             };
             User u4 = new User()
             {
@@ -202,7 +202,7 @@ namespace ITI.Archi_Vite.DataBase.Test
                 PhoneNumber = 0606066606,
                 Pseudo = "GuillaumeF",
                 Password = "GuillaumeF",
-                Photo = "yolo"
+                Photo = "GWji92h.png"
             };
             User u5 = new User()
             {
@@ -215,7 +215,7 @@ namespace ITI.Archi_Vite.DataBase.Test
                 PhoneNumber = 0606066606,
                 Pseudo = "MaximeD",
                 Password = "MaximeD",
-                Photo = "yolo"
+                Photo = "3yZF0Lz.png"
             };
             users[0] = u0;
             users[1] = u1;

@@ -9,6 +9,7 @@ namespace ITI.Archi_Vite.WebApi
 {
     public class FromXml
     {
+        ImageManager _img = new ImageManager();
         public Data FromXML(DataXML dataXML)
         {
             Data d = new Data(CreateDocument(dataXML.Documents), CreateDictionary(CreatePatientList(dataXML.Patients), CreateProList(dataXML.Professionals)), CreateUser(dataXML.User));
@@ -26,15 +27,16 @@ namespace ITI.Archi_Vite.WebApi
                 LastName = user.LastName,
                 Password = user.Password,
                 PhoneNumber = user.PhoneNumber,
-                Photo = user.Photo,
+                Photo = user.PhotoPath,
                 Postcode = user.Postcode,
                 Pseudo = user.Pseudo,
                 UserId = user.UserId
             };
+            _img.SaveImage(_img.BytesArrayConverter(user.Photo), user.PhotoPath);
             return u;
         }
 
-        private User CreateUser(int userId, string firstName, string lastName, DateTime birthdate, string adress, string city, int postcode, string pseudo, string password, int phoneNumber, string Photo)
+        private User CreateUser(int userId, string firstName, string lastName, DateTime birthdate, string adress, string city, int postcode, string pseudo, string password, int phoneNumber, string PhotoPath, byte[] Photo)
         {
             User u = new User()
             {
@@ -45,11 +47,13 @@ namespace ITI.Archi_Vite.WebApi
                 LastName = lastName,
                 Password = password,
                 PhoneNumber = phoneNumber,
-                Photo = Photo,
+                Photo = PhotoPath,
                 Postcode = postcode,
                 Pseudo = pseudo,
                 UserId = userId
             };
+            _img.SaveImage(_img.BytesArrayConverter(Photo), PhotoPath);
+
             return u;
         }
 
@@ -86,7 +90,7 @@ namespace ITI.Archi_Vite.WebApi
             {
                 ProfessionalId = professionalXML.ProfessionalId,
                 Role = professionalXML.Role,
-                User = CreateUser(professionalXML.UserId, professionalXML.FirstName, professionalXML.LastName, professionalXML.Birthdate, professionalXML.Adress, professionalXML.City, professionalXML.Postcode, professionalXML.Pseudo, professionalXML.Password, professionalXML.PhoneNumber, professionalXML.Photo)
+                User = CreateUser(professionalXML.UserId, professionalXML.FirstName, professionalXML.LastName, professionalXML.Birthdate, professionalXML.Adress, professionalXML.City, professionalXML.Postcode, professionalXML.Pseudo, professionalXML.Password, professionalXML.PhoneNumber, professionalXML.PhotoPath, professionalXML.Photo)
             };
             return p;
         }
@@ -106,7 +110,7 @@ namespace ITI.Archi_Vite.WebApi
             Patient p = new Patient()
             {
                 PatientId = patient.UserId,
-                User = CreateUser(patient.UserId, patient.FirstName, patient.LastName, patient.Birthdate, patient.Adress, patient.City, patient.Postcode, patient.Pseudo, patient.Password, patient.PhoneNumber, patient.Photo)
+                User = CreateUser(patient.UserId, patient.FirstName, patient.LastName, patient.Birthdate, patient.Adress, patient.City, patient.Postcode, patient.Pseudo, patient.Password, patient.PhoneNumber, patient.PhotoPath, patient.Photo)
             };
             return p;
         }
@@ -140,8 +144,18 @@ namespace ITI.Archi_Vite.WebApi
 
         private Message CreateMessage(MessageXML message)
         {
-            Message m = new Message(message.Title, message.Contents, message.Sender, message.Recievers, message.Patient);
+            Message m = new Message(message.Title, message.Contents, CreateUser(message.Sender), CreateProList(message.Recievers), CreatePatient(message.Patient));
             return m;
+        }
+
+        private List<Professional> CreateProList(List<ProfessionalXML> recievers)
+        {
+            List<Professional> p = new List<Professional>();
+            foreach (var r in recievers)
+            {
+                p.Add(CreatePro(r));
+            }
+            return p;
         }
 
         private List<Prescription> CreatePrescriptionList(List<PrescriptionXML> prescriptions)
@@ -154,9 +168,10 @@ namespace ITI.Archi_Vite.WebApi
             return m;
         }
 
-        private Prescription CreatePrescription(PrescriptionXML prescription)
+        public Prescription CreatePrescription(PrescriptionXML prescription)
         {
-            Prescription p = new Prescription(prescription.Title, prescription.DocPath, prescription.Sender, prescription.Recievers, prescription.Patient);
+            Prescription p = new Prescription(prescription.Title, prescription.DocPath, CreateUser(prescription.Sender), CreateProList(prescription.Recievers), CreatePatient(prescription.Patient));
+            _img.SaveImage(_img.BytesArrayConverter(prescription.Doc), prescription.DocPath);
             return p;
         }
     }

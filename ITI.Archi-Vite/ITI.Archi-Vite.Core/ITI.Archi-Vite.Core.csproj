@@ -38,6 +38,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -53,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Documents.cs" />
+    <Compile Include="ImageManager.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="DocumentManager.cs" />
     <Compile Include="Prescription.cs" />

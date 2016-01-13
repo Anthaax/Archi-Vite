@@ -11,7 +11,7 @@ namespace ITI.Archi_Vite.WebApi
         public static void Register(HttpConfiguration config)
         {
             // Configuration et services API Web
-            
+
             // Itinéraires de l'API Web
             config.MapHttpAttributeRoutes();
 

@@ -19,7 +19,8 @@ namespace ITI.Archi_Vite.Forms
         public string Pseudo { get; set; }
         public string Password { get; set; }
         public int PhoneNumber { get; set; }
-        public string Photo { get; set; }
+        public string PhotoPath { get; set; }
+        public byte[] Photo { get; set; }
 
     }
 }

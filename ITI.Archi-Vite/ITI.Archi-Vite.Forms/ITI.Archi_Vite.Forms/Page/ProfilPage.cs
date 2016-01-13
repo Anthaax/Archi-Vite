@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection.Emit;
 using System.Text;
@@ -64,14 +65,10 @@ namespace ITI.Archi_Vite.Forms
 				FontSize = 30,
 				HorizontalOptions = LayoutOptions.Center
 			};
+            Stream s = new MemoryStream(DependencyService.Get<IBytesSaveAndLoad>().LoadByteArray(_user.Photo));
 			Image logo = new Image
 			{
-				Source = new UriImageSource
-                {
-                    Uri = new Uri(_user.Photo),
-                    CachingEnabled = true,
-                    CacheValidity = new TimeSpan(5, 0, 0, 0)
-                },
+				Source = ImageSource.FromStream(() => s),
                 HorizontalOptions = LayoutOptions.FillAndExpand,
 			};
 
@@ -85,10 +82,11 @@ namespace ITI.Archi_Vite.Forms
 
             Suivis.Clicked += FollowButtonClicked;
 
-            if (PageForPatient())
-                Suivis.Text = "Voir mon Suivi";
-            else if (!UserAccount())
+            if (!UserAccount())
                 Suivis.Text = "Retour à mon suivi";
+            else if(PageForPatient())
+                Suivis.Text = "Voir mon Suivi";
+            
 
             Button document = new Button
 			{
@@ -167,7 +165,7 @@ namespace ITI.Archi_Vite.Forms
 
         private bool UserAccount()
         {
-            if(_userData.User.PhoneNumber == _user.PhoneNumber)
+            if(_userData.User.UserId == _user.UserId)
             {
                 return true;
             }

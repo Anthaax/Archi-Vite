@@ -6,7 +6,6 @@ using ITI.Archi_Vite.DataBase;
 using ITI.Archi_Vite.Core;
 using System.Xml.Serialization;
 using System.IO;
-using Newtonsoft.Json;
 
 namespace ITI.Archi_Vite.WebApi
 {
@@ -39,7 +38,7 @@ namespace ITI.Archi_Vite.WebApi
 
                 doc = new DocumentSerializable(new List<Message>(), new List<Prescription>());
 
-                //                follower.Select(p => follower.Keys).
+                //follower.Select(p => follower.Keys).
 
                 foreach (var patient in follower)
                 {
@@ -62,26 +61,6 @@ namespace ITI.Archi_Vite.WebApi
         public void PostUser(User user)
         {
             _db.UpdateRequest.CheckUserInfo(user);
-        }
-        public string SeriliazeData(Data data)
-        {
-            try
-            {
-                DataXML d = _tXML.ToXML(data);
-                string s = JsonConvert.SerializeObject(d);
-                //using (StringWriter textWriter = new StringWriter())
-                //{
-                //    ser.Serialize(textWriter, d);
-                //    string s = textWriter.ToString();
-                //    return s;
-                //}
-                return s;
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-            
         }
     }
 }

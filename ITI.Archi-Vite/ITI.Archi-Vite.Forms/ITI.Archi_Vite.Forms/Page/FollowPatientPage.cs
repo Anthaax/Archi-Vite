@@ -1,6 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Xamarin.Forms;
+using XLabs.Platform.Services.Media;
 
 namespace ITI.Archi_Vite.Forms
 {
@@ -8,7 +13,8 @@ namespace ITI.Archi_Vite.Forms
 	{
 		Data _userData;
 		Patient _patient;
-        Professional[] professionals;
+        Professional[] _professionals;
+        Guid[] _imageId = new Guid[11];
         public FollowPatientPage (Data userData, Patient patient)
 		{
 			_userData = userData;
@@ -73,10 +79,10 @@ namespace ITI.Archi_Vite.Forms
             AbsoluteLayout.SetLayoutBounds(prescriptionButton, new Rectangle(1, 1, AbsoluteLayout.AutoSize, AbsoluteLayout.AutoSize));
             photoLayout.Children.Add(prescriptionButton);
             prescriptionButton.Clicked += PrescriptionButton_Clicked;
-
+            Stream str = new MemoryStream(DependencyService.Get<IBytesSaveAndLoad>().LoadByteArray(patient.Photo), true);
             Image patientImage = new Image
             {
-                Source = patient.Photo,
+                Source = ImageSource.FromStream(() => str),
 				Scale = 0.75
             };
             AbsoluteLayout.SetLayoutFlags(patientImage, AbsoluteLayoutFlags.PositionProportional);
@@ -84,18 +90,20 @@ namespace ITI.Archi_Vite.Forms
             photoLayout.Children.Add(patientImage);
 
             Image[] proImage = new Image[10];
-            professionals = ProfessionalArray();
+            _professionals = ProfessionalArray();
             double X = 0.5;
             double Y = 0.0;
             for (int i = 0; i < 3; i++)
             {
 				proImage[i] = new Image();
-				if (professionals [i] != null) 
+				if (_professionals [i] != null) 
 				{
-					proImage [i].GestureRecognizers.Add (tappedGesture);
-                    proImage[i].Source = professionals[i].Photo;
+                    Stream s = new MemoryStream(DependencyService.Get<IBytesSaveAndLoad>().LoadByteArray(_professionals[i].Photo), true);
+                    proImage [i].GestureRecognizers.Add (tappedGesture);
+                    proImage[i].Source = ImageSource.FromStream(() => s);
+                    _imageId.SetValue(proImage[i].Id, i);
                 }
-				else
+                else
                 {
                     proImage[i].Source = "http://3.bp.blogspot.com/_9Q_36sq8aPo/S0D4__i1w1I/AAAAAAAAACo/cgLl5IYQtjA/s400/croix.png";
                 }
@@ -111,10 +119,12 @@ namespace ITI.Archi_Vite.Forms
             {
 				X = X + 0.2;
 				proImage[i] = new Image();
-				if (professionals [i] != null) 
+				if (_professionals [i] != null) 
 				{
+                    Stream s = new MemoryStream(DependencyService.Get<IBytesSaveAndLoad>().LoadByteArray(_professionals[i].Photo),true);
 					proImage [i].GestureRecognizers.Add (tappedGesture);
-                    proImage[i].Source = professionals[i].Photo;
+                    proImage[i].Source = ImageSource.FromStream(() => s);
+                    _imageId.SetValue(proImage[i].Id, i);
                 }
                 else
                 {
@@ -131,10 +141,12 @@ namespace ITI.Archi_Vite.Forms
 				X = X + 0.2;
 				Y = Y - 0.2;
 				proImage[i] = new Image();
-				if (professionals [i] != null) 
+				if (_professionals [i] != null) 
 				{
-					proImage [i].GestureRecognizers.Add (tappedGesture);
-                    proImage[i].Source = professionals[i].Photo;
+                    Stream s = new MemoryStream(DependencyService.Get<IBytesSaveAndLoad>().LoadByteArray(_professionals[i].Photo), true);
+                    proImage[i].GestureRecognizers.Add (tappedGesture);
+                    _imageId.SetValue(proImage[i].Id, i);
+                    proImage[i].Source = ImageSource.FromStream(() => s);
                 }
                 else
                 {
@@ -149,10 +161,12 @@ namespace ITI.Archi_Vite.Forms
             {
 				Y = Y - 0.2;
 				proImage[i] = new Image();
-				if (professionals [i] != null) 
+				if (_professionals [i] != null) 
 				{
-					proImage [i].GestureRecognizers.Add (tappedGesture);
-                    proImage[i].Source = professionals[i].Photo;
+                    Stream s = new MemoryStream(DependencyService.Get<IBytesSaveAndLoad>().LoadByteArray(_professionals[i].Photo), true);
+                    proImage[i].GestureRecognizers.Add (tappedGesture);
+                    _imageId.SetValue(proImage[i].Id, i);
+                    proImage[i].Source = ImageSource.FromStream(() => s);
                 }
                 else
                 {
@@ -202,25 +216,17 @@ namespace ITI.Archi_Vite.Forms
             await Navigation.PushAsync(new MessageListPage(_userData));
         }
 
-        private void TappedGesture_Tapped(object sender, EventArgs e)
+        private async void TappedGesture_Tapped(object sender, EventArgs e)
         {
             var image = sender as Image;
             if(image != null )
             {
-				var source = image.Source as UriImageSource;
-				if (source != null) 
-				{
-					for (int i = 0; i < professionals.Length; i++)
-					{
-						if (professionals[i] != null && source.Uri.ToString() == professionals[i].Photo) Navigation.PushAsync(new ProfilPage(_userData, professionals[i]));
-					}
-				}
-                var s = image.Source as FileImageSource;
-                if (s != null)
+                for (int i = 0; i < _professionals.Length; i++)
                 {
-                    for (int i = 0; i < professionals.Length; i++)
+                    if (_imageId[i] == image.Id)
                     {
-                        if (professionals[i] != null && s.File.ToString() == professionals[i].Photo) Navigation.PushAsync(new ProfilPage(_userData, professionals[i]));
+                        if(_professionals[i] != null)
+                            await Navigation.PushAsync(new ProfilPage(_userData, _professionals[i]));
                     }
                 }
             }
@@ -249,6 +255,28 @@ namespace ITI.Archi_Vite.Forms
         private async void ProfilButtonClicked(object sender, EventArgs e)
         {
             await Navigation.PushAsync(new ProfilPage(_userData, _userData.User));
+        }
+        private async Task<Stream> GetStreamFromImageSourceAsync(StreamImageSource imageSource, CancellationToken canellationToken = default(CancellationToken))
+        {
+            if (imageSource.Stream != null)
+            {
+                return await imageSource.Stream(canellationToken);
+            }
+            return null;
+        }
+        public static byte[] ReadFully(Stream input)
+        {
+            StreamReader str = new StreamReader(input);
+            byte[] buffer = new byte[16 * 1024];
+            using (MemoryStream ms = new MemoryStream())
+            {
+                int read;
+                while ((read = input.Read(buffer, 0, buffer.Length)) > 0)
+                {
+                    ms.Write(buffer, 0, read);
+                }
+                return ms.ToArray();
+            }
         }
     }
 }

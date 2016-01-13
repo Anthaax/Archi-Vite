@@ -9,6 +9,7 @@ namespace ITI.Archi_Vite.WebApi
 {
     public class ToXml
     {
+        ImageManager _img = new ImageManager();
         public DataXML ToXML(Data data)
         {
             DataXML d = new DataXML();
@@ -21,6 +22,7 @@ namespace ITI.Archi_Vite.WebApi
 
         private UserXML CreateUser(User user)
         {
+
             UserXML u = new UserXML()
             {
                 Adress = user.Adress,
@@ -30,7 +32,8 @@ namespace ITI.Archi_Vite.WebApi
                 LastName = user.LastName,
                 Password = user.Password,
                 PhoneNumber = user.PhoneNumber,
-                Photo = user.Photo,
+                PhotoPath = user.Photo,
+                Photo = _img.ImageCoverter(_img.LoadImage(user.Photo)),
                 Postcode = user.Postcode,
                 Pseudo = user.Pseudo,
                 UserId = user.UserId
@@ -49,7 +52,8 @@ namespace ITI.Archi_Vite.WebApi
                 LastName = lastName,
                 Password = password,
                 PhoneNumber = phoneNumber,
-                Photo = Photo,
+                PhotoPath = Photo,
+                Photo = _img.ImageCoverter(_img.LoadImage(Photo)),
                 Postcode = postcode,
                 Pseudo = pseudo,
                 UserId = userId
@@ -67,7 +71,8 @@ namespace ITI.Archi_Vite.WebApi
             p.LastName = patient.User.LastName;
             p.Password = patient.User.Password;
             p.PhoneNumber = patient.User.PhoneNumber;
-            p.Photo = patient.User.Photo;
+            p.PhotoPath = patient.User.Photo;
+            p.Photo = _img.ImageCoverter(_img.LoadImage(patient.User.Photo));
             p.Postcode = patient.User.Postcode;
             p.Pseudo = patient.User.Pseudo;
             p.PatientId = patient.User.UserId;
@@ -85,7 +90,8 @@ namespace ITI.Archi_Vite.WebApi
             p.LastName = pro.User.LastName;
             p.Password = pro.User.Password;
             p.PhoneNumber = pro.User.PhoneNumber;
-            p.Photo = pro.User.Photo;
+            p.PhotoPath = pro.User.Photo;
+            p.Photo = _img.ImageCoverter(_img.LoadImage(pro.User.Photo));
             p.Postcode = pro.User.Postcode;
             p.Pseudo = pro.User.Pseudo;
             p.ProfessionalId = pro.User.UserId;
@@ -150,10 +156,11 @@ namespace ITI.Archi_Vite.WebApi
             PrescriptionXML p = new PrescriptionXML()
             {
                 Date = pres.Date,
+                Doc = _img.ImageCoverter(_img.LoadImage(pres.DocPath)),
                 DocPath = pres.DocPath,
-                Patient = pres.Patient,
-                Recievers = pres.Receivers,
-                Sender = pres.Sender,
+                Patient = CreatePatient(pres.Patient),
+                Recievers = CreateProList(pres.Receivers),
+                Sender = CreateUser(pres.Sender),
                 Title = pres.Title
             };
             return p;
@@ -175,12 +182,22 @@ namespace ITI.Archi_Vite.WebApi
             {
                 Contents = message.Contents,
                 Date = message.Date,
-                Patient = message.Patient,
-                Recievers = message.Receivers,
-                Sender = message.Sender,
+                Patient = CreatePatient(message.Patient),
+                Recievers = CreateProList(message.Receivers),
+                Sender = CreateUser(message.Sender),
                 Title = message.Title
             };
             return m;
+        }
+
+        private List<ProfessionalXML> CreateProList(List<Professional> receivers)
+        {
+            List<ProfessionalXML> p = new List<ProfessionalXML>();
+            foreach (var r in receivers)
+            {
+                p.Add(CreatePro(r));
+            }
+            return p;
         }
     }
 }

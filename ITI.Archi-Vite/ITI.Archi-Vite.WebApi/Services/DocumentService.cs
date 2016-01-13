@@ -2,6 +2,7 @@
 using ITI.Archi_Vite.DataBase;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Web;
 
@@ -10,6 +11,7 @@ namespace ITI.Archi_Vite.WebApi.Controllers
     public class DocumentService
     {
         private ArchiViteContext _db = new ArchiViteContext();
+        ImageManager _img = new ImageManager();
         DocumentManager _doc;
 
         public DocumentService()
@@ -44,9 +46,9 @@ namespace ITI.Archi_Vite.WebApi.Controllers
             _doc.DeleteReciever(reciverId, patientid, date);
         }
 
-        public void putPrescription(List<Professional> Receivers, User Sender, Patient Patient, string Title, string DocPath)
+        public void putPrescription(Prescription pres)
         {
-            _doc.CreatePrescription(Receivers, Sender, Patient, Title, DocPath);
+            _doc.CreatePrescription(pres.Receivers, pres.Sender, pres.Patient, pres.Title, pres.DocPath);
         }
 
         public void postPrescripton(int reciverId, int patientid, DateTime date)

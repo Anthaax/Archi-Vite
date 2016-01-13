@@ -50,6 +50,7 @@
     <Compile Include="Data\Prescription.cs" />
     <Compile Include="Data\Professional.cs" />
     <Compile Include="Data\User.cs" />
+    <Compile Include="Interface\IBytesSaveAndLoad.cs" />
     <Compile Include="Interface\ISaveAndLoad.cs" />
     <Compile Include="XML\DataXML.cs" />
     <Compile Include="XML\DocumentsXML.cs" />

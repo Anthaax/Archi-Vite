@@ -22,7 +22,7 @@ namespace ITI.Archi_Vite.Forms
 
             MultibleButtonView button = new MultibleButtonView(_userData);
 
-            button.DocumentsIsDisable();
+            button.ProfilIsDisable();
             button.FollowButton.Clicked += FollowButtonClicked;
             button.DocumentButton.Clicked += DocumentButton_Clicked;
 

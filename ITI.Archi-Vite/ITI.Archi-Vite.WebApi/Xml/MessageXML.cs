@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 namespace ITI.Archi_Vite.WebApi
 {
     [Serializable]
+    [DataContract]
     public class MessageXML : DocumentsXML
     {
-        public string Contents { get; set; }		
+        [DataMember]
+        public string Contents { get; set; }
     }
 }

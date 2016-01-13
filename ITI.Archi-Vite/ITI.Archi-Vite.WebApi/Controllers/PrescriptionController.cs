@@ -28,16 +28,17 @@ namespace ITI.Archi_Vite.WebApi.Controllers
 
         // PUT: api/Prescription/5
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutPrescription(List<Professional> Receivers, User Sender, Patient Patient, string Title, string DocPath)
+        public async Task<IHttpActionResult> PutPrescription(PrescriptionXML pres)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
+            FromXml xml = new FromXml();
+            Prescription p = xml.CreatePrescription(pres);
             try
             {
-                Do.putPrescription(Receivers, Sender, Patient, Title, DocPath);
+                Do.putPrescription(p);
             }
             catch (DbUpdateConcurrencyException)
             {

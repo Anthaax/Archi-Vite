@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Xamarin.Forms;
 
 namespace ITI.Archi_Vite.Forms
 {
@@ -29,7 +30,8 @@ namespace ITI.Archi_Vite.Forms
             u.LastName = user.LastName;
             u.Password = user.Password;
             u.PhoneNumber = user.PhoneNumber;
-            u.Photo = user.Photo;
+            u.PhotoPath = user.Photo;
+            u.Photo = DependencyService.Get<IBytesSaveAndLoad>().LoadByteArray(user.Photo);
             u.Postcode = user.Postcode;
             u.Pseudo = user.Pseudo;
             u.UserId = user.UserId;
@@ -45,7 +47,8 @@ namespace ITI.Archi_Vite.Forms
             u.LastName = lastName;
             u.Password = password;
             u.PhoneNumber = phoneNumber;
-            u.Photo = Photo;
+            u.PhotoPath = Photo;
+            u.Photo = DependencyService.Get<IBytesSaveAndLoad>().LoadByteArray(Photo);
             u.Postcode = postcode;
             u.Pseudo = pseudo;
             u.UserId = userId;
@@ -61,7 +64,8 @@ namespace ITI.Archi_Vite.Forms
             p.LastName = lastName;
             p.Password = password;
             p.PhoneNumber = phoneNumber;
-            p.Photo = Photo;
+            p.PhotoPath = Photo;
+            p.Photo = DependencyService.Get<IBytesSaveAndLoad>().LoadByteArray(Photo);
             p.Postcode = postcode;
             p.Pseudo = pseudo;
             p.PatientId = userId;
@@ -78,7 +82,8 @@ namespace ITI.Archi_Vite.Forms
             p.LastName = lastName;
             p.Password = password;
             p.PhoneNumber = phoneNumber;
-            p.Photo = Photo;
+            p.PhotoPath = Photo;
+            p.Photo = DependencyService.Get<IBytesSaveAndLoad>().LoadByteArray(Photo);
             p.Postcode = postcode;
             p.Pseudo = pseudo;
             p.UserId = userId;
@@ -167,6 +172,7 @@ namespace ITI.Archi_Vite.Forms
             List<ProfessionalXML> pro = CreateListPro(mJson.Recievers);
             PrescriptionXML m = new PrescriptionXML();
             m.DocPath = mJson.DocPath;
+            m.Doc = DependencyService.Get<IBytesSaveAndLoad>().LoadByteArray(mJson.DocPath);
             m.Data = mJson.Date;
             m.Patient = pa;
             m.Recievers = pro;
@@ -199,6 +205,10 @@ namespace ITI.Archi_Vite.Forms
                 p.Add(pr);
             }
             return p;
+        }
+        private void SaveBytesArray(byte[] bytesArray)
+        {
+
         }
     }
 }

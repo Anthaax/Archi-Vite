@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,6 +17,7 @@ namespace ITI.Archi_Vite.Forms
         Professional[] professionals;
         string _title;
         string _content;
+        Guid[] _imageId = new Guid[11];
         bool _message;
         TapGestureRecognizer imageTapped = new TapGestureRecognizer();
 
@@ -69,11 +71,13 @@ namespace ITI.Archi_Vite.Forms
             for (int i = 0; i < 3; i++)
             {
                 proImage[i] = new Image();
-                proImage[i].Source = new UriImageSource();
                 if (professionals[i] != null)
                 {
-					proImage[i] = InitializePhoto(proImage[i], i, professionals);
-                    proImage[i].Source = professionals[i].Photo;
+                    Stream s = new MemoryStream(DependencyService.Get<IBytesSaveAndLoad>().LoadByteArray(professionals[i].Photo), true);
+                    proImage[i].Scale = 0.75;
+                    proImage[i] = InitializePhoto(proImage[i], i, professionals);
+                    proImage[i].Source = ImageSource.FromStream(() => s);
+                    _imageId.SetValue(proImage[i].Id, i);
                 }
                 else
                 {
@@ -93,9 +97,11 @@ namespace ITI.Archi_Vite.Forms
                 proImage[i] = new Image();
                 if (professionals[i] != null)
                 {
-					proImage[i].Scale = 0.75;
-					proImage[i] = InitializePhoto(proImage[i], i, professionals);
-                    proImage[i].Source = professionals[i].Photo;
+                    Stream s = new MemoryStream(DependencyService.Get<IBytesSaveAndLoad>().LoadByteArray(professionals[i].Photo), true);
+                    proImage[i].Scale = 0.75;
+                    proImage[i] = InitializePhoto(proImage[i], i, professionals);
+                    proImage[i].Source = ImageSource.FromStream(() => s);
+                    _imageId.SetValue(proImage[i].Id, i);
                 }
                 else
                 {
@@ -114,9 +120,11 @@ namespace ITI.Archi_Vite.Forms
                 proImage[i] = new Image();
                 if (professionals[i] != null)
                 {
-					proImage [i].Scale = 0.75;
-					proImage[i] = InitializePhoto(proImage[i], i, professionals);
-                    proImage[i].Source = professionals[i].Photo;
+                    Stream s = new MemoryStream(DependencyService.Get<IBytesSaveAndLoad>().LoadByteArray(professionals[i].Photo), true);
+                    proImage[i].Scale = 0.75;
+                    proImage[i] = InitializePhoto(proImage[i], i, professionals);
+                    proImage[i].Source = ImageSource.FromStream(() => s);
+                    _imageId.SetValue(proImage[i].Id, i);
                 }
                 else
                 {
@@ -133,9 +141,11 @@ namespace ITI.Archi_Vite.Forms
                 proImage[i] = new Image();
                 if (professionals[i] != null)
                 {
-					proImage [i].Scale = 0.75;
+                    Stream s = new MemoryStream(DependencyService.Get<IBytesSaveAndLoad>().LoadByteArray(professionals[i].Photo),true);
+                    proImage[i].Scale = 0.75;
 					proImage[i] = InitializePhoto(proImage[i], i, professionals);
-                    proImage[i].Source = professionals[i].Photo;
+                    proImage[i].Source = ImageSource.FromStream(() => s);
+                    _imageId.SetValue(proImage[i].Id, i);
                 }
                 else
                 {
@@ -183,28 +193,26 @@ namespace ITI.Archi_Vite.Forms
                 if (image.Scale == 0.75)
                 {
                     image.Scale = 0.6;
-                    var source = image.Source as UriImageSource;
-                    if (source != null)
+                    for (int i = 0; i < professionals.Length; i++)
                     {
-                        for (int i = 0; i < professionals.Length; i++)
+                        if (_imageId[i] == image.Id)
                         {
-                            if (professionals[i] != null && source.Uri.ToString() == professionals[i].Photo) _recievers.Add(professionals[i]);
+                            _recievers.Add(professionals[i]);
                         }
                     }
                 }
                 else if (true)
                 {
                     image.Scale = 0.75;
-                    var source = image.Source as UriImageSource;
-                    if (source != null)
+                    Professional[] p = ChangeListToArray(_recievers);
+                    for (int i = 0; i < p.Length; i++)
                     {
-                        Professional[] p = ChangeListToArray(_recievers);
-                        for (int i = 0; i < p.Length; i++)
+                        if (_imageId[i] == image.Id)
                         {
-							if (p[i] != null && source.Uri.ToString() == p[i].Photo) p[i] = null;
-                        } 
-                        _recievers = ChangeArrayToList(p);
-                    }
+                            p[i] = null;
+                        }
+                    } 
+                    _recievers = ChangeArrayToList(p);
                 }
             }
         }

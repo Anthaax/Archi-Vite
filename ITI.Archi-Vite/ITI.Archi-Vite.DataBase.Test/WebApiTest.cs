@@ -9,6 +9,7 @@ using System.Data.Entity;
 using ITI.Archi_Vite.DataBase;
 using ITI.Archi_Vite.WebApi.Controllers;
 using ITI.Archi_Vite.WebApi;
+using System.Drawing;
 
 namespace ITI.Archi_Vite.DataBase.Test
 {
@@ -314,8 +315,9 @@ namespace ITI.Archi_Vite.DataBase.Test
                 string Title = "My Title";
                 Patient P = context.SelectRequest.SelectPatient("GuillaumeF", "GuillaumeF");
                 string DocPath = P.PatientId + "$" + Sender.UserId;
+                Prescription p = new Prescription(Title, Sender.Photo, Sender, listPro, P);
 
-                _documentService.putPrescription(listPro, Sender, P, Title, DocPath);
+                _documentService.putPrescription(p);
                 DocumentSerializable document = dm.SeeDocument(context.SelectRequest.SelectProfessional("OlivierS", "OlivierS"), context.SelectRequest.SelectPatient("GuillaumeF", "GuillaumeF"));
                 Assert.AreEqual(document.Prescriptions.Count, 3);
             }
@@ -334,9 +336,11 @@ namespace ITI.Archi_Vite.DataBase.Test
                 string Title = "My Title2";
                 Patient P = context.SelectRequest.SelectPatient("GuillaumeF", "GuillaumeF");
                 string DocPath = P.PatientId + "$" + Sender.UserId;
+                ImageManager img = new ImageManager();
+                Image i = img.LoadImage(Sender.Photo);
+                Prescription p = new Prescription(Title, Sender.Photo, Sender, listPro, P);
 
-                _documentService.putPrescription(listPro, Sender, P, Title, DocPath);
-
+                _documentService.putPrescription(p);
 
                 DocumentSerializable document = dm.SeeDocument(context.SelectRequest.SelectProfessional("ClementR", "ClementR"), context.SelectRequest.SelectPatient("GuillaumeF", "GuillaumeF"));
 
@@ -356,6 +360,20 @@ namespace ITI.Archi_Vite.DataBase.Test
                         Assert.That(prescription.Receivers.Count == 2);
 
                     }
+                }
+            }
+        }
+        [Test]
+        public void GetArrayBytesOfAnImage()
+        {
+            using (ArchiViteContext context = new ArchiViteContext())
+            {
+                List<User> users = context.User.ToList();
+                foreach (var u in users)
+                {
+                    ImageManager img = new ImageManager();
+                    Image i = img.LoadImage(u.Photo);
+                    byte[] array = img.ImageCoverter(i);
                 }
             }
         }

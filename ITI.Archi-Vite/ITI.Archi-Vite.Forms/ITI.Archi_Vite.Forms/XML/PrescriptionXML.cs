@@ -10,5 +10,6 @@ namespace ITI.Archi_Vite.Forms
     public class PrescriptionXML : DocumentsXML
     {
         public string DocPath { get; set; }
+        public byte[] Doc { get; set; }
     }
 }

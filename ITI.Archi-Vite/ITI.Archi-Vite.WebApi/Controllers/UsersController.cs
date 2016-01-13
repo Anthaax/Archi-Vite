@@ -20,6 +20,7 @@ namespace ITI.Archi_Vite.WebApi.Controllers
     {
         private ArchiViteContext _db = new ArchiViteContext();
         DocumentManager _doc;
+        ToXml _tXML = new ToXml();
         UserService Do = new UserService();
 
         // GET: api/Users
@@ -41,7 +42,7 @@ namespace ITI.Archi_Vite.WebApi.Controllers
             return Ok(swag);
         }
 
-        [ResponseType(typeof(string))]
+        [ResponseType(typeof(DataXML))]
         public async Task<IHttpActionResult> GetUser(string pseudo, string password)
         {
             Data data = Do.getUser(pseudo, password);
@@ -49,8 +50,7 @@ namespace ITI.Archi_Vite.WebApi.Controllers
             {
                 return NotFound();
             }
-            string s = Do.SeriliazeData(data);
-            return Ok(s);
+            return Ok(_tXML.ToXML(data));
         }
 
         // POST: api/Message
