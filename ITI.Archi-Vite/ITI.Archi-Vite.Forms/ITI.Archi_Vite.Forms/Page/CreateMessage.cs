@@ -181,6 +181,7 @@ namespace ITI.Archi_Vite.Forms
         {
             _userData.Documents.Messages.Add(m);
 			_userData.DocumentsAdded.Messages.Add (m);
+			_userData.NeedUpdate = true;
         }
         private Message GetMessage()
         {

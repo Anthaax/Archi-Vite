@@ -12,7 +12,6 @@ namespace ITI.Archi_Vite.Forms
 {
     public class ConnectionPage : ContentPage
     {
-		User _user;
 		Data _dataForUser;
         DataJsonConvertor _jsonCovertor = new DataJsonConvertor();
         DataConvertor _convertor = new DataConvertor();

@@ -26,7 +26,7 @@ namespace ITI.Archi_Vite.WebApi.Controllers
             return _db.Follower;
         }
 
-        // PUT: api/Prescription/5
+        // PUT: api/Prescription
         [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> PutPrescription(PrescriptionXML pres)
         {

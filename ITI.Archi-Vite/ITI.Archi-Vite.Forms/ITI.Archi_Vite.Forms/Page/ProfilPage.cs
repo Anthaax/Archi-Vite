@@ -1,9 +1,13 @@
-﻿using System;
+﻿using ModernHttpClient;
+using Plugin.Connectivity;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Reflection.Emit;
 using System.Text;
+using Newtonsoft.Json;
 
 using Xamarin.Forms;
 
@@ -13,7 +17,7 @@ namespace ITI.Archi_Vite.Forms
     {
 		Data _userData;
         User _user;
-
+        DataConvertor _xml = new DataConvertor();
 		public ProfilPage(Data userData, User user)
         {
 			_userData = userData;
@@ -150,6 +154,7 @@ namespace ITI.Archi_Vite.Forms
 
         private async void Document_Clicked(object sender, EventArgs e)
         {
+            UpdateUserInformation();
             await Navigation.PushAsync(new DocumentsPage(_userData));
         }
 
@@ -184,7 +189,21 @@ namespace ITI.Archi_Vite.Forms
         {
             if (_userData.NeedUpdate)
             {
+                if(CrossConnectivity.Current.IsConnected)
+                {
+                    var client = new HttpClient(new NativeMessageHandler());
+                    client.BaseAddress = new Uri("http://10.8.110.152:8080/");
+                    client.Timeout = new TimeSpan(0, 0, 20);
+                    string s = "api/Prescription";
+					DocumentSerializableXML d = _xml.CreateDocumentSerializable(_userData.DocumentsAdded);
+                    string xml = JsonConvert.SerializeObject(d);
+                    StringContent content = new StringContent(xml);
+                    var response = await client.PostAsync(s, content);
+                    if (response.IsSuccessStatusCode)
+                    {
 
+                    } 
+                }
             }
         }
     }
