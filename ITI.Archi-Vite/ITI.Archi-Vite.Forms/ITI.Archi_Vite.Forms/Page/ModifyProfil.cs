@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Plugin.Connectivity;
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using Xamarin.Forms;
@@ -115,11 +117,7 @@ namespace ITI.Archi_Vite.Forms
 				_userData.User.LastName = lastName.Text;
 				_userData.User.PhoneNumber = Int32.Parse(phoneNumber.Text);
 				_userData.User.Postcode = Int32.Parse(postCode.Text);
-                var reponse = await HttpRequest.HttpRequestSetUserData(_userData);
-                if (CheckResponse(reponse))
-                {
-                    
-                }
+                UpdateAll();
 				await Navigation.PushAsync(new ProfilPage(_userData, _userData.User));
 			};
 			Content = new StackLayout
@@ -191,6 +189,26 @@ namespace ITI.Archi_Vite.Forms
         private bool CheckResponse(HttpResponseMessage response)
         {
             return response.IsSuccessStatusCode;
+        }
+        private async void UpdateAll()
+        {
+            if (CrossConnectivity.Current.IsConnected)
+            {
+                if (_userData.NeedUpdate && _userData.DocumentsAdded.Messages.Count == 0 && _userData.DocumentsAdded.Prescriptions.Count == 0 )
+                {
+                    DataConvertor d = new DataConvertor();
+                    DocumentSerializableXML doc = await HttpRequest.HttpRequestSetDocument(d.CreateDocumentSerializable(_userData.DocumentsAdded));
+                    _userData.NeedUpdate = false;
+                    _userData.DocumentsAdded.Messages = new List<Message>();
+                    _userData.DocumentsAdded.Prescriptions = new List<Prescription>();
+                }
+                var response = await HttpRequest.HttpRequestSetUserData(_userData);
+                if(!response.IsSuccessStatusCode)
+                {
+                    _userData.NeedUpdate = true;
+                }
+            }
+
         }
     }
 }

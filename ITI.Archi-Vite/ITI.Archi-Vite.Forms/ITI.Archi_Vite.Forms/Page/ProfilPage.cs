@@ -191,12 +191,24 @@ namespace ITI.Archi_Vite.Forms
             {
                 if(CrossConnectivity.Current.IsConnected)
                 {
-					DocumentSerializableXML d = _xml.CreateDocumentSerializable(_userData.DocumentsAdded);
-                    HttpRequest.HttpRequestSetDocument(d)
-                    if (response.IsSuccessStatusCode)
+                    if (_userData.NeedUpdate && _userData.DocumentsAdded.Messages.Count == 0 && _userData.DocumentsAdded.Prescriptions.Count == 0)
                     {
+                        var response = await HttpRequest.HttpRequestSetUserData(_userData);
+                        if (response.IsSuccessStatusCode)
+                        {
+                            _userData.NeedUpdate = false;
+                        }
+                    }
+                    else
+                    {
+                        DocumentSerializableXML doc = await HttpRequest.HttpRequestSetDocument(_xml.CreateDocumentSerializable(_userData.DocumentsAdded));
+                        if (doc != null)
+                        {
+                            _userData.DocumentsAdded.Messages = new List<Message>();
+                            _userData.DocumentsAdded.Prescriptions = new List<Prescription>();
 
-                    } 
+                        }
+                    }
                 }
             }
         }

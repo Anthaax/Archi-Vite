@@ -22,8 +22,9 @@ namespace ITI.Archi_Vite.Forms
             return response;
         }
 
-        public static async void HttpRequestSetDocument(DocumentSerializableXML documents)
+        public static async Task<DocumentSerializableXML> HttpRequestSetDocument(DocumentSerializableXML documents)
         {
+            bool ok = false;
             var client = new HttpClient(new NativeMessageHandler());
             client.BaseAddress = new Uri("http://10.8.110.152:8080/");
             client.Timeout = new TimeSpan(0, 0, 50);
@@ -34,6 +35,10 @@ namespace ITI.Archi_Vite.Forms
                 string xml = JsonConvert.SerializeObject(documents.Message);
                 StringContent content = new StringContent(xml);
                 var response = await client.PostAsync(s, content);
+                if (response.IsSuccessStatusCode)
+                {
+                    ok = true;
+                }
 
             }
             if (documents.Prescription.Any())
@@ -42,7 +47,16 @@ namespace ITI.Archi_Vite.Forms
                 string xml = JsonConvert.SerializeObject(documents.Prescription);
                 StringContent content = new StringContent(xml);
                 var response = await client.PostAsync(s, content);
-            } 
+                if (response.IsSuccessStatusCode)
+                {
+                    ok = true;
+                }
+            }
+            if(ok)
+            {
+                return documents;
+            }
+            return null;
         }
         public static async Task<HttpResponseMessage> HttpRequestSetUserData(Data user)
         {
