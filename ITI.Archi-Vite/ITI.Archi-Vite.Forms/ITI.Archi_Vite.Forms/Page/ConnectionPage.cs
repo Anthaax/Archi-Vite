@@ -89,7 +89,7 @@ namespace ITI.Archi_Vite.Forms
         {
             DataXML data = new DataXML();
             data = JsonConvert.DeserializeObject<DataXML>(s);
-            return _jsonCovertor.DataJsonToData(data);
+            return _jsonCovertor.DataJsonToDataFromRequest(data);
         }
 
         private void EntryTextChanged(object sender, TextChangedEventArgs e)
@@ -124,7 +124,7 @@ namespace ITI.Archi_Vite.Forms
 
         public void SaveUserData()
         {
-            DataXML json = _convertor.DataToDataJson(_dataForUser);
+            DataXML json = _convertor.DataToDataJsonForSave(_dataForUser);
 			DependencyService.Get<ISaveLoadAndDelete>().SaveData("user.txt", json);
         }
 
@@ -134,7 +134,7 @@ namespace ITI.Archi_Vite.Forms
             {
 				DataXML json = DependencyService.Get<ISaveLoadAndDelete>().LoadData("user.txt");
 				if(json != null)
-                	_dataForUser = _jsonCovertor.DataJsonToData(json);
+                	_dataForUser = _jsonCovertor.DataJsonToDataFromSave(json);
 				else return false;
             }
             catch (IOException)

@@ -12,6 +12,7 @@ namespace ITI.Archi_Vite.Forms
         public UserXML User { get; set; }
         public DocumentSerializableXML Documents { get; set; }
         public DocumentSerializableXML DocumentAdded { get; set; }
+        public bool NeedUpdate { get; set; }
     }
 }
 

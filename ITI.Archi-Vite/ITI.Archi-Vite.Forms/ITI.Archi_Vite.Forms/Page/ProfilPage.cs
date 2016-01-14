@@ -180,5 +180,12 @@ namespace ITI.Archi_Vite.Forms
             }
             return false;
         }
+        private async void UpdateUserInformation()
+        {
+            if (_userData.NeedUpdate)
+            {
+
+            }
+        }
     }
 }

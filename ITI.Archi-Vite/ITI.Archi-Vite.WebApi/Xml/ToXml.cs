@@ -133,7 +133,7 @@ namespace ITI.Archi_Vite.WebApi
             return p;
         }
 
-        private DocumentSerializableXML CreateDocuments(DocumentSerializable documents)
+        public DocumentSerializableXML CreateDocuments(DocumentSerializable documents)
         {
             DocumentSerializableXML d = new DocumentSerializableXML();
             d.Message = CreateMessagesList(documents.Messages);
@@ -141,7 +141,7 @@ namespace ITI.Archi_Vite.WebApi
             return d;
         }
 
-        private List<PrescriptionXML> CreatePrescriptionList(List<Prescription> prescriptions)
+        public List<PrescriptionXML> CreatePrescriptionList(List<Prescription> prescriptions)
         {
             List<PrescriptionXML> p = new List<PrescriptionXML>();
             foreach (var pres in prescriptions)

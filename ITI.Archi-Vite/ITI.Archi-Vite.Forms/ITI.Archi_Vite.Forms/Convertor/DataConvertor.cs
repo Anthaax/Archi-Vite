@@ -9,7 +9,7 @@ namespace ITI.Archi_Vite.Forms
 {
     public class DataConvertor
     {
-        public DataXML DataToDataJson(Data userData)
+        public DataXML DataToDataJsonForRequest(Data userData)
         {
             DataXML d = new DataXML();
             d.Documents = CreateDocumentSerializable(userData.Documents); ;
@@ -17,6 +17,17 @@ namespace ITI.Archi_Vite.Forms
             d.Professionals = CreateArrayProList(userData.Follow.Values.ToList());
             d.User = CreateUser(userData.User);
             d.DocumentAdded = CreateDocumentSerializable(userData.DocumentsAdded);
+            return d;
+        }
+        public DataXML DataToDataJsonForSave(Data userData)
+        {
+            DataXML d = new DataXML();
+            d.Documents = CreateDocumentSerializable(userData.Documents); ;
+            d.Patients = CreatePatientList(userData.Follow.Keys.ToList());
+            d.Professionals = CreateArrayProList(userData.Follow.Values.ToList());
+            d.User = CreateUser(userData.User);
+            d.DocumentAdded = CreateDocumentSerializable(userData.DocumentsAdded);
+            d.NeedUpdate = userData.NeedUpdate;
             return d;
         }
 
@@ -137,7 +148,7 @@ namespace ITI.Archi_Vite.Forms
             }
             return dico;
         }
-        private DocumentSerializableXML CreateDocumentSerializable(DocumentSerializable json)
+        public DocumentSerializableXML CreateDocumentSerializable(DocumentSerializable json)
         {
             List<MessageXML> m = CreateMessageList(json.Messages);
             List<PrescriptionXML> p = CreatePrescriptionList(json.Prescriptions);

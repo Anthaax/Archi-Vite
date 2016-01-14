@@ -125,7 +125,7 @@ namespace ITI.Archi_Vite.WebApi
             return d;
         }
 
-        private DocumentSerializable CreateDocument(DocumentSerializableXML documents)
+        public DocumentSerializable CreateDocument(DocumentSerializableXML documents)
         {
             DocumentSerializable d = 
                 new DocumentSerializable(CreateMessageList(documents.Message), CreatePrescriptionList(documents.Prescription));
