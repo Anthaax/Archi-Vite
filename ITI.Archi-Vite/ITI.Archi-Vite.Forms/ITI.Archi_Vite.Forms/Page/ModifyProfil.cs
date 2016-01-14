@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Net.Http;
 using Xamarin.Forms;
 using XLabs.Forms.Mvvm;
 using XLabs.Ioc;
@@ -114,6 +115,11 @@ namespace ITI.Archi_Vite.Forms
 				_userData.User.LastName = lastName.Text;
 				_userData.User.PhoneNumber = Int32.Parse(phoneNumber.Text);
 				_userData.User.Postcode = Int32.Parse(postCode.Text);
+                var reponse = await HttpRequest.HttpRequestSetUserData(_userData);
+                if (CheckResponse(reponse))
+                {
+                    
+                }
 				await Navigation.PushAsync(new ProfilPage(_userData, _userData.User));
 			};
 			Content = new StackLayout
@@ -181,6 +187,10 @@ namespace ITI.Archi_Vite.Forms
                 await Navigation.PushAsync(new FollowPatientPage(_userData, patient));
             }
             else await Navigation.PushAsync(new PatientListPage(_userData));
+        }
+        private bool CheckResponse(HttpResponseMessage response)
+        {
+            return response.IsSuccessStatusCode;
         }
     }
 }

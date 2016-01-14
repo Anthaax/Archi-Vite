@@ -142,7 +142,7 @@ namespace ITI.Archi_Vite.WebApi
             return m;
         }
 
-        private Message CreateMessage(MessageXML message)
+        public Message CreateMessage(MessageXML message)
         {
             Message m = new Message(message.Title, message.Contents, CreateUser(message.Sender), CreateProList(message.Recievers), CreatePatient(message.Patient));
             return m;

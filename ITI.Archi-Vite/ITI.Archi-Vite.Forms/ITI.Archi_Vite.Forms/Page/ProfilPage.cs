@@ -191,14 +191,8 @@ namespace ITI.Archi_Vite.Forms
             {
                 if(CrossConnectivity.Current.IsConnected)
                 {
-                    var client = new HttpClient(new NativeMessageHandler());
-                    client.BaseAddress = new Uri("http://10.8.110.152:8080/");
-                    client.Timeout = new TimeSpan(0, 0, 20);
-                    string s = "api/Prescription";
 					DocumentSerializableXML d = _xml.CreateDocumentSerializable(_userData.DocumentsAdded);
-                    string xml = JsonConvert.SerializeObject(d);
-                    StringContent content = new StringContent(xml);
-                    var response = await client.PostAsync(s, content);
+                    HttpRequest.HttpRequestSetDocument(d)
                     if (response.IsSuccessStatusCode)
                     {
 

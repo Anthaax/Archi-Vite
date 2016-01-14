@@ -53,7 +53,7 @@ namespace ITI.Archi_Vite.WebApi.Controllers
             return Ok(_tXML.ToXML(data));
         }
 
-        // POST: api/Message
+        // POST: api/Users
         [ResponseType(typeof(Follower))]
         public async Task<IHttpActionResult> PostUser(User user)
         {

@@ -27,16 +27,17 @@ namespace ITI.Archi_Vite.WebApi.Controllers
         }
         // PUT: api/Message/5
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutMessage(List<Professional> Receivers, User Sender, string Title, string Contents, Patient Patient )
+        public async Task<IHttpActionResult> PutMessage(MessageXML message)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-     
+            FromXml xml = new FromXml();
+            Message m = xml.CreateMessage(message);
             try
             {
-                Do.putMessage(Receivers, Sender, Title, Contents, Patient);               
+                Do.putMessage(m.Receivers, m.Sender, m.Title, m.Contents, m.Patient);               
             }
             catch (DbUpdateConcurrencyException)
             {

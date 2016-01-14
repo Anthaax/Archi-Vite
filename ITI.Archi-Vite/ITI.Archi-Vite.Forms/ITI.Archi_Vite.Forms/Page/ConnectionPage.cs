@@ -101,16 +101,11 @@ namespace ITI.Archi_Vite.Forms
         }
         private async void ConnectionGestion(string pseudo, string password)
         {
-            var client = new HttpClient(new NativeMessageHandler());
-            client.BaseAddress = new Uri("http://10.8.110.152:8080/");
-            client.Timeout = new TimeSpan(0, 0, 50);
-            client.MaxResponseContentBufferSize = Int64.MaxValue;
-			string s = "api/Users/?pseudo=" + pseudo + "&password=" + password;
-			var response = await client.GetAsync(s);
+            var response = await HttpRequest.HttpRequestGetUserData(pseudo, password);
             if (response.IsSuccessStatusCode)
             {
-                s = await response.Content.ReadAsStringAsync();
-                Data u = XmlDeseriliaze(s);
+                string information = await response.Content.ReadAsStringAsync();
+                Data u = XmlDeseriliaze(information);
                 _dataForUser = u;
                 SaveUserData();
                 await Navigation.PushAsync(new ProfilPage(_dataForUser, _dataForUser.User));
