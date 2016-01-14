@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.IO;
 using Xamarin.Forms;
 using XLabs.Forms.Mvvm;
 using XLabs.Ioc;
@@ -84,9 +84,10 @@ namespace ITI.Archi_Vite.Forms
 				VerticalOptions = LayoutOptions.CenterAndExpand,
 				TextColor = Color.Gray
 			};
-			_profilPhoto = new Image {
-				Source = _userData.User.Photo, 
-			};
+            Stream s = new MemoryStream(DependencyService.Get<IBytesSaveAndLoad>().LoadByteArray(_userData.User.Photo));
+            _profilPhoto = new Image {
+                Source = ImageSource.FromStream(() => s),
+            };
 			_profilPhoto.GestureRecognizers.Add (tappedGesture);
 
 			Button modify = new Button
