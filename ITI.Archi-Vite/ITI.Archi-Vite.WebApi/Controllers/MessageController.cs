@@ -25,7 +25,7 @@ namespace ITI.Archi_Vite.WebApi.Controllers
         {
             return _db.Follower;
         }
-        // PUT: api/Message/5
+        // PUT: api/Message
         [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> PutMessage(MessageXML message)
         {

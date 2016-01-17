@@ -1,14 +1,7 @@
-﻿using System;
-
+﻿
 using Android.App;
 using Android.Content.PM;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
 using Android.OS;
-using Java.IO;
-
-using Xamarin.Forms;
 
 using XLabs.Forms;
 using XLabs.Ioc;

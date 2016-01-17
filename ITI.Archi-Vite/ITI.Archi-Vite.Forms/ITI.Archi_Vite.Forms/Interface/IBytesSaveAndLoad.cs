@@ -10,6 +10,7 @@ namespace ITI.Archi_Vite.Forms
     {
         void SaveByteArray(byte[] byteArray, string name);
         byte[] LoadByteArray(string name);
-
+        byte[] GetBytes(string str);
+        string GetString(byte[] bytes);
     }
 }

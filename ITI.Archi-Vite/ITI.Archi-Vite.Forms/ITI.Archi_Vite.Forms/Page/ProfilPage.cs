@@ -191,22 +191,27 @@ namespace ITI.Archi_Vite.Forms
             {
                 if(CrossConnectivity.Current.IsConnected)
                 {
-                    if (_userData.NeedUpdate && _userData.DocumentsAdded.Messages.Count == 0 && _userData.DocumentsAdded.Prescriptions.Count == 0)
+                    if (_userData.DocumentsAdded.Messages.Count == 0 && _userData.DocumentsAdded.Prescriptions.Count == 0)
                     {
-                        var response = await HttpRequest.HttpRequestSetUserData(_userData);
+                        UserXML user = _xml.CreateUser(_userData.User);
+                        var response = await HttpRequest.HttpRequestSetUserData(user);
                         if (response.IsSuccessStatusCode)
                         {
                             _userData.NeedUpdate = false;
+							DataXML json = _xml.DataToDataJsonForSave(_userData);
+							DependencyService.Get<ISaveLoadAndDelete>().SaveData("user.txt", json);
                         }
                     }
-                    else
+					if(_userData.DocumentsAdded.Messages.Count != 0 || _userData.DocumentsAdded.Prescriptions.Count != 0)
                     {
                         DocumentSerializableXML doc = await HttpRequest.HttpRequestSetDocument(_xml.CreateDocumentSerializable(_userData.DocumentsAdded));
                         if (doc != null)
                         {
                             _userData.DocumentsAdded.Messages = new List<Message>();
                             _userData.DocumentsAdded.Prescriptions = new List<Prescription>();
-
+							_userData.NeedUpdate = false;
+                            DataXML json = _xml.DataToDataJsonForSave(_userData);
+                            DependencyService.Get<ISaveLoadAndDelete>().SaveData("user.txt", json);
                         }
                     }
                 }

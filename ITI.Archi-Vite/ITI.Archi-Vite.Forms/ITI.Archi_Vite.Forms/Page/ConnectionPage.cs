@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Net.Http;
 
 using Xamarin.Forms;
 using System.IO;
-using ModernHttpClient;
 using Newtonsoft.Json;
-using System.Xml.Serialization;
 
 namespace ITI.Archi_Vite.Forms
 {
@@ -112,7 +108,7 @@ namespace ITI.Archi_Vite.Forms
             }
             else
             {
-                await DisplayAlert("Error", "Les champ doivent etre valides", "Ok");
+                await DisplayAlert("Error", "Problème avec le serveur", "Ok");
             }
         }
 

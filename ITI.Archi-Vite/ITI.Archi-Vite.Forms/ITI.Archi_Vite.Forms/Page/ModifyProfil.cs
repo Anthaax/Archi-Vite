@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 using XLabs.Forms.Mvvm;
 using XLabs.Ioc;
@@ -16,6 +17,7 @@ namespace ITI.Archi_Vite.Forms
 		Image _profilPhoto;
 		Data _userData;
         CameraViewModel _cameraview;
+		DataConvertor _xml = new DataConvertor ();
 		public ModifyProfil (Data userData)
 		{
 			_userData = userData;
@@ -117,6 +119,9 @@ namespace ITI.Archi_Vite.Forms
 				_userData.User.LastName = lastName.Text;
 				_userData.User.PhoneNumber = Int32.Parse(phoneNumber.Text);
 				_userData.User.Postcode = Int32.Parse(postCode.Text);
+				_userData.NeedUpdate = true;
+                DataXML json = _xml.DataToDataJsonForSave(_userData);
+                DependencyService.Get<ISaveLoadAndDelete>().SaveData("user.txt", json);
                 UpdateAll();
 				await Navigation.PushAsync(new ProfilPage(_userData, _userData.User));
 			};
@@ -192,23 +197,30 @@ namespace ITI.Archi_Vite.Forms
         }
         private async void UpdateAll()
         {
-            if (CrossConnectivity.Current.IsConnected)
-            {
-                if (_userData.NeedUpdate && _userData.DocumentsAdded.Messages.Count == 0 && _userData.DocumentsAdded.Prescriptions.Count == 0 )
-                {
-                    DataConvertor d = new DataConvertor();
-                    DocumentSerializableXML doc = await HttpRequest.HttpRequestSetDocument(d.CreateDocumentSerializable(_userData.DocumentsAdded));
-                    _userData.NeedUpdate = false;
-                    _userData.DocumentsAdded.Messages = new List<Message>();
-                    _userData.DocumentsAdded.Prescriptions = new List<Prescription>();
-                }
-                var response = await HttpRequest.HttpRequestSetUserData(_userData);
-                if(!response.IsSuccessStatusCode)
-                {
-                    _userData.NeedUpdate = true;
-                }
-            }
-
+			if (_userData.NeedUpdate) 
+			{
+				if (CrossConnectivity.Current.IsConnected)
+				{
+					if (_userData.DocumentsAdded.Messages.Count != 0 || _userData.DocumentsAdded.Prescriptions.Count != 0 )
+					{
+						DataConvertor d = new DataConvertor();
+						DocumentSerializableXML doc = await HttpRequest.HttpRequestSetDocument(d.CreateDocumentSerializable(_userData.DocumentsAdded));
+						_userData.NeedUpdate = false;
+						_userData.DocumentsAdded.Messages = new List<Message>();
+						_userData.DocumentsAdded.Prescriptions = new List<Prescription>();
+						DataXML json = _xml.DataToDataJsonForSave(_userData);
+						DependencyService.Get<ISaveLoadAndDelete>().SaveData("user.txt", json);
+					}
+                    UserXML user = _xml.CreateUser(_userData.User);
+					var response = await HttpRequest.HttpRequestSetUserData(user);
+					if(response.IsSuccessStatusCode)
+					{
+						_userData.NeedUpdate = false;
+                        //return response;
+					}
+				}
+			}
+            //return null;
         }
     }
 }

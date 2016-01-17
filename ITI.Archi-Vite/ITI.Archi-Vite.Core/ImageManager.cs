@@ -37,16 +37,20 @@ namespace ITI.Archi_Vite.Core
         {
             string folderName = @"C:\ArchiFile\Photo";
             string pathString = Path.Combine(folderName, fileName);
-            try
+            if (File.Exists(pathString))
             {
-                Image image = Image.FromFile(pathString);
-                return image;
+                try
+                {
+                    Image image = Image.FromFile(pathString);
+                    return image;
+                }
+                catch (Exception)
+                {
+                    return null;
+                    throw;
+                }
             }
-            catch (Exception)
-            {
-                return null;
-                throw;
-            }
+            return null;
         }
     }
 }

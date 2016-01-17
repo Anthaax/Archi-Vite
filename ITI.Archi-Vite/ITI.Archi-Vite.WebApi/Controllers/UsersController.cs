@@ -55,15 +55,17 @@ namespace ITI.Archi_Vite.WebApi.Controllers
 
         // POST: api/Users
         [ResponseType(typeof(Follower))]
-        public async Task<IHttpActionResult> PostUser(User user)
+        public async Task<IHttpActionResult> PostUser(UserXML user)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
+            FromXml xml = new FromXml();
+            User u = xml.CreateUser(user);
             try
             {
-                Do.PostUser(user);
+                Do.PostUser(u);
             }
             catch (DbUpdateException)
             {

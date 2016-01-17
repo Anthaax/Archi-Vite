@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Xamarin.Forms;
-using XLabs.Platform.Services.Media;
 
 namespace ITI.Archi_Vite.Forms
 {
-	public class FollowPatientPage : ContentPage
+    public class FollowPatientPage : ContentPage
 	{
 		Data _userData;
 		Patient _patient;

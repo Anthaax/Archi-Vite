@@ -31,7 +31,7 @@ namespace ITI.Archi_Vite.Forms
             return d;
         }
 
-        private UserXML CreateUser(User user)
+        public UserXML CreateUser(User user)
         {
             UserXML u = new UserXML();
             u.Adress = user.Adress;

@@ -16,7 +16,7 @@ namespace ITI.Archi_Vite.WebApi
             return d;
         }
 
-        private User CreateUser(UserXML user)
+        public User CreateUser(UserXML user)
         {
             User u = new User()
             {
