@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Text;
 
 using Xamarin.Forms;
 
@@ -17,49 +13,11 @@ namespace ITI.Archi_Vite.Forms
             _userData = userData;
             _prescription = prescription;
 
-            Button profilButton = new Button
-            {
-                Text = "Mon Profil",
-                BackgroundColor = Color.White,
-                BorderColor = Color.Black,
-                TextColor = Color.Black,
-                FontSize = 30,
-            };
-            profilButton.Clicked += async (sender, e) =>
-            {
-                await Navigation.PushAsync(new ProfilPage(_userData, _userData.User));
-            };
-            Button followButton = new Button
-            {
-                Text = "Mes Suivis",
-                BackgroundColor = Color.White,
-                BorderColor = Color.Black,
-                FontSize = 30,
-                TextColor = Color.Black
-            };
-            if (PageForPatient()) followButton.Text = "Mon Suivi";
+            MultibleButtonView button = new MultibleButtonView(_userData);
 
-            followButton.Clicked += FollowButtonClicked;
-            Button documentsButton = new Button
-            {
-                Text = "Mes Documents",
-                BackgroundColor = Color.Gray,
-                BorderColor = Color.Black,
-                FontSize = 30,
-                FontAttributes = FontAttributes.Bold,
-            };
-
-            StackLayout buttonStack = new StackLayout
-            {
-
-                Children = {
-                    profilButton,
-                    followButton,
-                    documentsButton
-                },
-                Orientation = StackOrientation.Horizontal,
-                HorizontalOptions = LayoutOptions.Start
-            };
+            button.DocumentsIsDisable();
+            button.FollowButton.Clicked += FollowButtonClicked;
+            button.ProfilButton.Clicked += ProfilButtonClicked;
 
             Label messageLabel = new Label()
             {
@@ -94,7 +52,7 @@ namespace ITI.Archi_Vite.Forms
 
             Label recieversLabel = new Label()
             {
-                Text = "À : " + _prescription.Receivers.Count + " personne(s)",
+                Text = "À : " + _prescription.Recievers.Count + " personne(s)",
                 FontSize = 40,
                 TextColor = Color.Gray,
                 HorizontalOptions = LayoutOptions.StartAndExpand,
@@ -129,7 +87,7 @@ namespace ITI.Archi_Vite.Forms
             {
                 Children =
                 {
-                    buttonStack,
+                    button.Content,
                     messageLabel,
                     titleLabel,
                     senderLabel,
@@ -155,7 +113,7 @@ namespace ITI.Archi_Vite.Forms
 				Patient patient = new Patient(_userData.User);
 				await Navigation.PushAsync(new FollowPatientPage(_userData, patient));
 			}
-			else await Navigation.PushAsync(new PatientList(_userData));
+			else await Navigation.PushAsync(new PatientListPage(_userData));
         }
 
         private bool PageForPatient()
@@ -165,6 +123,10 @@ namespace ITI.Archi_Vite.Forms
                 if (patient.UserId == _userData.User.UserId) return true;
             }
             return false;
+        }
+        private async void ProfilButtonClicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new ProfilPage(_userData, _userData.User));
         }
     }
 }

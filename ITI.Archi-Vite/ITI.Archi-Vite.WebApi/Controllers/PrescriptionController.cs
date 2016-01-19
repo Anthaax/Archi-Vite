@@ -18,7 +18,7 @@ namespace ITI.Archi_Vite.WebApi.Controllers
     {
         private ArchiViteContext _db = new ArchiViteContext();
         DocumentManager _doc;
-        PrescriptionService Do = new PrescriptionService();
+        DocumentService Do = new DocumentService();
 
         // GET: api/Prescription
         public IQueryable<Follower> GetFollower()
@@ -26,31 +26,19 @@ namespace ITI.Archi_Vite.WebApi.Controllers
             return _db.Follower;
         }
 
-        // GET: api/Prescription/?patientId=5&proId=5
-        [ResponseType(typeof(DocumentSerializable))]
-        public async Task<IHttpActionResult> GetPrescrition(int patientId, int proId)
-        {
-            DocumentSerializable prescription = Do.getPrescription(patientId, proId);
-            if ( prescription == null)
-            {
-                return NotFound();
-            }
-
-            return (Ok(prescription));
-        }
-
-        // PUT: api/Prescription/5
+        // PUT: api/Prescription
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutFollower(List<Professional> Receivers, Professional Sender, Patient Patient, string Title, string DocPath)
+        public async Task<IHttpActionResult> PutPrescription(PrescriptionXML pres)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
+            FromXml xml = new FromXml();
+            Prescription p = xml.CreatePrescription(pres);
             try
             {
-                Do.putPrescription(Receivers, Sender, Patient, Title, DocPath);
+                Do.putPrescription(p);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -62,7 +50,7 @@ namespace ITI.Archi_Vite.WebApi.Controllers
 
         // POST: api/Prescription
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PostFollower(int reciverId, int patientid, DateTime date)
+        public async Task<IHttpActionResult> PostPrescripton(int reciverId, int patientid, DateTime date)
         {
             if (!ModelState.IsValid)
             {
@@ -70,7 +58,7 @@ namespace ITI.Archi_Vite.WebApi.Controllers
             }            
             try
             {
-                Do.postFollower(reciverId, patientid, date);
+                Do.postPrescripton(reciverId, patientid, date);
             }
             catch (DbUpdateException)
             {
@@ -82,13 +70,13 @@ namespace ITI.Archi_Vite.WebApi.Controllers
 
         // DELETE: api/Prescription/5
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> DeleteFollower(Prescription prescription, string FilePath)
+        public async Task<IHttpActionResult> DeletePrescription(Prescription prescription, string FilePath)
         {
             if (prescription == null || FilePath == null)
             {
                 return NotFound();
             }
-            Do.deleteFollower(prescription, FilePath);
+            Do.deletePrescription(prescription, FilePath);
             return StatusCode(HttpStatusCode.NoContent);
         }
 

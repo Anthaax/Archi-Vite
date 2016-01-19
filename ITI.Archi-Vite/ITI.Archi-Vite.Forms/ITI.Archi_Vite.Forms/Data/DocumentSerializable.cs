@@ -8,8 +8,8 @@ namespace ITI.Archi_Vite.Forms
 {
     public class DocumentSerializable
     {
-        readonly List<Message> _messages;
-        readonly List<Prescription> _prescriptions;
+        List<Message> _messages;
+        List<Prescription> _prescriptions;
 
         public DocumentSerializable(List<Message> messages, List<Prescription> prescription)
         {
@@ -23,6 +23,10 @@ namespace ITI.Archi_Vite.Forms
             {
                 return _messages;
             }
+            set
+            {
+                _messages = value;
+            }
         }
 
         public List<Prescription> Prescriptions
@@ -30,6 +34,10 @@ namespace ITI.Archi_Vite.Forms
             get
             {
                 return _prescriptions;
+            }
+            set
+            {
+                _prescriptions = value;
             }
         }
     }

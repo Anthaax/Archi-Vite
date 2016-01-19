@@ -10,26 +10,26 @@ namespace ITI.Archi_Vite.Core
     [Serializable]
     public abstract class Document
     {
-        readonly List<Professional> receivers;
-        readonly Patient patient;
-        readonly Professional sender;
-        readonly DateTime date;
-        readonly string title;
+        readonly List<Professional> _receivers;
+        readonly Patient _patient;
+        readonly User _sender;
+        readonly DateTime _date;
+        readonly string _title;
 
-        protected Document(Professional Sender, List<Professional> Receivers, Patient Patient, string Title)
+        protected Document(User Sender, List<Professional> Receivers, Patient Patient, string Title)
         {
-            receivers = Receivers;
-            patient = Patient;
-            sender = Sender;
-            date = DateTime.Now;
-            title = Title;
+            _receivers = Receivers;
+            _patient = Patient;
+            _sender = Sender;
+            _date = DateTime.Now;
+            _title = Title;
         }
 
         public List<Professional> Receivers
         {
             get
             {
-                return receivers;
+                return _receivers;
             }
         }
 
@@ -37,15 +37,15 @@ namespace ITI.Archi_Vite.Core
         {
             get
             {
-                return patient;
+                return _patient;
             }
         }
 
-        public Professional Sender
+        public User Sender
         {
             get
             {
-                return sender;
+                return _sender;
             }
         }
 
@@ -53,7 +53,7 @@ namespace ITI.Archi_Vite.Core
         {
             get
             {
-                return date;
+                return _date;
             }
         }
 
@@ -61,7 +61,7 @@ namespace ITI.Archi_Vite.Core
         {
             get
             {
-                return title;
+                return _title;
             }
         }
     }

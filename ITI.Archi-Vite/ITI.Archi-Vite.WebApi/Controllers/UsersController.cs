@@ -11,6 +11,8 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using ITI.Archi_Vite.DataBase;
 using ITI.Archi_Vite.Core;
+using System.Xml.Serialization;
+using System.IO;
 
 namespace ITI.Archi_Vite.WebApi.Controllers
 {
@@ -18,6 +20,7 @@ namespace ITI.Archi_Vite.WebApi.Controllers
     {
         private ArchiViteContext _db = new ArchiViteContext();
         DocumentManager _doc;
+        ToXml _tXML = new ToXml();
         UserService Do = new UserService();
 
         // GET: api/Users
@@ -30,38 +33,39 @@ namespace ITI.Archi_Vite.WebApi.Controllers
         [ResponseType(typeof(User))]
         public async Task<IHttpActionResult> GetUser(int id)
         {
-            User user = Do.getUser(id);
-            if (user == null)
+            User swag = Do.getUser(id);
+            if (swag == null)
             {
                 return NotFound();
             }
 
-            return Ok(user);
+            return Ok(swag);
         }
 
-        [ResponseType(typeof(User))]
+        [ResponseType(typeof(DataXML))]
         public async Task<IHttpActionResult> GetUser(string pseudo, string password)
         {
-            Do.getUser(pseudo, password);
-            if (User == null)
+            Data data = Do.getUser(pseudo, password);
+            if (data == null)
             {
                 return NotFound();
             }
-
-            return Ok(User);
+            return Ok(_tXML.ToXML(data));
         }
 
-        // POST: api/Message
+        // POST: api/Users
         [ResponseType(typeof(Follower))]
-        public async Task<IHttpActionResult> PostUser(User user)
+        public async Task<IHttpActionResult> PostUser(UserXML user)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
+            FromXml xml = new FromXml();
+            User u = xml.CreateUser(user);
             try
             {
-                Do.PostUser(user);
+                Do.PostUser(u);
             }
             catch (DbUpdateException)
             {

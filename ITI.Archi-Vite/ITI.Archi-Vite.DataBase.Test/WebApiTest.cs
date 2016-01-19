@@ -8,6 +8,8 @@ using ITI.Archi_Vite.Core;
 using System.Data.Entity;
 using ITI.Archi_Vite.DataBase;
 using ITI.Archi_Vite.WebApi.Controllers;
+using ITI.Archi_Vite.WebApi;
+using System.Drawing;
 
 namespace ITI.Archi_Vite.DataBase.Test
 {
@@ -20,7 +22,8 @@ namespace ITI.Archi_Vite.DataBase.Test
         DocumentService _documentService;
         PatientService _patientService;
         ProfessionalService _professionalService;
-        MessageService _messageService;
+        Data _data; 
+        
         public WebApiTest()
         {
             _professionalService = new ProfessionalService();
@@ -28,31 +31,48 @@ namespace ITI.Archi_Vite.DataBase.Test
             _userService = new UserService();
             _documentService = new DocumentService();
             _followerService = new FollowerService();
-            _messageService = new MessageService();
         }
 
         [Test]
-        public void GetUser()
+        public void GetUserWithId()
         {
+            using (ArchiViteContext context = new ArchiViteContext())
+            {
+                User u = _userService.getUser(context.SelectRequest.SelectUser("clementR","clementR").UserId);
+                Assert.AreEqual(u.LastName, "Rousseau");
+                int id = u.UserId;
 
-            User u = _userService.getUser("ClementR", "ClementR");
-            Assert.AreEqual(u.LastName, "Rousseau");
-            int id = u.UserId;
+                User u2 = _userService.getUser(id);
+                Assert.AreEqual(u.LastName, "Rousseau");
+            }
+        }
 
-            User u2 = _userService.getUser(id);
-            Assert.AreEqual(u.LastName, "Rousseau");
+        [Test]
+        public void GetUserWithPseudoAndPassword()
+        {
+            using (ArchiViteContext context = new ArchiViteContext())
+            {
+                _data = _userService.getUser("ClementR", "ClementR");
+                Assert.AreEqual(_data.User.UserId, context.SelectRequest.SelectUser("ClementR", "ClementR").UserId);
+                Assert.AreEqual(_data.Followers.Count, context.SelectRequest.SelectAllFollow(context.SelectRequest.SelectUser("ClementR", "ClementR").UserId).Count);
+
+            }
         }
 
         [Test]
         public void PostUser()
         {
-            User u = _userService.getUser("ClementR", "ClementR");
-            u.City = "Paris";
-            _userService.PostUser(u);
-            Assert.AreEqual(u.City, ("Paris"));
-            u.City = "Ivry-sur-Seine";
-            _userService.PostUser(u);
-            Assert.AreEqual(u.City, ("Ivry-sur-Seine"));
+            using (ArchiViteContext context = new ArchiViteContext())
+            {
+                int id = context.SelectRequest.SelectUser("clementR", "clementR").UserId;
+                User u = _userService.getUser(id);
+                u.City = "Paris";
+                _userService.PostUser(u);
+                Assert.AreEqual(u.City, ("Paris"));
+                u.City = "Ivry-sur-Seine";
+                _userService.PostUser(u);
+                Assert.AreEqual(u.City, ("Ivry-sur-Seine"));
+            }
 
         }
 
@@ -99,7 +119,7 @@ namespace ITI.Archi_Vite.DataBase.Test
                     Assert.AreEqual(pair.Value[0].ProfessionalId, context.SelectRequest.SelectProfessional("AntoineR", "AntoineR").ProfessionalId);
                 }
 
-                _doc.DeleteFollowerFile(context.SelectRequest.SelectProfessional("AntoineR","AntoineR").ProfessionalId, context.SelectRequest.SelectPatient("GuillaumeF", "GuillaumeF").PatientId);
+                _doc.DeleteFollowerFile(context.SelectRequest.SelectProfessional("AntoineR", "AntoineR").ProfessionalId, context.SelectRequest.SelectPatient("GuillaumeF", "GuillaumeF").PatientId);
                 context.SuppressionRequest.FollowerSuppression(context.SelectRequest.SelectOneFollow(context.SelectRequest.SelectPatient("GuillaumeF", "GuillaumeF").PatientId, context.SelectRequest.SelectProfessional("AntoineR", "AntoineR").ProfessionalId));
                 Assert.IsNull(context.SelectRequest.SelectOneFollow(context.SelectRequest.SelectPatient("GuillaumeF", "GuillaumeF").PatientId, context.SelectRequest.SelectProfessional("AntoineR", "AntoineR").ProfessionalId));
             }
@@ -190,7 +210,7 @@ namespace ITI.Archi_Vite.DataBase.Test
                     Photo = "yolo"
                 };
 
-                ProfessionalCreation newPro = new ProfessionalCreation (userTest, "testeur");
+                ProfessionalCreation newPro = new ProfessionalCreation(userTest, "testeur");
                 _professionalService.putProfessional(newPro);
                 Assert.IsNotNull(context.SelectRequest.SelectProfessional("test", "mdp"));
 
@@ -200,18 +220,27 @@ namespace ITI.Archi_Vite.DataBase.Test
         }
 
         [Test]
-        public void GetDoc()
+        public void GetDocPro()
         {
             using (ArchiViteContext context = new ArchiViteContext())
             {
-                DocumentSerializable doc = _messageService.getMessage(context.SelectRequest.SelectProfessional("ClementR","ClementR").ProfessionalId, context.SelectRequest.SelectPatient("GuillaumeF","GuillaumeF").PatientId);
-
+                DocumentSerializable doc = _documentService.SeeDocument(context.SelectRequest.SelectPatient("GuillaumeF", "GuillaumeF").PatientId, context.SelectRequest.SelectProfessional("ClementR", "ClementR").ProfessionalId);
                 Assert.IsNotNull(doc);
             }
         }
 
         [Test]
-        public void PutDoc()
+        public void GetDocPatient()
+        {
+            using (ArchiViteContext context = new ArchiViteContext())
+            {
+                DocumentSerializable doc = _documentService.SeeDocument(context.SelectRequest.SelectPatient("GuillaumeF", "GuillaumeF").PatientId);
+                Assert.IsNotNull(doc);
+            }
+        }
+
+        [Test]
+        public void PutDocMessage()
         {
             using (ArchiViteContext context = new ArchiViteContext())
             {
@@ -219,17 +248,17 @@ namespace ITI.Archi_Vite.DataBase.Test
                 List<Professional> listPro = new List<Professional>();
                 listPro.Add(context.SelectRequest.SelectProfessional("ClementR", "ClementR"));
                 listPro.Add(context.SelectRequest.SelectProfessional("SimonF", "SimonF"));
-                Professional Sender = context.SelectRequest.SelectProfessional("AntoineR", "AntoineR");
+                User Sender = context.SelectRequest.SelectUser("AntoineR", "AntoineR");
                 string Title = "My Title";
                 string Contents = "My Contents";
                 Patient P = context.SelectRequest.SelectPatient("GuillaumeF", "GuillaumeF");
 
-                _messageService.putMessage(listPro, Sender, Title, Contents, P);
+                _documentService.putMessage(listPro, Sender, Title, Contents, P);
 
                 DocumentSerializable document = dm.SeeDocument(context.SelectRequest.SelectProfessional("ClementR", "ClementR"), context.SelectRequest.SelectPatient("GuillaumeF", "GuillaumeF"));
                 Assert.AreEqual(document.Messages.Count, 1);
 
-                
+
             }
         }
 
@@ -242,27 +271,111 @@ namespace ITI.Archi_Vite.DataBase.Test
                 List<Professional> listPro = new List<Professional>();
                 listPro.Add(context.SelectRequest.SelectProfessional("ClementR", "ClementR"));
                 listPro.Add(context.SelectRequest.SelectProfessional("SimonF", "SimonF"));
-                Professional Sender = context.SelectRequest.SelectProfessional("AntoineR", "AntoineR");
+                User Sender = context.SelectRequest.SelectUser("AntoineR", "AntoineR");
                 string Title = "My Title2";
                 string Contents = "My Contents";
                 Patient P = context.SelectRequest.SelectPatient("GuillaumeF", "GuillaumeF");
 
-                _messageService.putMessage(listPro, Sender, Title, Contents, P);
+                _documentService.putMessage(listPro, Sender, Title, Contents, P);
 
-                
+
                 DocumentSerializable document = dm.SeeDocument(context.SelectRequest.SelectProfessional("ClementR", "ClementR"), context.SelectRequest.SelectPatient("GuillaumeF", "GuillaumeF"));
 
                 foreach (var message in document.Messages)
                 {
                     if (message.Title == "MyTitle2")
                     {
-                        _messageService.postMessage(context.SelectRequest.SelectPatient("GuillaumF", "GuillaumeF").PatientId, context.SelectRequest.SelectProfessional("AntoineR", "AntoineR").ProfessionalId, message.Date);
+                        _documentService.postMessage(context.SelectRequest.SelectPatient("GuillaumF", "GuillaumeF").PatientId, context.SelectRequest.SelectProfessional("AntoineR", "AntoineR").ProfessionalId, message.Date);
 
                         Assert.That(message.Receivers.Count == 3);
+
+                        foreach (var pro in message.Receivers)
+                        {
+                            _documentService.deleteMessage(pro.ProfessionalId, message.Patient.PatientId, message.Date);
+                        }
+
+                        Assert.That(message.Receivers.Count == 2);
+
                     }
                 }
             }
 
+        }
+
+        [Test]
+        public void PutDocPrescription()
+        {
+            using (ArchiViteContext context = new ArchiViteContext())
+            {
+                DocumentManager dm = new DocumentManager(context);
+                List<Professional> listPro = new List<Professional>();
+                listPro.Add(context.SelectRequest.SelectProfessional("ClementR", "ClementR"));
+                listPro.Add(context.SelectRequest.SelectProfessional("SimonF", "SimonF"));
+                User Sender = context.SelectRequest.SelectUser("OlivierS", "OlivierS");
+                string Title = "My Title";
+                Patient P = context.SelectRequest.SelectPatient("GuillaumeF", "GuillaumeF");
+                string DocPath = P.PatientId + "$" + Sender.UserId;
+                Prescription p = new Prescription(Title, Sender.Photo, Sender, listPro, P);
+
+                _documentService.putPrescription(p);
+                DocumentSerializable document = dm.SeeDocument(context.SelectRequest.SelectProfessional("OlivierS", "OlivierS"), context.SelectRequest.SelectPatient("GuillaumeF", "GuillaumeF"));
+                Assert.AreEqual(document.Prescriptions.Count, 3);
+            }
+        }
+
+        [Test]
+        public void PostPrescription()
+        {
+            using (ArchiViteContext context = new ArchiViteContext())
+            {
+                DocumentManager dm = new DocumentManager(context);
+                List<Professional> listPro = new List<Professional>();
+                listPro.Add(context.SelectRequest.SelectProfessional("ClementR", "ClementR"));
+                listPro.Add(context.SelectRequest.SelectProfessional("SimonF", "SimonF"));
+                User Sender = context.SelectRequest.SelectUser("OlivierS", "OlivierS");
+                string Title = "My Title2";
+                Patient P = context.SelectRequest.SelectPatient("GuillaumeF", "GuillaumeF");
+                string DocPath = P.PatientId + "$" + Sender.UserId;
+                ImageManager img = new ImageManager();
+                Image i = img.LoadImage(Sender.Photo);
+                Prescription p = new Prescription(Title, Sender.Photo, Sender, listPro, P);
+
+                _documentService.putPrescription(p);
+
+                DocumentSerializable document = dm.SeeDocument(context.SelectRequest.SelectProfessional("ClementR", "ClementR"), context.SelectRequest.SelectPatient("GuillaumeF", "GuillaumeF"));
+
+                foreach (var prescription in document.Prescriptions)
+                {
+                    if (prescription.Title == "MyTitle2")
+                    {
+                        _documentService.postPrescripton(context.SelectRequest.SelectPatient("GuillaumF", "GuillaumeF").PatientId, context.SelectRequest.SelectProfessional("AntoineR", "AntoineR").ProfessionalId, prescription.Date);
+
+                        Assert.That(prescription.Receivers.Count == 3);
+
+                        foreach (var pro in prescription.Receivers)
+                        {
+                            _documentService.deletePrescription(prescription, prescription.DocPath);
+                        }
+
+                        Assert.That(prescription.Receivers.Count == 2);
+
+                    }
+                }
+            }
+        }
+        [Test]
+        public void GetArrayBytesOfAnImage()
+        {
+            using (ArchiViteContext context = new ArchiViteContext())
+            {
+                List<User> users = context.User.ToList();
+                foreach (var u in users)
+                {
+                    ImageManager img = new ImageManager();
+                    Image i = img.LoadImage(u.Photo);
+                    byte[] array = img.ImageCoverter(i);
+                }
+            }
         }
     }
 }

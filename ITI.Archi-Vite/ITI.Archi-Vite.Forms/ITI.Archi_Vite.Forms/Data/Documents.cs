@@ -10,14 +10,14 @@ namespace ITI.Archi_Vite.Forms
     {
         readonly List<Professional> _receivers;
         readonly Patient _patient;
-        readonly Professional _sender;
+        readonly User _sender;
         readonly DateTime _date;
         readonly string _title;
 		readonly string _senderFullName;
         readonly string _patientFullName;
 
 
-        protected Documents(Professional Sender, List<Professional> Receivers, Patient Patient, string Title)
+        protected Documents(User Sender, List<Professional> Receivers, Patient Patient, string Title)
         {
             _receivers = Receivers;
             _patient = Patient;
@@ -28,7 +28,7 @@ namespace ITI.Archi_Vite.Forms
             _title = Title;
         }
 
-        public List<Professional> Receivers
+        public List<Professional> Recievers
         {
             get
             {
@@ -52,7 +52,7 @@ namespace ITI.Archi_Vite.Forms
             }
         }
 
-        public Professional Sender
+        public User Sender
         {
             get
             {
@@ -60,11 +60,11 @@ namespace ITI.Archi_Vite.Forms
             }
         }
 
-		public string Date
+		public DateTime Date
         {
             get
             {
-				return _date.ToString();
+				return _date;
             }
         }
 
