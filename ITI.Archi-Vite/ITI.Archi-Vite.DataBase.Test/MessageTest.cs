@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ITI.Archi_Vite.Core;
+using ITI.Archi_Vite.WebApi;
 using System.Data.Entity;
 using ITI.Archi_Vite.WebApi.Controllers;
 
-namespace ITI.Archi_Vite.DataBase.Test
+namespace ITI.Archi_Vite.Test
 {
     [TestFixture]
     public class MessageTest

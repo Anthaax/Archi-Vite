@@ -4,14 +4,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ITI.Archi_Vite.Core;
 using System.Data.Entity;
-using ITI.Archi_Vite.DataBase;
 using ITI.Archi_Vite.WebApi.Controllers;
 using ITI.Archi_Vite.WebApi;
 using System.Drawing;
 
-namespace ITI.Archi_Vite.DataBase.Test
+namespace ITI.Archi_Vite.Test
 {
     [TestFixture]
     class WebApiTest

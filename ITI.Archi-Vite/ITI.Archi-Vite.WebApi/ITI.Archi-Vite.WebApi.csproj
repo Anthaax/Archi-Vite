@@ -106,6 +106,35 @@
     <Compile Include="Controllers\DocumentController.cs" />
     <Compile Include="Controllers\FollowersController.cs" />
     <Compile Include="Controllers\MessageController.cs" />
+    <Compile Include="Core\DocumentManager.cs" />
+    <Compile Include="Core\Documents.cs" />
+    <Compile Include="Core\DocumentSerializable.cs" />
+    <Compile Include="Core\ImageManager.cs" />
+    <Compile Include="Core\Message.cs" />
+    <Compile Include="Core\Prescription.cs" />
+    <Compile Include="Models\AddRequest.cs" />
+    <Compile Include="Models\ArchiViteContext.cs" />
+    <Compile Include="Models\ContextManager.cs" />
+    <Compile Include="Models\Follower.cs" />
+    <Compile Include="Migrations\201511101428410_Initial.cs" />
+    <Compile Include="Migrations\201511101428410_Initial.Designer.cs">
+      <DependentUpon>201511101428410_Initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201511251640255_Initial1.cs" />
+    <Compile Include="Migrations\201511251640255_Initial1.Designer.cs">
+      <DependentUpon>201511251640255_Initial1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201512021325555_Initial2.cs" />
+    <Compile Include="Migrations\201512021325555_Initial2.Designer.cs">
+      <DependentUpon>201512021325555_Initial2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Patient.cs" />
+    <Compile Include="Models\Professional.cs" />
+    <Compile Include="Models\SelectRequest.cs" />
+    <Compile Include="Models\SuppressionRequest.cs" />
+    <Compile Include="Models\UpdateRequest.cs" />
+    <Compile Include="Models\User.cs" />
     <Compile Include="Services\Data.cs" />
     <Compile Include="Services\DocumentService.cs" />
     <Compile Include="Services\FollowerService.cs" />
@@ -139,7 +168,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
+    <Content Include="Migrations\App.config" />
+    <Content Include="Models\packages.config" />
     <None Include="Properties\PublishProfiles\ArchiVite.pubxml" />
+    <None Include="Properties\PublishProfiles\itiarchivite.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -149,17 +181,23 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ITI.Archi-Vite.Core\ITI.Archi-Vite.Core.csproj">
-      <Project>{8E1DD5E5-0186-4BE5-9999-970BA6D75744}</Project>
-      <Name>ITI.Archi-Vite.Core</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ITI.Archi-Vite.DataBase\ITI.Archi-Vite.DataBase.csproj">
       <Project>{31A7B949-14C8-4BD1-BF34-082D340BB885}</Project>
       <Name>ITI.Archi-Vite.DataBase</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201511101428410_Initial.resx">
+      <DependentUpon>201511101428410_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511251640255_Initial1.resx">
+      <DependentUpon>201511251640255_Initial1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201512021325555_Initial2.resx">
+      <DependentUpon>201512021325555_Initial2.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -1,4 +1,4 @@
-﻿using ITI.Archi_Vite;
+﻿using ITI.Archi_Vite.DataBase;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data.Entity;
 
-namespace ITI.Archi_Vite.Core
+namespace ITI.Archi_Vite.WebApi
 {
     public class DocumentManager 
     {

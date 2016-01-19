@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 using ITI.Archi_Vite.DataBase;
-using ITI.Archi_Vite.Core;
 using System.Xml.Serialization;
 using System.IO;
 
