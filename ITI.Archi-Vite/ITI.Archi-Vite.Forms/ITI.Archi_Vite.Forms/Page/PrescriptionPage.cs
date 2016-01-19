@@ -1,4 +1,13 @@
-﻿using System;
+﻿using ModernHttpClient;
+using Plugin.Connectivity;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Net.Http;
+using System.Reflection.Emit;
+using System.Text;
+using Newtonsoft.Json;
 
 using Xamarin.Forms;
 
@@ -42,10 +51,13 @@ namespace ITI.Archi_Vite.Forms
                 TextColor = Color.Gray,
                 HorizontalOptions = LayoutOptions.StartAndExpand,
             };
+            Stream s = new MemoryStream(DependencyService.Get<IBytesSaveAndLoad>().LoadByteArray(_prescription.DocPath));
 
             Image ContentLabel = new Image()
             {
-                Source = _prescription.DocPath,
+                Source = ImageSource.FromStream(() => s),
+                HeightRequest = 200,
+                WidthRequest = 200,
                 VerticalOptions = LayoutOptions.CenterAndExpand,
                 HorizontalOptions = LayoutOptions.CenterAndExpand
             };
@@ -103,17 +115,17 @@ namespace ITI.Archi_Vite.Forms
 
         private async void ReturnButton_Clicked(object sender, EventArgs e)
         {
-			await Navigation.PushAsync(new PrescriptionListPage(_userData));
+            await Navigation.PushAsync(new PrescriptionListPage(_userData));
         }
 
         private async void FollowButtonClicked(object sender, EventArgs e)
         {
-			if (PageForPatient())
-			{
-				Patient patient = new Patient(_userData.User);
-				await Navigation.PushAsync(new FollowPatientPage(_userData, patient));
-			}
-			else await Navigation.PushAsync(new PatientListPage(_userData));
+            if (PageForPatient())
+            {
+                Patient patient = new Patient(_userData.User);
+                await Navigation.PushAsync(new FollowPatientPage(_userData, patient));
+            }
+            else await Navigation.PushAsync(new PatientListPage(_userData));
         }
 
         private bool PageForPatient()
