@@ -112,6 +112,10 @@
     <Compile Include="Core\ImageManager.cs" />
     <Compile Include="Core\Message.cs" />
     <Compile Include="Core\Prescription.cs" />
+    <Compile Include="Migrations\201601220825326_Initial3.cs" />
+    <Compile Include="Migrations\201601220825326_Initial3.Designer.cs">
+      <DependentUpon>201601220825326_Initial3.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\AddRequest.cs" />
     <Compile Include="Models\ArchiViteContext.cs" />
     <Compile Include="Models\ContextManager.cs" />
@@ -170,8 +174,7 @@
     <Content Include="packages.config" />
     <Content Include="Migrations\App.config" />
     <Content Include="Models\packages.config" />
-    <None Include="Properties\PublishProfiles\ArchiVite.pubxml" />
-    <None Include="Properties\PublishProfiles\itiarchivite.pubxml" />
+    <None Include="Properties\PublishProfiles\ITIArchiVite.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -183,12 +186,6 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ITI.Archi-Vite.DataBase\ITI.Archi-Vite.DataBase.csproj">
-      <Project>{31A7B949-14C8-4BD1-BF34-082D340BB885}</Project>
-      <Name>ITI.Archi-Vite.DataBase</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Migrations\201511101428410_Initial.resx">
       <DependentUpon>201511101428410_Initial.cs</DependentUpon>
     </EmbeddedResource>
@@ -197,6 +194,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201512021325555_Initial2.resx">
       <DependentUpon>201512021325555_Initial2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201601220825326_Initial3.resx">
+      <DependentUpon>201601220825326_Initial3.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

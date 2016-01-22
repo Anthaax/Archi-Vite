@@ -94,10 +94,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ITI.Archi-Vite.DataBase\ITI.Archi-Vite.DataBase.csproj">
-      <Project>{31A7B949-14C8-4BD1-BF34-082D340BB885}</Project>
-      <Name>ITI.Archi-Vite.DataBase</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ITI.Archi-Vite.WebApi\ITI.Archi-Vite.WebApi.csproj">
       <Project>{A53541C2-1666-42ED-9608-225E8F49EEFE}</Project>
       <Name>ITI.Archi-Vite.WebApi</Name>

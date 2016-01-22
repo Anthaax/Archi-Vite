@@ -1,18 +1,18 @@
-namespace ITI.Archi_Vite.DataBase.Migrations
+namespace ITI.Archi_Vite.WebApi.Migrations
 {
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<ITI.Archi_Vite.DataBase.ArchiViteContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<ArchiViteContext>
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = false;
+            AutomaticMigrationsEnabled = true;
         }
 
-        protected override void Seed(ITI.Archi_Vite.DataBase.ArchiViteContext context)
+        protected override void Seed(ArchiViteContext context)
         {
             //  This method will be called after migrating to the latest version.
 
