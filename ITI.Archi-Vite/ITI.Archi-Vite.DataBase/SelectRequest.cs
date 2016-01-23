@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.Entity;
+using System.Security.Cryptography;
 
 namespace ITI.Archi_Vite.DataBase
 {
@@ -34,7 +35,8 @@ namespace ITI.Archi_Vite.DataBase
         /// <returns></returns>
         public User SelectUser(string pseudo, string password)
         {
-                var selectQuery = _context.User
+            password = CryptoMDP.GetMd5Hash(MD5.Create(), password);
+            var selectQuery = _context.User
                                         .Where(t => t.Pseudo.Equals(pseudo) && t.Password.Equals(password))
                                         .FirstOrDefault();
                 return selectQuery;
@@ -61,6 +63,7 @@ namespace ITI.Archi_Vite.DataBase
         /// <returns></returns>
         public Patient SelectPatient(string pseudo, string password)
         {
+            password = CryptoMDP.GetMd5Hash(MD5.Create(), password);
             var selectQuery = _context.Patient
                                     .Include(c => c.User)
                                     .Where(t => t.User.Pseudo.Equals(pseudo) && t.User.Password.Equals(password))
@@ -88,6 +91,7 @@ namespace ITI.Archi_Vite.DataBase
         /// <returns></returns>
         public Professional SelectProfessional(string pseudo, string password)
         {
+            password = CryptoMDP.GetMd5Hash(MD5.Create(), password);
             var selectQuery = _context.Professional
                                     .Include(c => c.User)
                                     .Where(t => t.User.Pseudo.Equals(pseudo) && t.User.Password.Equals(password))

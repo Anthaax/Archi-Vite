@@ -30,6 +30,8 @@ namespace ITI.Archi_Vite.DataBase.Test
                 Patient patient1 = context.AddRequest.AddPatient(users[5]);
                 dm.CreateEmptyFile(patient1.PatientId.ToString());
 
+                context.AddRequest.AddFollow(patient.PatientId, pro.ProfessionalId);
+                dm.CreateEmptyFile(patient.PatientId + "$" + pro.ProfessionalId);
 
                 context.AddRequest.AddFollow(patient.PatientId, pro1.ProfessionalId);
                 dm.CreateEmptyFile(patient.PatientId + "$" + pro1.ProfessionalId);
@@ -70,15 +72,12 @@ namespace ITI.Archi_Vite.DataBase.Test
                 List<Professional> receivers = new List<Professional>();
                 foreach (var f in context.SelectRequest.SelectFollowForPatient(context.SelectRequest.SelectPatient("GuillaumeF", "GuillaumeF").PatientId))
                 {
-                    receivers.Add(f.Professionnal);
+                    if(f.Professionnal.User.Pseudo != "ClementR")
+                        receivers.Add(f.Professionnal);
                 }
-                dm.CreateMessage(receivers, context.SelectRequest.SelectUser("ClementR", "ClementR"), "Coucou", "J'ai un pb", context.SelectRequest.SelectPatient("GuillaumeF", "GuillaumeF"));
+                dm.CreateMessage(receivers, context.SelectRequest.SelectUser("ClementR", "ClementR"), "Agen", "J'ai hâte de venir à Agen", context.SelectRequest.SelectPatient("GuillaumeF", "GuillaumeF"));
                 DocumentSerializable document = dm.SeeDocument(context.SelectRequest.SelectProfessional(context.SelectRequest.SelectProfessional("ClementR", "ClementR").ProfessionalId), context.SelectRequest.SelectPatient("GuillaumeF", "GuillaumeF"));
-                Assert.AreEqual(document.Messages.Count, 2);
-
-                dm.DeleteDoc(document.Messages.First(), context.SelectRequest.SelectPatient("GuillaumeF", "GuillaumeF").PatientId+"$"+ context.SelectRequest.SelectProfessional("ClementR", "ClementR").ProfessionalId);
-                DocumentSerializable documents1 = dm.SeeDocument(context.SelectRequest.SelectProfessional(context.SelectRequest.SelectProfessional("ClementR", "ClementR").ProfessionalId), context.SelectRequest.SelectPatient("GuillaumeF", "GuillaumeF"));
-                Assert.AreEqual(documents1.Messages.Count, 0);
+                Assert.AreEqual(document.Messages.Count, 1);
             }
         }
         [Test]
@@ -146,7 +145,7 @@ namespace ITI.Archi_Vite.DataBase.Test
                 Birthdate = DateTime.Now,
                 Adress = "72 avenue maurice thorez",
                 City = "Ivry-sur-Seine",
-                Postcode = 12345,
+                Postcode = 94200,
                 PhoneNumber = 0606066606,
                 Pseudo = "AntoineR",
                 Password = "AntoineR",
@@ -159,7 +158,7 @@ namespace ITI.Archi_Vite.DataBase.Test
                 Birthdate = DateTime.Now,
                 Adress = "72 avenue maurice thorez",
                 City = "Ivry-sur-Seine",
-                Postcode = 12345,
+                Postcode = 94200,
                 PhoneNumber = 0606066606,
                 Pseudo = "SimonF",
                 Password = "SimonF",
@@ -172,8 +171,8 @@ namespace ITI.Archi_Vite.DataBase.Test
                 Birthdate = DateTime.Now,
                 Adress = "72 avenue maurice thorez",
                 City = "Ivry-sur-Seine",
-                Postcode = 12345,
-                PhoneNumber = 0606066606,
+                Postcode = 94200,
+                PhoneNumber = 0606060606,
                 Pseudo = "ClementR",
                 Password = "ClementR",
                 Photo = "silO1AR.png"
@@ -186,7 +185,7 @@ namespace ITI.Archi_Vite.DataBase.Test
                 Adress = "72 avenue maurice thorez",
                 City = "Ivry-sur-Seine",
                 Postcode = 12345,
-                PhoneNumber = 0606066606,
+                PhoneNumber = 94200,
                 Pseudo = "OlivierS",
                 Password = "OlivierS",
                 Photo = "olivier-spinelli_portrait.png"
@@ -198,8 +197,8 @@ namespace ITI.Archi_Vite.DataBase.Test
                 Birthdate = DateTime.Now,
                 Adress = "72 avenue maurice thorez",
                 City = "Ivry-sur-Seine",
-                Postcode = 12345,
-                PhoneNumber = 0606066606,
+                Postcode = 94200,
+                PhoneNumber = 0606060606,
                 Pseudo = "GuillaumeF",
                 Password = "GuillaumeF",
                 Photo = "GWji92h.png"
@@ -211,7 +210,7 @@ namespace ITI.Archi_Vite.DataBase.Test
                 Birthdate = DateTime.Now,
                 Adress = "72 avenue maurice thorez",
                 City = "Ivry-sur-Seine",
-                Postcode = 12345,
+                Postcode = 94200,
                 PhoneNumber = 0606066606,
                 Pseudo = "MaximeD",
                 Password = "MaximeD",

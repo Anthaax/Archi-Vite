@@ -268,7 +268,7 @@ namespace ITI.Archi_Vite.Core
                 var follow = _context.SelectRequest.SelectOneFollow(prescription.Patient.PatientId, receiver.ProfessionalId);
                 if (follow != null && follow != senderFollow)
                 {
-                    AddDoc(prescription, senderFollow.PatientId + "$" + senderFollow.ProfessionnalId);
+                    AddDoc(prescription, follow.PatientId + "$" + follow.ProfessionnalId);
                 }
             }
             AddDoc(prescription, GetPathFile(prescription.Patient.PatientId.ToString()));

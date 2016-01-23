@@ -312,14 +312,14 @@ namespace ITI.Archi_Vite.DataBase.Test
                 listPro.Add(context.SelectRequest.SelectProfessional("ClementR", "ClementR"));
                 listPro.Add(context.SelectRequest.SelectProfessional("SimonF", "SimonF"));
                 User Sender = context.SelectRequest.SelectUser("OlivierS", "OlivierS");
-                string Title = "My Title";
+                string Title = "Agen";
                 Patient P = context.SelectRequest.SelectPatient("GuillaumeF", "GuillaumeF");
                 string DocPath = P.PatientId + "$" + Sender.UserId;
-                Prescription p = new Prescription(Title, Sender.Photo, Sender, listPro, P);
+                Prescription p = new Prescription(Title, "Agen.png", Sender, listPro, P);
 
                 _documentService.putPrescription(p);
                 DocumentSerializable document = dm.SeeDocument(context.SelectRequest.SelectProfessional("OlivierS", "OlivierS"), context.SelectRequest.SelectPatient("GuillaumeF", "GuillaumeF"));
-                Assert.AreEqual(document.Prescriptions.Count, 3);
+                Assert.AreEqual(document.Prescriptions.Count, 1);
             }
         }
 

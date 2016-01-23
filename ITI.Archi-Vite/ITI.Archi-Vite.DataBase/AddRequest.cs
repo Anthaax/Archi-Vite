@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Security.Cryptography;
 
 namespace ITI.Archi_Vite.DataBase
 {
@@ -32,6 +33,7 @@ namespace ITI.Archi_Vite.DataBase
             if (user == null) throw new ArgumentNullException("user", "user can't be null");
             if (user.Adress == null || user.Birthdate == null || user.City == null || user.FirstName == null || user.LastName == null || user.Password == null || user.PhoneNumber == 0 || user.Photo == null || user.Postcode == 0 || user.Pseudo == "null" || user.UserId != 0)
                 throw new ArgumentException("All property of an user can't be null exept userId who it must be null");
+            user.Password = CryptoMDP.GetMd5Hash(MD5.Create(), user.Password);
             Patient p = new Patient()
             {
                 User = user
@@ -54,6 +56,7 @@ namespace ITI.Archi_Vite.DataBase
             if (user == null || role == null) throw new ArgumentNullException("user or ", "user can't be null");
             if (user.Adress == null || user.Birthdate == null || user.City == null || user.FirstName == null || user.LastName == null || user.Password == null || user.PhoneNumber == 0 || user.Photo == null || user.Postcode == 0 || user.Pseudo == "null" || user.UserId != 0)
                 throw new ArgumentException("All property of an user can't be null exept userId who it must be null");
+            user.Password = CryptoMDP.GetMd5Hash(MD5.Create(), user.Password);
             Professional p = new Professional()
             {
                 Role = role,
