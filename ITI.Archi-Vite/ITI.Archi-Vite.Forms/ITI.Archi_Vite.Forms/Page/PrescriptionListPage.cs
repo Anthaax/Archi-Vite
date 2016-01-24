@@ -58,10 +58,15 @@ namespace ITI.Archi_Vite.Forms
                     patient.TextColor = Color.Gray;
 
                     Label spaceLabel = new Label();
-					spaceLabel.Text = " Titre : ";
+					spaceLabel.Text = " '' ";
                     spaceLabel.FontSize = 20;
                     spaceLabel.TextColor = Color.Gray;
-
+					
+					Label spaceLabel2 = new Label();
+					spaceLabel2.Text = " '' ";
+					spaceLabel2.FontSize = 20;
+					spaceLabel2.TextColor = Color.Gray;
+					
                     Label pro = new Label();
                     pro.Text = " De : ";
                     pro.FontSize = 20;
@@ -87,6 +92,7 @@ namespace ITI.Archi_Vite.Forms
                                         patientName,
                                         spaceLabel,
                                         title,
+										spaceLabel2,
                                         pro,
                                         senderName
                                     },
