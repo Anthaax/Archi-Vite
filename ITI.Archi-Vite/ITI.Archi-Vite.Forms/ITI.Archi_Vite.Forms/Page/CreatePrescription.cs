@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using Plugin.Media;
 
 using Xamarin.Forms;
+using System.IO;
 
 namespace ITI.Archi_Vite.Forms
 {
@@ -162,16 +164,23 @@ namespace ITI.Archi_Vite.Forms
         private async void Content_Clicked(object sender, EventArgs e)
         {
             await _cameraview.TakePicture();
+            var file = await CrossMedia.Current.PickPhotoAsync();
             _photo.Source = _cameraview.ImageSource;
-            _docpath =TostringSource(_photo);
+            _docpath = TostringSource(_photo);
+            using (var memoryStream = new MemoryStream())
+            {
+                file.GetStream().CopyTo(memoryStream);
+                file.Dispose();
+                DependencyService.Get<IBytesSaveAndLoad>().SaveByteArray(memoryStream.ToArray(), _docpath);
+            }
         }
 
         private async void Add_Clicked(object sender, EventArgs e)
         {
             if(_docpath == null)
-			    await Navigation.PushAsync(new AddReciverPage(_userData, _patient, null, _title.Text, _docpath, false));
+				await Navigation.PushAsync(new AddReciverPage(_userData, _patient, _recievers, _title.Text, _docpath, false));
             else
-                await Navigation.PushAsync(new AddReciverPage(_userData, _patient, null, _title.Text, TostringSource(_photo), false));
+				await Navigation.PushAsync(new AddReciverPage(_userData, _patient, _recievers, _title.Text, TostringSource(_photo), false));
         }
 
         private async void Back_Clicked(object sender, EventArgs e)
@@ -204,12 +213,6 @@ namespace ITI.Archi_Vite.Forms
 			_userData.DocumentsAdded.Prescriptions.Add (p);
 		}
 
-		private void MessageAdd( Message m )
-		{
-			_userData.Documents.Messages.Add(m);
-			_userData.DocumentsAdded.Messages.Add (m);
-		}
-
         private bool PageForPatient()
         {
             foreach (var patient in _userData.Follow.Keys)
@@ -229,6 +232,7 @@ namespace ITI.Archi_Vite.Forms
         private async void MessageAdd(Prescription p)
         {
             if(TostringSource(_photo)!= null)
+                
                 _userData.Documents.Prescriptions.Add(p);
             else
                 await DisplayAlert("Envoi", "Le message à été envoyé", "OK");

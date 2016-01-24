@@ -86,7 +86,7 @@ namespace ITI.Archi_Vite.Forms
 
             Button back = new Button
             {
-                Text = "retour au message",
+                Text = "Retour au message",
                 FontSize = 40,
                 BackgroundColor = Color.FromHex("439DFE"),
                 VerticalOptions = LayoutOptions.End
@@ -111,7 +111,7 @@ namespace ITI.Archi_Vite.Forms
 
         private async void Add_Clicked(object sender, EventArgs e)
         {
-			await Navigation.PushAsync(new AddReciverPage(_userData, _patient, null, _title.Text, _content.Text, true));
+			await Navigation.PushAsync(new AddReciverPage(_userData, _patient, _recievers, _title.Text, _content.Text, true));
         }
 
         private void Initiliaze(string title, string content, List<Professional> recievers)
@@ -134,7 +134,7 @@ namespace ITI.Archi_Vite.Forms
             Message message = GetMessage();
             MessageAdd(message);
             SaveUserData();
-            await DisplayAlert("Envoi", "Le message à été envoyé", "OK");
+            await DisplayAlert("Envoi", "Le message a été envoyé", "OK");
 
             await Navigation.PushAsync(new MessageListPage(_userData));
         }

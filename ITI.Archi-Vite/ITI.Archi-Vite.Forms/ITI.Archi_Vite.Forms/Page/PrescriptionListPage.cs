@@ -138,6 +138,7 @@ namespace ITI.Archi_Vite.Forms
         private void CreateMyPrescriptions()
         {
             _prescriptions = _userData.Documents.Prescriptions;
+            _prescriptions.Reverse();
         }
 
         private async void FollowButtonClicked(object sender, EventArgs e)

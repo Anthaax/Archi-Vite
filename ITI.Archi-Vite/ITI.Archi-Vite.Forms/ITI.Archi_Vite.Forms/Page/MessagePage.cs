@@ -109,7 +109,12 @@ namespace ITI.Archi_Vite.Forms
 
         private async void FollowButtonClicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new MessageListPage(_userData));
+            if (PageForPatient())
+            {
+                Patient patient = new Patient(_userData.User);
+                await Navigation.PushAsync(new FollowPatientPage(_userData, patient));
+            }
+            else await Navigation.PushAsync(new PatientListPage(_userData));
         }
 
         private bool PageForPatient()

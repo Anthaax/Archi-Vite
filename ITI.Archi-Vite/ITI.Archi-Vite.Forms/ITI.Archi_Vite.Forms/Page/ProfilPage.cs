@@ -43,7 +43,7 @@ namespace ITI.Archi_Vite.Forms
 
 			Label phonenumber = new Label
 			{
-				Text = "Numero : " + _user.PhoneNumber ,
+				Text = "Téléphone : 0" + _user.PhoneNumber.ToString() ,
 				FontSize = 30,
 				HorizontalOptions = LayoutOptions.Center
 

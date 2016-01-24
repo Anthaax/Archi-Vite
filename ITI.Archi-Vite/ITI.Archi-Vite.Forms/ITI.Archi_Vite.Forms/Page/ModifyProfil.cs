@@ -1,4 +1,5 @@
 ﻿using Plugin.Connectivity;
+using Plugin.Media;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -81,7 +82,7 @@ namespace ITI.Archi_Vite.Forms
 			};
 			Entry phoneNumber = new Entry
 			{
-				Text = _userData.User.PhoneNumber.ToString(),
+				Text = "0" + _userData.User.PhoneNumber.ToString(),
 				FontSize = 40,
 				Keyboard = Keyboard.Telephone,
 				HorizontalTextAlignment = TextAlignment.Center,
@@ -152,8 +153,16 @@ namespace ITI.Archi_Vite.Forms
         async void Photo_Clicked (object sender, EventArgs e)
 		{
 			await _cameraview.TakePicture();
+            var file = await CrossMedia.Current.PickPhotoAsync();
 			_profilPhoto.Source = _cameraview.ImageSource;
-		}
+            string _docpath = TostringSource(_profilPhoto);
+            using (var memoryStream = new MemoryStream())
+            {
+                file.GetStream().CopyTo(memoryStream);
+                file.Dispose();
+                DependencyService.Get<IBytesSaveAndLoad>().SaveByteArray(memoryStream.ToArray(), _docpath);
+            }
+        }
 
         private async void TappedGesture_Tapped(object sender, EventArgs e)
         {
@@ -221,6 +230,20 @@ namespace ITI.Archi_Vite.Forms
 				}
 			}
             //return null;
+        }
+        private string TostringSource(Image i)
+        {
+            var source = i.Source as UriImageSource;
+            if (source != null)
+            {
+                return source.Uri.ToString();
+            }
+            var s = i.Source as FileImageSource;
+            if (s != null)
+            {
+                return s.File.ToString();
+            }
+            return null;
         }
     }
 }

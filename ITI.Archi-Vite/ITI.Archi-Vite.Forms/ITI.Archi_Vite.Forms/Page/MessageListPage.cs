@@ -139,6 +139,7 @@ namespace ITI.Archi_Vite.Forms
         private void CreateMyMessage()
         {
             _message = _userData.Documents.Messages;
+            _message.Reverse();
         }
 
         private async void FollowButtonClicked(object sender, EventArgs e)
