@@ -58,7 +58,7 @@ namespace ITI.Archi_Vite.Forms
                     patient.TextColor = Color.Gray;
 
                     Label spaceLabel = new Label();
-                    spaceLabel.Text = "  ";
+					spaceLabel.Text = " Titre : ";
                     spaceLabel.FontSize = 20;
                     spaceLabel.TextColor = Color.Gray;
 

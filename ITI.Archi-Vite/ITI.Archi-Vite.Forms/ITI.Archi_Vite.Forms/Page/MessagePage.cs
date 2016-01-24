@@ -61,7 +61,7 @@ namespace ITI.Archi_Vite.Forms
             };
 
 			Label patientLabel = new Label () {
-				Text = "À propos de : " + _message.PatientFullName,
+				Text = "Patient : " + _message.PatientFullName,
 				FontSize = 40,
 				TextColor = Color.Gray,
 				HorizontalOptions = LayoutOptions.StartAndExpand,

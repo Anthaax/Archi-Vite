@@ -72,7 +72,7 @@ namespace ITI.Archi_Vite.Forms
 
             Label patientLabel = new Label()
             {
-                Text = "À propos de : " + _prescription.PatientFullName,
+                Text = "Patient : " + _prescription.PatientFullName,
                 FontSize = 40,
                 TextColor = Color.Gray,
                 HorizontalOptions = LayoutOptions.StartAndExpand,
