@@ -13,25 +13,33 @@ namespace ITI.Archi_Vite.Forms
 {
     public class HttpRequest
     {
-        static string _serveur = "192.168.0.40";
+		static string _serveur = "192.168.10.24";
         public static async Task<HttpResponseMessage> HttpRequestGetUserData(string pseudo, string password )
         {
-            var client = new HttpClient(new NativeMessageHandler());
-            client.BaseAddress = new Uri("http://"+ _serveur +":8080/");
-            client.Timeout = new TimeSpan(0, 0, 50);
-            client.MaxResponseContentBufferSize = long.MaxValue;
-            string s = "api/Users/?pseudo=" + pseudo + "&password=" + password;
-            var response = await client.GetAsync(s);
-            return response;
+			try {
+				var client = new HttpClient(new NativeMessageHandler());
+				client.BaseAddress = new Uri("http://"+ _serveur +":8080/");
+				client.Timeout = new TimeSpan(0, 0, 50);
+				client.MaxResponseContentBufferSize = long.MaxValue;
+				string s = "api/Users/?pseudo=" + pseudo + "&password=" + password;
+				var response = await client.GetAsync(s);
+				return response;
+			} catch (Exception ex) {
+				return null;
+			}
         }
 
         public static async Task<DocumentSerializableXML> HttpRequestSetDocument(DocumentSerializableXML documents)
         {
-            bool ok = false;
-            var client = new HttpClient(new NativeMessageHandler());
-            client.BaseAddress = new Uri("http://"+ _serveur +":8080/");
-            client.Timeout = new TimeSpan(0, 0, 50);
-            client.MaxResponseContentBufferSize = long.MaxValue;
+			bool ok = false;
+			var client = new HttpClient(new NativeMessageHandler());
+			try {
+	            client.BaseAddress = new Uri("http://"+ _serveur +":8080/");
+	            client.Timeout = new TimeSpan(0, 0, 50);
+	            client.MaxResponseContentBufferSize = long.MaxValue;
+			} catch (Exception ex) {
+				return null;
+			}
             if (documents.Message.Any())
             {
 				string s = "api/Message";
@@ -66,9 +74,13 @@ namespace ITI.Archi_Vite.Forms
         public static async Task<HttpResponseMessage> HttpRequestSetUserData(UserXML user)
         {
             var client = new HttpClient(new NativeMessageHandler());
-            client.BaseAddress = new Uri("http://"+ _serveur +":8080/");
-            client.Timeout = new TimeSpan(0, 0, 50);
-            client.MaxResponseContentBufferSize = long.MaxValue;
+			try {
+				client.BaseAddress = new Uri("http://"+ _serveur +":8080/");
+				client.Timeout = new TimeSpan(0, 0, 50);
+				client.MaxResponseContentBufferSize = long.MaxValue;
+			} catch (Exception ex) {
+				return null;
+			}
             string s = "api/Users";
             
             string json = JsonConvert.SerializeObject(user);

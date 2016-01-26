@@ -192,7 +192,7 @@ namespace ITI.Archi_Vite.Forms
                     image.Scale = 0.6;
                     for (int i = 0; i < professionals.Length; i++)
                     {
-                        if (_imageId[i] == image.Id)
+						if (_imageId[i] == image.Id && !_recievers.Contains(professionals[i]))
                         {
                             _recievers.Add(professionals[i]);
                         }

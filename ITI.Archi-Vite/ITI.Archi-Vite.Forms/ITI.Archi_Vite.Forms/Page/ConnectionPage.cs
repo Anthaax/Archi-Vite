@@ -17,8 +17,7 @@ namespace ITI.Archi_Vite.Forms
             Image logo = new Image
             {
                 Source = "Logo.png",
-				Scale = 0.75,
-                HorizontalOptions = LayoutOptions.FillAndExpand,
+				Scale = 0.7,
                 VerticalOptions = LayoutOptions.Start
             };
             Entry pseudo = new Entry
@@ -26,7 +25,6 @@ namespace ITI.Archi_Vite.Forms
                 Placeholder = "Pseudo",
                 FontSize = 40,
                 HorizontalTextAlignment = TextAlignment.Center,
-                HorizontalOptions = LayoutOptions.FillAndExpand,
                 VerticalOptions = LayoutOptions.Start,
                 TextColor = Color.Gray
             };
@@ -37,7 +35,6 @@ namespace ITI.Archi_Vite.Forms
                 IsPassword = true,
                 FontSize = 40,
                 HorizontalTextAlignment = TextAlignment.Center,
-                HorizontalOptions = LayoutOptions.FillAndExpand,
                 VerticalOptions = LayoutOptions.Start,
             };
             password.TextChanged += EntryTextChanged;
@@ -47,7 +44,7 @@ namespace ITI.Archi_Vite.Forms
                 FontSize = 40,
                 BackgroundColor = Color.FromHex("439DFE"),
                 HorizontalOptions = LayoutOptions.FillAndExpand,
-				VerticalOptions = LayoutOptions.FillAndExpand,
+				VerticalOptions = LayoutOptions.Center,
             };
             send.Clicked += async (sender, e) =>
             {
@@ -65,7 +62,7 @@ namespace ITI.Archi_Vite.Forms
                     logo,
                     pseudo,
                     password,
-                    send,
+					send,
                 }
             };
             this.BackgroundColor = Color.White;
@@ -98,18 +95,22 @@ namespace ITI.Archi_Vite.Forms
         private async void ConnectionGestion(string pseudo, string password)
         {
             var response = await HttpRequest.HttpRequestGetUserData(pseudo, password);
-            if (response.IsSuccessStatusCode)
+			if (response != null || response.IsSuccessStatusCode)
             {
                 string information = await response.Content.ReadAsStringAsync();
                 Data u = XmlDeseriliaze(information);
                 _dataForUser = u;
                 SaveUserData();
-                await Navigation.PushAsync(new ProfilPage(_dataForUser, _dataForUser.User));
+               	await Navigation.PushAsync(new ProfilPage(_dataForUser, _dataForUser.User));
             }
-            else
+			else if(response == null)
             {
                 await DisplayAlert("Error", "Problème avec le serveur", "Ok");
             }
+			else {
+				await DisplayAlert("Error", "Identifiants incorrects", "Ok");
+					
+			}
         }
 
         public void SaveUserData()
