@@ -24,7 +24,7 @@ namespace ITI.Archi_Vite.Forms
                 BackgroundColor = Color.White,
                 BorderColor = Color.Black,
                 TextColor = Color.Black,
-                FontSize = 30,
+                FontSize = 16,
             };
             _followButton = new Button
             {
@@ -32,7 +32,7 @@ namespace ITI.Archi_Vite.Forms
                 BackgroundColor = Color.White,
                 BorderColor = Color.Black,
                 TextColor = Color.Black,
-                FontSize = 30,
+                FontSize = 16,
             };
             _documentButton = new Button
             {
@@ -40,7 +40,7 @@ namespace ITI.Archi_Vite.Forms
                 BackgroundColor = Color.White,
                 BorderColor = Color.Black,
                 TextColor = Color.Black,
-                FontSize = 30,
+                FontSize = 16,
             };
             if (PageForPatient())
                 _followButton.Text = "Mon Suivi";

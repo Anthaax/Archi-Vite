@@ -31,20 +31,23 @@ namespace ITI.Archi_Vite.Forms
 
 			Label title = new Label {
 				Text = "Profil",
-				FontSize = 40,
-				HorizontalOptions = LayoutOptions.Center
+				FontSize = 20,
+				HorizontalOptions = LayoutOptions.Center,
+				TextColor =Color.Black
 			};
 
 			Label name = new Label {
 				Text = _user.FirstName + "  " + _user.LastName,
-				FontSize = 30,
+				FontSize = 17,
+				TextColor =Color.Black,
 				HorizontalOptions = LayoutOptions.Center	
 			};
 
 			Label phonenumber = new Label
 			{
 				Text = "Téléphone : 0" + _user.PhoneNumber.ToString() ,
-				FontSize = 30,
+				FontSize = 17,
+				TextColor =Color.Black,
 				HorizontalOptions = LayoutOptions.Center
 
             };
@@ -52,21 +55,24 @@ namespace ITI.Archi_Vite.Forms
 			Label adresse = new Label
 			{
 				Text = "Adresse : "+ _user.Adress,
-                FontSize = 30,
+                FontSize = 17,
+				TextColor =Color.Black,
                 HorizontalOptions = LayoutOptions.Center
 			};
 
 			Label postCode = new Label
 			{
 				Text = _user.Postcode.ToString(),
-				FontSize = 30,
+				FontSize = 17,
+				TextColor =Color.Black,
 				HorizontalOptions = LayoutOptions.Center
 			};
 
 			Label city = new Label
 			{
 				Text = _user.City,
-				FontSize = 30,
+				FontSize = 17,
+				TextColor =Color.Black,
 				HorizontalOptions = LayoutOptions.Center
 			};
             Stream s = new MemoryStream(DependencyService.Get<IBytesSaveAndLoad>().LoadByteArray(_user.Photo));
@@ -74,12 +80,14 @@ namespace ITI.Archi_Vite.Forms
 			{
 				Source = ImageSource.FromStream(() => s),
                 HorizontalOptions = LayoutOptions.FillAndExpand,
+				WidthRequest = 65,
+				HeightRequest = 65
 			};
 
             Button Suivis = new Button
             {
                 Text = "Voir mes Suivis",
-                FontSize = 40,
+                FontSize = 20,
                 BackgroundColor = Color.FromHex("439DFE"),
                 VerticalOptions = LayoutOptions.EndAndExpand
             };
@@ -95,7 +103,7 @@ namespace ITI.Archi_Vite.Forms
             Button document = new Button
 			{
 				Text = "Voir mes documents",
-				FontSize = 40,
+				FontSize = 20,
 				BackgroundColor = Color.FromHex("439DFE"),
 				VerticalOptions = LayoutOptions.EndAndExpand
 			};
@@ -107,7 +115,7 @@ namespace ITI.Archi_Vite.Forms
             Button modify = new Button
             {
                 Text = "Modifier mes infos",
-                FontSize = 40,
+                FontSize = 20,
                 BackgroundColor = Color.FromHex("439DFE"),
 				VerticalOptions = LayoutOptions.EndAndExpand
             };
@@ -119,7 +127,7 @@ namespace ITI.Archi_Vite.Forms
             Button deconnection = new Button
             {
                 Text = "Se déconnecter",
-                FontSize = 40,
+                FontSize = 20,
                 BackgroundColor = Color.FromHex("439DFE"),
                 VerticalOptions = LayoutOptions.EndAndExpand
             };

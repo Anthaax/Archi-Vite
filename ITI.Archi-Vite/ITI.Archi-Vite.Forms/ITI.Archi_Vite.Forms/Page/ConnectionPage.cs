@@ -17,34 +17,38 @@ namespace ITI.Archi_Vite.Forms
             Image logo = new Image
             {
                 Source = "Logo.png",
-				Scale = 0.7,
-                VerticalOptions = LayoutOptions.Start
+				HeightRequest = 250,
+				WidthRequest = 250,
             };
             Entry pseudo = new Entry
             {
                 Placeholder = "Pseudo",
-                FontSize = 40,
+                FontSize = 35,
                 HorizontalTextAlignment = TextAlignment.Center,
                 VerticalOptions = LayoutOptions.Start,
-                TextColor = Color.Gray
+                TextColor = Color.Gray,
+                PlaceholderColor = Color.Gray
             };
             pseudo.TextChanged += EntryTextChanged;
+
             Entry password = new Entry
             {
                 Placeholder = "Password",
                 IsPassword = true,
-                FontSize = 40,
+                FontSize = 35,
                 HorizontalTextAlignment = TextAlignment.Center,
                 VerticalOptions = LayoutOptions.Start,
+                PlaceholderColor = Color.Gray
             };
             password.TextChanged += EntryTextChanged;
+
             Button send = new Button
             {
                 Text = "Se connecter",
-                FontSize = 40,
+                FontSize = 35,
                 BackgroundColor = Color.FromHex("439DFE"),
                 HorizontalOptions = LayoutOptions.FillAndExpand,
-				VerticalOptions = LayoutOptions.Center,
+				VerticalOptions = LayoutOptions.End,
             };
             send.Clicked += async (sender, e) =>
             {

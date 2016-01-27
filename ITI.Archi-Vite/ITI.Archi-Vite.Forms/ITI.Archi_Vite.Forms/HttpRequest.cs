@@ -13,7 +13,7 @@ namespace ITI.Archi_Vite.Forms
 {
     public class HttpRequest
     {
-		static string _serveur = "192.168.10.24";
+		static string _serveur = "10.8.110.152";
         public static async Task<HttpResponseMessage> HttpRequestGetUserData(string pseudo, string password )
         {
 			try {
