@@ -22,7 +22,7 @@ namespace ITI.Archi_Vite.Forms
             Label messageLabel = new Label()
             {
                 Text = "Message",
-                FontSize = 40,
+				FontSize = 25,
                 TextColor = Color.Gray,
 				HorizontalOptions = LayoutOptions.Center,
             };
@@ -30,7 +30,7 @@ namespace ITI.Archi_Vite.Forms
             Label titleLabel = new Label()
             {
                 Text = "Titre : " + _message.Title,
-                FontSize = 40,
+				FontSize = 25,
                 TextColor = Color.Gray,
 				HorizontalOptions = LayoutOptions.StartAndExpand,
             };
@@ -38,7 +38,7 @@ namespace ITI.Archi_Vite.Forms
             Label senderLabel = new Label()
             {
                 Text = "De : " + _message.SenderName,
-                FontSize = 40,
+                FontSize = 25,
                 TextColor = Color.Gray,
 				HorizontalOptions = LayoutOptions.StartAndExpand,
             };
@@ -46,7 +46,7 @@ namespace ITI.Archi_Vite.Forms
             Label ContentLabel = new Label()
             {
                 Text = _message.Contents,
-                FontSize = 30,
+				FontSize = 20,
                 TextColor = Color.Gray,
                 VerticalOptions = LayoutOptions.CenterAndExpand,
 				HorizontalOptions = LayoutOptions.CenterAndExpand
@@ -55,14 +55,14 @@ namespace ITI.Archi_Vite.Forms
             Label recieversLabel = new Label()
             {
                 Text = "À : " + _message.Recievers.Count + " personne(s)",
-                FontSize = 40,
+				FontSize = 25,
                 TextColor = Color.Gray,
 				HorizontalOptions = LayoutOptions.StartAndExpand,
             };
 
 			Label patientLabel = new Label () {
 				Text = "Patient : " + _message.PatientFullName,
-				FontSize = 40,
+				FontSize = 25,
 				TextColor = Color.Gray,
 				HorizontalOptions = LayoutOptions.StartAndExpand,
 			};
@@ -70,7 +70,7 @@ namespace ITI.Archi_Vite.Forms
             Label dateLabel = new Label()
             {
                 Text = "Date : " + _message.Date.ToString(),
-                FontSize = 40,
+				FontSize = 25,
                 TextColor = Color.Gray,
 				HorizontalOptions = LayoutOptions.StartAndExpand,
             };
@@ -78,7 +78,7 @@ namespace ITI.Archi_Vite.Forms
             Button returnButton = new Button()
             {
                 Text = "Retour à mes messages",
-                FontSize = 40,
+				FontSize = 20,
                 BackgroundColor = Color.FromHex("439DFE"),
                 VerticalOptions = LayoutOptions.End
             };

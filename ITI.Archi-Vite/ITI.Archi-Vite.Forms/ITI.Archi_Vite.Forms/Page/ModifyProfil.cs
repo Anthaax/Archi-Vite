@@ -35,7 +35,7 @@ namespace ITI.Archi_Vite.Forms
             Entry firstName = new Entry
 			{
 				Text = _userData.User.FirstName,
-				FontSize = 40,
+				FontSize = 17,
 				HorizontalTextAlignment = TextAlignment.Center,
 				HorizontalOptions = LayoutOptions.FillAndExpand,
 				VerticalOptions = LayoutOptions.CenterAndExpand,
@@ -45,7 +45,7 @@ namespace ITI.Archi_Vite.Forms
 			Entry lastName = new Entry
 			{
 				Text = _userData.User.LastName,
-				FontSize = 40,
+				FontSize = 17,
 				HorizontalTextAlignment = TextAlignment.Center,
 				HorizontalOptions = LayoutOptions.FillAndExpand,
 				VerticalOptions = LayoutOptions.CenterAndExpand,
@@ -54,7 +54,7 @@ namespace ITI.Archi_Vite.Forms
 			Entry adress = new Entry
 			{
 				Text = _userData.User.Adress,
-				FontSize = 40,
+				FontSize = 17,
 				HorizontalTextAlignment = TextAlignment.Center,
 				HorizontalOptions = LayoutOptions.FillAndExpand,
 				VerticalOptions = LayoutOptions.CenterAndExpand,
@@ -63,7 +63,7 @@ namespace ITI.Archi_Vite.Forms
 			Entry postCode = new Entry
 			{
 				Text = _userData.User.Postcode.ToString(),
-				FontSize = 40,
+				FontSize = 17,
 				Keyboard = Keyboard.Numeric,
 				HorizontalTextAlignment = TextAlignment.Center,
 				HorizontalOptions = LayoutOptions.FillAndExpand,
@@ -74,7 +74,7 @@ namespace ITI.Archi_Vite.Forms
 			Entry city = new Entry
 			{
 				Text = _userData.User.City,
-				FontSize = 40,
+				FontSize = 17,
 				HorizontalTextAlignment = TextAlignment.Center,
 				HorizontalOptions = LayoutOptions.FillAndExpand,
 				VerticalOptions = LayoutOptions.CenterAndExpand,
@@ -83,7 +83,7 @@ namespace ITI.Archi_Vite.Forms
 			Entry phoneNumber = new Entry
 			{
 				Text = "0" + _userData.User.PhoneNumber.ToString(),
-				FontSize = 40,
+				FontSize = 17,
 				Keyboard = Keyboard.Telephone,
 				HorizontalTextAlignment = TextAlignment.Center,
 				HorizontalOptions = LayoutOptions.FillAndExpand,
@@ -93,13 +93,15 @@ namespace ITI.Archi_Vite.Forms
             Stream s = new MemoryStream(DependencyService.Get<IBytesSaveAndLoad>().LoadByteArray(_userData.User.Photo));
             _profilPhoto = new Image {
                 Source = ImageSource.FromStream(() => s),
+				WidthRequest = 50,
+				HeightRequest = 50
             };
 			_profilPhoto.GestureRecognizers.Add (tappedGesture);
 
 			Button modify = new Button
 			{
 				Text = "Sauvegarder",
-				FontSize = 40,
+				FontSize = 17,
 				BackgroundColor = Color.FromHex("439DFE"),
 				VerticalOptions = LayoutOptions.EndAndExpand,
                 
@@ -107,7 +109,7 @@ namespace ITI.Archi_Vite.Forms
             Button photo = new Button
             {
                 Text = "Prendre une photo",
-                FontSize = 40,
+                FontSize = 17,
                 BackgroundColor = Color.FromHex("439DFE"),
                 VerticalOptions = LayoutOptions.EndAndExpand,
         	};

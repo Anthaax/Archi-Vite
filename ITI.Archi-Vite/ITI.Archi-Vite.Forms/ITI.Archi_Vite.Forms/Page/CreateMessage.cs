@@ -27,7 +27,7 @@ namespace ITI.Archi_Vite.Forms
             Label message = new Label
             {
                 Text = "Creation de message",
-                FontSize = 50,
+                FontSize = 25,
                 VerticalOptions = LayoutOptions.Start,
                 TextColor = Color.Gray
             };
@@ -35,10 +35,11 @@ namespace ITI.Archi_Vite.Forms
             _title = new Entry
             {
                 Placeholder = "Titre du message",
-                FontSize = 40,
+                FontSize = 25,
                 HorizontalTextAlignment = TextAlignment.Center,
                 HorizontalOptions = LayoutOptions.FillAndExpand,
                 VerticalOptions = LayoutOptions.Center,
+				PlaceholderColor = Color.Gray
             };
             _title.TextChanged += EntryTextChanged;
 
@@ -53,14 +54,14 @@ namespace ITI.Archi_Vite.Forms
 			Label recivers = new Label
 			{
 				Text = "À : " + _recievers.Count.ToString() + " personnes",
-				FontSize = 40,
+				FontSize = 20,
 				VerticalOptions = LayoutOptions.Start,
 				TextColor = Color.Gray
 			};
 			Button add = new Button
 			{
 				Text = "+",
-				FontSize = 40,
+				FontSize = 20,
 				BackgroundColor = Color.FromHex("439DFE"),
 			};
 			add.Clicked += Add_Clicked;
@@ -78,7 +79,7 @@ namespace ITI.Archi_Vite.Forms
             Button create = new Button
             {
                 Text = "Envoyer",
-                FontSize = 40,
+                FontSize = 20,
                 BackgroundColor = Color.FromHex("439DFE"),
                 VerticalOptions = LayoutOptions.End
             };
@@ -87,7 +88,7 @@ namespace ITI.Archi_Vite.Forms
             Button back = new Button
             {
                 Text = "Retour au message",
-                FontSize = 40,
+                FontSize = 20,
                 BackgroundColor = Color.FromHex("439DFE"),
                 VerticalOptions = LayoutOptions.End
             };
@@ -131,12 +132,18 @@ namespace ITI.Archi_Vite.Forms
 
         private async void Create_Clicked(object sender, EventArgs e)
         {
-            Message message = GetMessage();
-            MessageAdd(message);
-            SaveUserData();
-            await DisplayAlert("Envoi", "Le message a été envoyé", "OK");
+			if (_title.Text != null || _content.Text != null || _recievers.Count != 0) 
+			{
+				Message message = GetMessage();
+				MessageAdd(message);
+				SaveUserData();
+				await DisplayAlert("Envoi", "Le message a été envoyé", "OK");
+				await Navigation.PushAsync(new MessageListPage(_userData));
 
-            await Navigation.PushAsync(new MessageListPage(_userData));
+			}
+			else
+				await DisplayAlert("Erreur", "Champs incomplets", "OK");
+           
         }
 
         private void Content_TextChanged(object sender, TextChangedEventArgs e)

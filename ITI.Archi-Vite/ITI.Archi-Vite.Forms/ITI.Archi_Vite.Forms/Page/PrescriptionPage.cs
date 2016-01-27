@@ -31,7 +31,7 @@ namespace ITI.Archi_Vite.Forms
             Label messageLabel = new Label()
             {
                 Text = "Prescription",
-                FontSize = 40,
+                FontSize = 20,
                 TextColor = Color.Gray,
                 HorizontalOptions = LayoutOptions.Center,
             };
@@ -39,7 +39,7 @@ namespace ITI.Archi_Vite.Forms
             Label titleLabel = new Label()
             {
                 Text = "Titre : " + _prescription.Title,
-                FontSize = 40,
+				FontSize = 20,
                 TextColor = Color.Gray,
                 HorizontalOptions = LayoutOptions.StartAndExpand,
             };
@@ -47,7 +47,7 @@ namespace ITI.Archi_Vite.Forms
             Label senderLabel = new Label()
             {
                 Text = "De : " + _prescription.SenderName,
-                FontSize = 40,
+				FontSize = 20,
                 TextColor = Color.Gray,
                 HorizontalOptions = LayoutOptions.StartAndExpand,
             };
@@ -65,7 +65,7 @@ namespace ITI.Archi_Vite.Forms
             Label recieversLabel = new Label()
             {
                 Text = "À : " + _prescription.Recievers.Count + " personne(s)",
-                FontSize = 40,
+				FontSize = 20,
                 TextColor = Color.Gray,
                 HorizontalOptions = LayoutOptions.StartAndExpand,
             };
@@ -73,7 +73,7 @@ namespace ITI.Archi_Vite.Forms
             Label patientLabel = new Label()
             {
                 Text = "Patient : " + _prescription.PatientFullName,
-                FontSize = 40,
+				FontSize = 20,
                 TextColor = Color.Gray,
                 HorizontalOptions = LayoutOptions.StartAndExpand,
             };
@@ -81,7 +81,7 @@ namespace ITI.Archi_Vite.Forms
             Label dateLabel = new Label()
             {
                 Text = "Date : " + _prescription.Date.ToString(),
-                FontSize = 40,
+				FontSize = 20,
                 TextColor = Color.Gray,
                 HorizontalOptions = LayoutOptions.StartAndExpand,
             };
@@ -89,7 +89,7 @@ namespace ITI.Archi_Vite.Forms
             Button returnButton = new Button()
             {
                 Text = "Retour à mes prescriptions",
-                FontSize = 40,
+				FontSize = 20,
                 BackgroundColor = Color.FromHex("439DFE"),
                 VerticalOptions = LayoutOptions.End
             };

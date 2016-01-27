@@ -20,7 +20,7 @@ namespace ITI.Archi_Vite.Forms
 
             Label myFollow = new Label {
 				Text = "Mes Suivis",
-				FontSize = 50,
+				FontSize = 25,
 				HorizontalOptions = LayoutOptions.Center
 			};
             CreateMyPatient();
@@ -33,14 +33,14 @@ namespace ITI.Archi_Vite.Forms
                 {
                     Label firstName = new Label();
                     firstName.SetBinding(Label.TextProperty, "FirstName");
-					firstName.FontSize = 40;
+					firstName.FontSize = 25;
 
                     Label spaceLabel = new Label();
                     spaceLabel.Text = "  ";
 
                     Label lastName = new Label();
                     lastName.SetBinding(Label.TextProperty, "LastName");
-                    lastName.FontSize = 40;
+                    lastName.FontSize = 25;
 
                     Image patientImage = new Image();
                     return new ViewCell

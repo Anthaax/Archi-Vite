@@ -37,22 +37,22 @@ namespace ITI.Archi_Vite.Forms
 
             Label prescription = new Label
             {
-                Text = "Creation de Prescription",
-                FontSize = 50,
+                Text = "Création de Prescription",
+                FontSize = 25,
                 VerticalOptions = LayoutOptions.Start,
                 TextColor = Color.Gray
             };
             Label recivers = new Label
             {
                 Text = "À : " + _recievers.Count.ToString() + " personnes",
-                FontSize = 40,
+                FontSize = 25,
                 VerticalOptions = LayoutOptions.Start,
                 TextColor = Color.Gray
             };
             Button add = new Button
             {
                 Text = "+",
-                FontSize = 40,
+                FontSize = 20,
                 BackgroundColor = Color.FromHex("439DFE"),
             };
             add.Clicked += Add_Clicked;
@@ -70,10 +70,14 @@ namespace ITI.Archi_Vite.Forms
             _title = new Entry
             {
                 Placeholder = "Titre de la prescription",
-                FontSize = 40,
+                FontSize = 25,
                 HorizontalTextAlignment = TextAlignment.Center,
                 HorizontalOptions = LayoutOptions.FillAndExpand,
                 VerticalOptions = LayoutOptions.Center,
+				PlaceholderColor = Color.Gray
+					
+
+
             };
             _title.TextChanged += EntryTextChanged;
 
@@ -81,7 +85,7 @@ namespace ITI.Archi_Vite.Forms
             {
                 Text = "Prendre une photo",
 				BackgroundColor = Color.FromHex("439DFE"),
-                FontSize = 25,
+                FontSize = 15,
                 HorizontalOptions = LayoutOptions.FillAndExpand,
                 VerticalOptions = LayoutOptions.FillAndExpand,
             };
@@ -90,7 +94,7 @@ namespace ITI.Archi_Vite.Forms
             {
                 Text = "Choisir une image éxistante",
 				BackgroundColor = Color.FromHex("439DFE"),
-                FontSize = 25,
+                FontSize = 13,
                 HorizontalOptions = LayoutOptions.FillAndExpand,
                 VerticalOptions = LayoutOptions.FillAndExpand,
             };
@@ -110,7 +114,7 @@ namespace ITI.Archi_Vite.Forms
             Button create = new Button
             {
                 Text = "Envoyer",
-                FontSize = 40,
+                FontSize = 20,
                 BackgroundColor = Color.FromHex("439DFE"),
                 VerticalOptions = LayoutOptions.End
             };
@@ -119,7 +123,7 @@ namespace ITI.Archi_Vite.Forms
             Button back = new Button
             {
                 Text = "Retour aux prescriptions",
-                FontSize = 40,
+                FontSize = 20,
                 BackgroundColor = Color.FromHex("439DFE"),
                 VerticalOptions = LayoutOptions.End
             };
@@ -148,7 +152,7 @@ namespace ITI.Archi_Vite.Forms
 			if (title != null)
 				_title.Text = title;
 			else
-				_title.Text = "";
+				_title.Text = null;
             _photo = new Image
             {
                 Source = docPath
@@ -190,11 +194,17 @@ namespace ITI.Archi_Vite.Forms
 
         private async void Create_Clicked(object sender, EventArgs e)
         {
-			Prescription p = GetPrescription();
-			PrescriptionAdd (p);
-			SaveUserData ();
-            await DisplayAlert("Envoi", "Le message à été envoyé", "OK");
-            await Navigation.PushAsync(new MessageListPage(_userData));
+			if (_title.Text != null || _recievers.Count != 0 || TostringSource(_photo) != null)
+			{
+				Prescription p = GetPrescription();
+				PrescriptionAdd (p);
+				SaveUserData ();
+				await DisplayAlert("Envoi", "Le message à été envoyé", "OK");
+				await Navigation.PushAsync(new MessageListPage(_userData));
+			}
+			else
+				await DisplayAlert("Erreur", "Les champs sont incomplets", "OK");
+
         }
 
         private async void FollowButtonClicked(object sender, EventArgs e)
@@ -250,9 +260,10 @@ namespace ITI.Archi_Vite.Forms
                 return source.Uri.ToString();
             }
             var s = i.Source as FileImageSource;
-            if (s != null)
+			if (s != null)
             {
-                return s.File.ToString();
+				if(s.File != null)
+                	return s.File.ToString();
             }
             return null;
         }

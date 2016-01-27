@@ -22,7 +22,7 @@ namespace ITI.Archi_Vite.Forms
             Label myFollow = new Label
             {
                 Text = "Mes Messages",
-                FontSize = 50,
+                FontSize = 25,
                 HorizontalOptions = LayoutOptions.Center,
                 TextColor = Color.Gray
             };
@@ -36,40 +36,40 @@ namespace ITI.Archi_Vite.Forms
                 {
                     Label title = new Label();
                     title.SetBinding(Label.TextProperty, "Title");
-					title.FontSize = 20;
+					title.FontSize = 13;
 					title.TextColor = Color.Gray;
 
 					
                     Label senderName = new Label();
                     senderName.SetBinding(Label.TextProperty, "SenderName");
-					senderName.FontSize = 20;
+					senderName.FontSize = 13;
 					senderName.TextColor = Color.Gray;
 
 
                     Label patientName = new Label();
                     patientName.SetBinding(Label.TextProperty, "PatientFullName");
-                    patientName.FontSize = 20;
+                    patientName.FontSize = 13;
 					patientName.TextColor = Color.Gray;
 
 
 					Label patient = new Label();
 					patient.Text = "Patient : "; 
-					patient.FontSize = 20;
+					patient.FontSize = 13;
 					patient.TextColor = Color.Gray;
 
 					Label spaceLabel = new Label();
 					spaceLabel.Text = " '' ";
-					spaceLabel.FontSize = 20;
+					spaceLabel.FontSize = 13;
                     spaceLabel.TextColor = Color.Gray;
 
 					Label spaceLabel2 = new Label();
 					spaceLabel2.Text = " '' ";
-					spaceLabel2.FontSize = 20;
+					spaceLabel2.FontSize = 13;
 					spaceLabel2.TextColor = Color.Gray;
 
                     Label pro = new Label();
 					pro.Text = " De : ";
-					pro.FontSize = 20;
+					pro.FontSize = 13;
 					pro.TextColor = Color.Gray;
 
 
