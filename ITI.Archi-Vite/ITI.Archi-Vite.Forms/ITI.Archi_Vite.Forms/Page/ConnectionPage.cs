@@ -28,44 +28,42 @@ namespace ITI.Archi_Vite.Forms
             Image logo = new Image
             {
                 Source = "Logo.png",
-				Scale = 0.75,
-                HorizontalOptions = LayoutOptions.FillAndExpand,
-                VerticalOptions = LayoutOptions.Start
+                HeightRequest = 250,
+                WidthRequest = 250,
             };
             Entry pseudo = new Entry
             {
                 Placeholder = "Pseudo",
-                FontSize = 40,
+                FontSize = 35,
                 HorizontalTextAlignment = TextAlignment.Center,
-                HorizontalOptions = LayoutOptions.FillAndExpand,
                 VerticalOptions = LayoutOptions.Start,
-                TextColor = Color.Gray
+                TextColor = Color.Gray,
+                PlaceholderColor = Color.Gray
             };
             pseudo.TextChanged += EntryTextChanged;
             Entry password = new Entry
             {
                 Placeholder = "Password",
                 IsPassword = true,
-                FontSize = 40,
+                FontSize = 35,
                 HorizontalTextAlignment = TextAlignment.Center,
-                HorizontalOptions = LayoutOptions.FillAndExpand,
                 VerticalOptions = LayoutOptions.Start,
+                PlaceholderColor = Color.Gray
             };
             password.TextChanged += EntryTextChanged;
             Button send = new Button
             {
                 Text = "Se connecter",
-                FontSize = 40,
+                FontSize = 35,
                 BackgroundColor = Color.FromHex("439DFE"),
                 HorizontalOptions = LayoutOptions.FillAndExpand,
-				VerticalOptions = LayoutOptions.FillAndExpand,
+                VerticalOptions = LayoutOptions.End,
             };
             send.Clicked += async (sender, e) =>
             {
                 if (pseudo.Text != null && password.Text != null)
                 {
                     _dataForUser = PutUserData(pseudo.Text, password.Text);
-                    //ConnectionGestion(pseudo.Text, password.Text);
 					SaveUserData();
 					await Navigation.PushAsync(new ProfilPage(_dataForUser, _dataForUser.User));
                 }
@@ -109,18 +107,6 @@ namespace ITI.Archi_Vite.Forms
             if (entry != null)
             {
                 entry.TextColor = Color.Gray;
-            }
-        }
-        private async void ConnectionGestion(string pseudo, string password)
-        {
-            using (var client = new HttpClient(new NativeMessageHandler()))
-            {
-                client.BaseAddress = new Uri("http://10.8.110.152:8080/");
-                client.Timeout = new TimeSpan(0, 0, 20);
-                var response = await client.GetAsync("api/Users/?pseudo=GuillaumeF&password=GuillaumeF");
-                string s = await response.Content.ReadAsStringAsync();
-                Data u = XmlDeseriliaze(s);
-                _dataForUser = u;
             }
         }
 		private Data PutUserData(string pseudo, string password)

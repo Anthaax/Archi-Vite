@@ -27,84 +27,86 @@ namespace ITI.Archi_Vite.Forms
             button.DocumentButton.Clicked += DocumentButton_Clicked;
 
             Entry firstName = new Entry
-			{
-				Text = _userData.User.FirstName,
-				FontSize = 40,
-				HorizontalTextAlignment = TextAlignment.Center,
-				HorizontalOptions = LayoutOptions.FillAndExpand,
-				VerticalOptions = LayoutOptions.CenterAndExpand,
-				TextColor = Color.Gray
-			};
-			firstName.TextChanged += EntryTextChanged;
-			Entry lastName = new Entry
-			{
-				Text = _userData.User.LastName,
-				FontSize = 40,
-				HorizontalTextAlignment = TextAlignment.Center,
-				HorizontalOptions = LayoutOptions.FillAndExpand,
-				VerticalOptions = LayoutOptions.CenterAndExpand,
-				TextColor = Color.Gray
-			};
-			Entry adress = new Entry
-			{
-				Text = _userData.User.Adress,
-				FontSize = 40,
-				HorizontalTextAlignment = TextAlignment.Center,
-				HorizontalOptions = LayoutOptions.FillAndExpand,
-				VerticalOptions = LayoutOptions.CenterAndExpand,
-				TextColor = Color.Gray
-			};
-			Entry postCode = new Entry
-			{
-				Text = _userData.User.Postcode.ToString(),
-				FontSize = 40,
-				Keyboard = Keyboard.Numeric,
-				HorizontalTextAlignment = TextAlignment.Center,
-				HorizontalOptions = LayoutOptions.FillAndExpand,
-				VerticalOptions = LayoutOptions.CenterAndExpand,
-				TextColor = Color.Gray
-			};
+            {
+                Text = _userData.User.FirstName,
+                FontSize = 17,
+                HorizontalTextAlignment = TextAlignment.Center,
+                HorizontalOptions = LayoutOptions.FillAndExpand,
+                VerticalOptions = LayoutOptions.CenterAndExpand,
+                TextColor = Color.Gray
+            };
+            firstName.TextChanged += EntryTextChanged;
+            Entry lastName = new Entry
+            {
+                Text = _userData.User.LastName,
+                FontSize = 17,
+                HorizontalTextAlignment = TextAlignment.Center,
+                HorizontalOptions = LayoutOptions.FillAndExpand,
+                VerticalOptions = LayoutOptions.CenterAndExpand,
+                TextColor = Color.Gray
+            };
+            Entry adress = new Entry
+            {
+                Text = _userData.User.Adress,
+                FontSize = 17,
+                HorizontalTextAlignment = TextAlignment.Center,
+                HorizontalOptions = LayoutOptions.FillAndExpand,
+                VerticalOptions = LayoutOptions.CenterAndExpand,
+                TextColor = Color.Gray
+            };
+            Entry postCode = new Entry
+            {
+                Text = _userData.User.Postcode.ToString(),
+                FontSize = 17,
+                Keyboard = Keyboard.Numeric,
+                HorizontalTextAlignment = TextAlignment.Center,
+                HorizontalOptions = LayoutOptions.FillAndExpand,
+                VerticalOptions = LayoutOptions.CenterAndExpand,
+                TextColor = Color.Gray
+            };
 
-			Entry city = new Entry
-			{
-				Text = _userData.User.City,
-				FontSize = 40,
-				HorizontalTextAlignment = TextAlignment.Center,
-				HorizontalOptions = LayoutOptions.FillAndExpand,
-				VerticalOptions = LayoutOptions.CenterAndExpand,
-				TextColor = Color.Gray
-			};
-			Entry phoneNumber = new Entry
-			{
-				Text = _userData.User.PhoneNumber.ToString(),
-				FontSize = 40,
-				Keyboard = Keyboard.Telephone,
-				HorizontalTextAlignment = TextAlignment.Center,
-				HorizontalOptions = LayoutOptions.FillAndExpand,
-				VerticalOptions = LayoutOptions.CenterAndExpand,
-				TextColor = Color.Gray
-			};
-			_profilPhoto = new Image {
-				Source = _userData.User.Photo, 
-			};
+            Entry city = new Entry
+            {
+                Text = _userData.User.City,
+                FontSize = 17,
+                HorizontalTextAlignment = TextAlignment.Center,
+                HorizontalOptions = LayoutOptions.FillAndExpand,
+                VerticalOptions = LayoutOptions.CenterAndExpand,
+                TextColor = Color.Gray
+            };
+            Entry phoneNumber = new Entry
+            {
+                Text = "0" + _userData.User.PhoneNumber.ToString(),
+                FontSize = 17,
+                Keyboard = Keyboard.Telephone,
+                HorizontalTextAlignment = TextAlignment.Center,
+                HorizontalOptions = LayoutOptions.FillAndExpand,
+                VerticalOptions = LayoutOptions.CenterAndExpand,
+                TextColor = Color.Gray
+            };
+            _profilPhoto = new Image {
+				Source = _userData.User.Photo,
+                WidthRequest = 50,
+                HeightRequest = 50
+            };
 			_profilPhoto.GestureRecognizers.Add (tappedGesture);
 
-			Button modify = new Button
-			{
-				Text = "Sauvegarder",
-				FontSize = 40,
-				BackgroundColor = Color.FromHex("439DFE"),
-				VerticalOptions = LayoutOptions.EndAndExpand,
-                
-			};
+            Button modify = new Button
+            {
+                Text = "Sauvegarder",
+                FontSize = 17,
+                BackgroundColor = Color.FromHex("439DFE"),
+                VerticalOptions = LayoutOptions.EndAndExpand,
+
+            };
             Button photo = new Button
             {
                 Text = "Prendre une photo",
-                FontSize = 40,
+                FontSize = 17,
                 BackgroundColor = Color.FromHex("439DFE"),
                 VerticalOptions = LayoutOptions.EndAndExpand,
-        	};
-			photo.Clicked += Photo_Clicked;
+            };
+            photo.Clicked += Photo_Clicked;
             modify.Clicked += async (sender, e) => 
 			{
 				_userData.User.Adress = adress.Text;

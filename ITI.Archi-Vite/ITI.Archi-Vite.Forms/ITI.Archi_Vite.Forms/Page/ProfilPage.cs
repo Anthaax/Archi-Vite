@@ -22,63 +22,72 @@ namespace ITI.Archi_Vite.Forms
 
 			button.ProfilIsDisable ();
             button.FollowButton.Clicked += FollowButtonClicked;
-            button.DocumentButton.Clicked += Document_Clicked;   
+            button.DocumentButton.Clicked += Document_Clicked;
 
-			Label title = new Label {
-				Text = "Profil",
-				FontSize = 40,
-				HorizontalOptions = LayoutOptions.Center
-			};
+            Label title = new Label
+            {
+                Text = "Profil",
+                FontSize = 20,
+                HorizontalOptions = LayoutOptions.Center,
+                TextColor = Color.Black
+            };
 
-			Label name = new Label {
-				Text = _user.FirstName + "  " + _user.LastName,
-				FontSize = 30,
-				HorizontalOptions = LayoutOptions.Center	
-			};
+            Label name = new Label
+            {
+                Text = _user.FirstName + "  " + _user.LastName,
+                FontSize = 17,
+                TextColor = Color.Black,
+                HorizontalOptions = LayoutOptions.Center
+            };
 
-			Label phonenumber = new Label
-			{
-				Text = "Numero : " + _user.PhoneNumber ,
-				FontSize = 30,
-				HorizontalOptions = LayoutOptions.Center
+            Label phonenumber = new Label
+            {
+                Text = "Téléphone : 0" + _user.PhoneNumber.ToString(),
+                FontSize = 17,
+                TextColor = Color.Black,
+                HorizontalOptions = LayoutOptions.Center
 
             };
 
-			Label adresse = new Label
-			{
-				Text = "Adresse : "+ _user.Adress,
-                FontSize = 30,
+            Label adresse = new Label
+            {
+                Text = "Adresse : " + _user.Adress,
+                FontSize = 17,
+                TextColor = Color.Black,
                 HorizontalOptions = LayoutOptions.Center
-			};
+            };
 
-			Label postCode = new Label
-			{
-				Text = _user.Postcode.ToString(),
-				FontSize = 30,
-				HorizontalOptions = LayoutOptions.Center
-			};
+            Label postCode = new Label
+            {
+                Text = _user.Postcode.ToString(),
+                FontSize = 17,
+                TextColor = Color.Black,
+                HorizontalOptions = LayoutOptions.Center
+            };
 
-			Label city = new Label
-			{
-				Text = _user.City,
-				FontSize = 30,
-				HorizontalOptions = LayoutOptions.Center
-			};
-			Image logo = new Image
+            Label city = new Label
+            {
+                Text = _user.City,
+                FontSize = 17,
+                TextColor = Color.Black,
+                HorizontalOptions = LayoutOptions.Center
+            };
+
+            Image logo = new Image
 			{
 				Source = new UriImageSource
                 {
                     Uri = new Uri(_user.Photo),
-                    CachingEnabled = true,
-                    CacheValidity = new TimeSpan(5, 0, 0, 0)
                 },
                 HorizontalOptions = LayoutOptions.FillAndExpand,
-			};
+                WidthRequest = 65,
+                HeightRequest = 65
+            };
 
             Button Suivis = new Button
             {
                 Text = "Voir mes Suivis",
-                FontSize = 40,
+                FontSize = 20,
                 BackgroundColor = Color.FromHex("439DFE"),
                 VerticalOptions = LayoutOptions.EndAndExpand
             };
@@ -91,12 +100,12 @@ namespace ITI.Archi_Vite.Forms
                 Suivis.Text = "Retour à mon suivi";
 
             Button document = new Button
-			{
-				Text = "Voir mes documents",
-				FontSize = 40,
-				BackgroundColor = Color.FromHex("439DFE"),
-				VerticalOptions = LayoutOptions.EndAndExpand
-			};
+            {
+                Text = "Voir mes documents",
+                FontSize = 20,
+                BackgroundColor = Color.FromHex("439DFE"),
+                VerticalOptions = LayoutOptions.EndAndExpand
+            };
             document.Clicked += Document_Clicked;
 
             if (!UserAccount())
@@ -105,9 +114,9 @@ namespace ITI.Archi_Vite.Forms
             Button modify = new Button
             {
                 Text = "Modifier mes infos",
-                FontSize = 40,
+                FontSize = 20,
                 BackgroundColor = Color.FromHex("439DFE"),
-				VerticalOptions = LayoutOptions.EndAndExpand
+                VerticalOptions = LayoutOptions.EndAndExpand
             };
             modify.Clicked += async (sender, e) =>
             {
@@ -117,7 +126,7 @@ namespace ITI.Archi_Vite.Forms
             Button deconnection = new Button
             {
                 Text = "Se déconnecter",
-                FontSize = 40,
+                FontSize = 20,
                 BackgroundColor = Color.FromHex("439DFE"),
                 VerticalOptions = LayoutOptions.EndAndExpand
             };

@@ -23,15 +23,15 @@ namespace ITI.Archi_Vite.Forms
             Label myFollow = new Label
             {
                 Text = "Mes Documents",
-                FontSize = 50,
-				VerticalOptions = LayoutOptions.CenterAndExpand,
-                TextColor = Color.Gray
+                FontSize = 30,
+                VerticalOptions = LayoutOptions.CenterAndExpand,
+                TextColor = Color.Black
             };
 
             Button messages = new Button
             {
-				Text = "Nombre de messages : " + _userData.Documents.Messages.Count.ToString(),
-                FontSize = 40,
+                Text = "Nombre de messages : " + _userData.Documents.Messages.Count.ToString(),
+                FontSize = 20,
                 BackgroundColor = Color.FromHex("439DFE"),
                 VerticalOptions = LayoutOptions.CenterAndExpand
             };
@@ -39,8 +39,8 @@ namespace ITI.Archi_Vite.Forms
 
             Button prescription = new Button
             {
-				Text = "Nombre de prescriptions : " + _userData.Documents.Prescriptions.Count.ToString(),
-                FontSize = 40,
+                Text = "Nombre de prescriptions : " + _userData.Documents.Prescriptions.Count.ToString(),
+                FontSize = 20,
                 BackgroundColor = Color.FromHex("439DFE"),
                 VerticalOptions = LayoutOptions.CenterAndExpand
             };

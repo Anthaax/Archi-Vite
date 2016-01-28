@@ -31,18 +31,19 @@ namespace ITI.Archi_Vite.Forms
             Label message = new Label
             {
                 Text = "Creation de message",
-                FontSize = 50,
+                FontSize = 25,
                 VerticalOptions = LayoutOptions.Start,
                 TextColor = Color.Gray
             };
-            
+
             _title = new Entry
             {
                 Placeholder = "Titre du message",
-                FontSize = 40,
+                FontSize = 25,
                 HorizontalTextAlignment = TextAlignment.Center,
                 HorizontalOptions = LayoutOptions.FillAndExpand,
                 VerticalOptions = LayoutOptions.Center,
+                PlaceholderColor = Color.Gray
             };
             _title.TextChanged += EntryTextChanged;
 
@@ -53,36 +54,36 @@ namespace ITI.Archi_Vite.Forms
                 VerticalOptions = LayoutOptions.FillAndExpand,
             };
             _content.TextChanged += Content_TextChanged;
-			Initiliaze(title, content, recievers);
-			Label recivers = new Label
-			{
-				Text = "À : " + _recievers.Count.ToString() + " personnes",
-				FontSize = 40,
-				VerticalOptions = LayoutOptions.Start,
-				TextColor = Color.Gray
-			};
-			Button add = new Button
-			{
-				Text = "+",
-				FontSize = 40,
-				BackgroundColor = Color.FromHex("439DFE"),
-			};
-			add.Clicked += Add_Clicked;
-			StackLayout addRecieverStack = new StackLayout
-			{
+            Initiliaze(title, content, recievers);
+            Label recivers = new Label
+            {
+                Text = "À : " + _recievers.Count.ToString() + " personnes",
+                FontSize = 20,
+                VerticalOptions = LayoutOptions.Start,
+                TextColor = Color.Gray
+            };
+            Button add = new Button
+            {
+                Text = "+",
+                FontSize = 20,
+                BackgroundColor = Color.FromHex("439DFE"),
+            };
+            add.Clicked += Add_Clicked;
+            StackLayout addRecieverStack = new StackLayout
+            {
 
-				Children = {
-					recivers,
-					add,
-				},
-				Orientation = StackOrientation.Horizontal,
-				HorizontalOptions = LayoutOptions.Start
+                Children = {
+                    recivers,
+                    add,
+                },
+                Orientation = StackOrientation.Horizontal,
+                HorizontalOptions = LayoutOptions.Start
 
-			};
+            };
             Button create = new Button
             {
                 Text = "Envoyer",
-                FontSize = 40,
+                FontSize = 20,
                 BackgroundColor = Color.FromHex("439DFE"),
                 VerticalOptions = LayoutOptions.End
             };
@@ -90,8 +91,8 @@ namespace ITI.Archi_Vite.Forms
 
             Button back = new Button
             {
-                Text = "retour au message",
-                FontSize = 40,
+                Text = "Retour au message",
+                FontSize = 20,
                 BackgroundColor = Color.FromHex("439DFE"),
                 VerticalOptions = LayoutOptions.End
             };
@@ -135,12 +136,18 @@ namespace ITI.Archi_Vite.Forms
 
         private async void Create_Clicked(object sender, EventArgs e)
         {
-            Message message = GetMessage();
-            MessageAdd(message);
-            SaveUserData();
-            await DisplayAlert("Envoi", "Le message à été envoyé", "OK");
+            if (_title.Text != null || _content.Text != null || _recievers.Count != 0)
+            {
+                Message message = GetMessage();
+                MessageAdd(message);
+                SaveUserData();
+                await DisplayAlert("Envoi", "Le message à été envoyé", "OK");
 
-            await Navigation.PushAsync(new MessageListPage(_userData));
+                await Navigation.PushAsync(new MessageListPage(_userData));
+            }
+            else
+                await DisplayAlert("Erreur", "Champs incomplets", "OK");
+
         }
 
         private void Content_TextChanged(object sender, TextChangedEventArgs e)

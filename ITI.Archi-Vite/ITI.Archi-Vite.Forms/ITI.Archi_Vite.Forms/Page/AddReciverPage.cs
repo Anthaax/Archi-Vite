@@ -40,7 +40,8 @@ namespace ITI.Archi_Vite.Forms
             Image patientImage = new Image
             {
                 Source = patient.Photo,
-                Scale = 0.75
+                WidthRequest = 65,
+                HeightRequest = 65
             };
             AbsoluteLayout.SetLayoutFlags(patientImage, AbsoluteLayoutFlags.PositionProportional);
             AbsoluteLayout.SetLayoutBounds(patientImage, new Rectangle(0.5, 0.5, AbsoluteLayout.AutoSize, AbsoluteLayout.AutoSize));
@@ -49,7 +50,7 @@ namespace ITI.Archi_Vite.Forms
             Button backMessage = new Button
             {
                 Text = "Retour aux messages",
-                FontSize = 23,
+                FontSize = 10,
                 BackgroundColor = Color.FromHex("439DFE"),
             };
             if (!_message)
@@ -72,13 +73,17 @@ namespace ITI.Archi_Vite.Forms
                 proImage[i].Source = new UriImageSource();
                 if (professionals[i] != null)
                 {
-					proImage[i] = InitializePhoto(proImage[i], i, professionals);
+                    proImage[i].WidthRequest = 65;
+                    proImage[i].HeightRequest = 65;
+                    proImage[i] = InitializePhoto(proImage[i], i, professionals);
                     proImage[i].Source = professionals[i].Photo;
+                    proImage[i].GestureRecognizers.Add(imageTapped);
                 }
                 else
                 {
                     proImage[i].Source = "http://3.bp.blogspot.com/_9Q_36sq8aPo/S0D4__i1w1I/AAAAAAAAACo/cgLl5IYQtjA/s400/croix.png";
-                    proImage[i].Scale = 0.75;
+                    proImage[i].WidthRequest = 65;
+                    proImage[i].HeightRequest = 65;
                 }
                 AbsoluteLayout.SetLayoutFlags(proImage[i], AbsoluteLayoutFlags.PositionProportional);
                 AbsoluteLayout.SetLayoutBounds(proImage[i], new Rectangle(X, Y, AbsoluteLayout.AutoSize, AbsoluteLayout.AutoSize));
@@ -93,14 +98,17 @@ namespace ITI.Archi_Vite.Forms
                 proImage[i] = new Image();
                 if (professionals[i] != null)
                 {
-					proImage[i].Scale = 0.75;
-					proImage[i] = InitializePhoto(proImage[i], i, professionals);
+                    proImage[i].WidthRequest = 65;
+                    proImage[i].HeightRequest = 65;
+                    proImage[i] = InitializePhoto(proImage[i], i, professionals);
                     proImage[i].Source = professionals[i].Photo;
+                    proImage[i].GestureRecognizers.Add(imageTapped);
                 }
                 else
                 {
                     proImage[i].Source = "http://3.bp.blogspot.com/_9Q_36sq8aPo/S0D4__i1w1I/AAAAAAAAACo/cgLl5IYQtjA/s400/croix.png";
-                    proImage[i].Scale = 0.75;
+                    proImage[i].WidthRequest = 65;
+                    proImage[i].HeightRequest = 65;
                 }
                 AbsoluteLayout.SetLayoutFlags(proImage[i], AbsoluteLayoutFlags.PositionProportional);
                 AbsoluteLayout.SetLayoutBounds(proImage[i], new Rectangle(X, Y, AbsoluteLayout.AutoSize, AbsoluteLayout.AutoSize));
@@ -114,14 +122,17 @@ namespace ITI.Archi_Vite.Forms
                 proImage[i] = new Image();
                 if (professionals[i] != null)
                 {
-					proImage [i].Scale = 0.75;
-					proImage[i] = InitializePhoto(proImage[i], i, professionals);
+                    proImage[i].WidthRequest = 65;
+                    proImage[i].HeightRequest = 65;
+                    proImage[i] = InitializePhoto(proImage[i], i, professionals);
                     proImage[i].Source = professionals[i].Photo;
+                    proImage[i].GestureRecognizers.Add(imageTapped);
                 }
                 else
                 {
                     proImage[i].Source = "http://3.bp.blogspot.com/_9Q_36sq8aPo/S0D4__i1w1I/AAAAAAAAACo/cgLl5IYQtjA/s400/croix.png";
-                    proImage[i].Scale = 0.75;
+                    proImage[i].WidthRequest = 65;
+                    proImage[i].HeightRequest = 65;
                 }
                 AbsoluteLayout.SetLayoutFlags(proImage[i], AbsoluteLayoutFlags.PositionProportional);
                 AbsoluteLayout.SetLayoutBounds(proImage[i], new Rectangle(X, Y, AbsoluteLayout.AutoSize, AbsoluteLayout.AutoSize));
@@ -133,14 +144,17 @@ namespace ITI.Archi_Vite.Forms
                 proImage[i] = new Image();
                 if (professionals[i] != null)
                 {
-					proImage [i].Scale = 0.75;
-					proImage[i] = InitializePhoto(proImage[i], i, professionals);
+                    proImage[i].WidthRequest = 65;
+                    proImage[i].HeightRequest = 65;
+                    proImage[i] = InitializePhoto(proImage[i], i, professionals);
                     proImage[i].Source = professionals[i].Photo;
+                    proImage[i].GestureRecognizers.Add(imageTapped);
                 }
                 else
                 {
                     proImage[i].Source = "http://3.bp.blogspot.com/_9Q_36sq8aPo/S0D4__i1w1I/AAAAAAAAACo/cgLl5IYQtjA/s400/croix.png";
-                    proImage[i].Scale = 0.75;
+                    proImage[i].WidthRequest = 65;
+                    proImage[i].HeightRequest = 65;
                 }
                 AbsoluteLayout.SetLayoutFlags(proImage[i], AbsoluteLayoutFlags.PositionProportional);
                 AbsoluteLayout.SetLayoutBounds(proImage[i], new Rectangle(X, Y, AbsoluteLayout.AutoSize, AbsoluteLayout.AutoSize));
@@ -180,21 +194,25 @@ namespace ITI.Archi_Vite.Forms
             var image = sender as Image;
             if (image != null)
             {
-                if (image.Scale == 0.75)
+                if (image.WidthRequest == 65 && image.HeightRequest == 65)
                 {
-                    image.Scale = 0.6;
+                    image.WidthRequest = 60;
+                    image.HeightRequest = 60;
+                    image.Opacity = 0.5;
                     var source = image.Source as UriImageSource;
                     if (source != null)
                     {
                         for (int i = 0; i < professionals.Length; i++)
                         {
-                            if (professionals[i] != null && source.Uri.ToString() == professionals[i].Photo) _recievers.Add(professionals[i]);
+                            if (professionals[i] != null && source.Uri.ToString() == professionals[i].Photo && !_recievers.Contains(professionals[i])) _recievers.Add(professionals[i]);
                         }
                     }
                 }
-                else if (true)
+                else
                 {
-                    image.Scale = 0.75;
+                    image.WidthRequest = 65;
+                    image.HeightRequest = 65;
+                    image.Opacity = 1;
                     var source = image.Source as UriImageSource;
                     if (source != null)
                     {
@@ -240,12 +258,11 @@ namespace ITI.Archi_Vite.Forms
         }
         private Professional[] ChangeListToArray(List<Professional> pro)
         {
-            Professional[] p = new Professional[10];
-            int count = 0;
-            foreach (var pr in pro)
+            Professional[] p = ProfessionalArray();
+            for (int i = 0; i < p.Length; i++)
             {
-                p.SetValue(pr, count);
-                count++;
+                if (p[i] != null && !pro.Contains(p[i]))
+                    p[i] = null;
             }
             return p;
         }
@@ -254,7 +271,8 @@ namespace ITI.Archi_Vite.Forms
 			if (_recievers.Count == 0)
             {
                 image.GestureRecognizers.Add(imageTapped);
-				image.Scale = 0.75;
+                image.WidthRequest = 65;
+                image.HeightRequest = 65;
             }
             else
             {
@@ -262,12 +280,15 @@ namespace ITI.Archi_Vite.Forms
                 {
                     if(pro.UserId == professionals[count].UserId)
                     {
-                        image.Scale = 0.6;
+                        image.WidthRequest = 65;
+                        image.HeightRequest = 65;
+                        image.Opacity = 0.5;
                         return image;
                     }
                     else
                     {
-                        image.Scale = 0.75;
+                        image.WidthRequest = 65;
+                        image.HeightRequest = 65;
                     }
                 }
             }

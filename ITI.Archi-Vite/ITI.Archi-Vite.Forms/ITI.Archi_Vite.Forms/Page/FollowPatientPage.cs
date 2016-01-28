@@ -29,7 +29,7 @@ namespace ITI.Archi_Vite.Forms
             Button messageButton = new Button
             {
                 Text = "Messages",
-                FontSize = 30,
+                FontSize = 15,
                 BackgroundColor = Color.FromHex("439DFE"),
             };
 
@@ -40,35 +40,34 @@ namespace ITI.Archi_Vite.Forms
 
             Button createMessageButtton = new Button
             {
-                Text = "Ajouter un message",
-                FontSize = 20,
+                Text = "+ message",
+                FontSize = 15,
                 BackgroundColor = Color.FromHex("439DFE"),
             };
 
             AbsoluteLayout.SetLayoutFlags(createMessageButtton, AbsoluteLayoutFlags.PositionProportional);
-            AbsoluteLayout.SetLayoutBounds(createMessageButtton, new Rectangle(0, 0.9, AbsoluteLayout.AutoSize, AbsoluteLayout.AutoSize));
+            AbsoluteLayout.SetLayoutBounds(createMessageButtton, new Rectangle(0, 0, AbsoluteLayout.AutoSize, AbsoluteLayout.AutoSize));
             photoLayout.Children.Add(createMessageButtton);
             createMessageButtton.Clicked += CreateMessageButtton_Clicked;
 
             Button createPrescriptionButtton = new Button
             {
-                Text = "Ajouter une prescription",
-                FontSize = 20,
+                Text = "+ prescription",
+                FontSize = 15,
                 BackgroundColor = Color.FromHex("439DFE"),
             };
 
             AbsoluteLayout.SetLayoutFlags(createPrescriptionButtton, AbsoluteLayoutFlags.PositionProportional);
-            AbsoluteLayout.SetLayoutBounds(createPrescriptionButtton, new Rectangle(1, 0.9, AbsoluteLayout.AutoSize, AbsoluteLayout.AutoSize));
+            AbsoluteLayout.SetLayoutBounds(createPrescriptionButtton, new Rectangle(1, 0, AbsoluteLayout.AutoSize, AbsoluteLayout.AutoSize));
             photoLayout.Children.Add(createPrescriptionButtton);
             createPrescriptionButtton.Clicked += CreatePrescriptionButtton_Clicked;
 
             Button prescriptionButton = new Button
             {
                 Text = "Prescriptions",
-                FontSize = 30,
+                FontSize = 15,
                 BackgroundColor = Color.FromHex("439DFE"),
             };
-
             AbsoluteLayout.SetLayoutFlags(prescriptionButton, AbsoluteLayoutFlags.PositionProportional);
             AbsoluteLayout.SetLayoutBounds(prescriptionButton, new Rectangle(1, 1, AbsoluteLayout.AutoSize, AbsoluteLayout.AutoSize));
             photoLayout.Children.Add(prescriptionButton);
@@ -77,7 +76,8 @@ namespace ITI.Archi_Vite.Forms
             Image patientImage = new Image
             {
                 Source = patient.Photo,
-				Scale = 0.75
+                WidthRequest = 65,
+                HeightRequest = 65
             };
             AbsoluteLayout.SetLayoutFlags(patientImage, AbsoluteLayoutFlags.PositionProportional);
             AbsoluteLayout.SetLayoutBounds(patientImage, new Rectangle(0.5, 0.5, AbsoluteLayout.AutoSize, AbsoluteLayout.AutoSize));
@@ -99,8 +99,9 @@ namespace ITI.Archi_Vite.Forms
                 {
                     proImage[i].Source = "http://3.bp.blogspot.com/_9Q_36sq8aPo/S0D4__i1w1I/AAAAAAAAACo/cgLl5IYQtjA/s400/croix.png";
                 }
-                proImage [i].Scale = 0.75;
-				AbsoluteLayout.SetLayoutFlags(proImage[i], AbsoluteLayoutFlags.PositionProportional);
+                proImage[i].WidthRequest = 65;
+                proImage[i].HeightRequest = 65;
+                AbsoluteLayout.SetLayoutFlags(proImage[i], AbsoluteLayoutFlags.PositionProportional);
 				AbsoluteLayout.SetLayoutBounds(proImage[i], new Rectangle(X, Y, AbsoluteLayout.AutoSize, AbsoluteLayout.AutoSize));
 				photoLayout.Children.Add(proImage[i]);
 				X = X - 0.2;
@@ -120,7 +121,8 @@ namespace ITI.Archi_Vite.Forms
                 {
                     proImage[i].Source = "http://3.bp.blogspot.com/_9Q_36sq8aPo/S0D4__i1w1I/AAAAAAAAACo/cgLl5IYQtjA/s400/croix.png";
                 }
-                proImage [i].Scale = 0.75;
+                proImage[i].WidthRequest = 65;
+                proImage[i].HeightRequest = 65;
                 AbsoluteLayout.SetLayoutFlags(proImage[i], AbsoluteLayoutFlags.PositionProportional);
                 AbsoluteLayout.SetLayoutBounds(proImage[i], new Rectangle(X, Y, AbsoluteLayout.AutoSize, AbsoluteLayout.AutoSize));
                 photoLayout.Children.Add(proImage[i]);
@@ -140,7 +142,8 @@ namespace ITI.Archi_Vite.Forms
                 {
                     proImage[i].Source = "http://3.bp.blogspot.com/_9Q_36sq8aPo/S0D4__i1w1I/AAAAAAAAACo/cgLl5IYQtjA/s400/croix.png";
                 }
-                proImage [i].Scale = 0.75;
+                proImage[i].WidthRequest = 65;
+                proImage[i].HeightRequest = 65;
                 AbsoluteLayout.SetLayoutFlags(proImage[i], AbsoluteLayoutFlags.PositionProportional);
                 AbsoluteLayout.SetLayoutBounds(proImage[i], new Rectangle(X, Y, AbsoluteLayout.AutoSize, AbsoluteLayout.AutoSize));
                 photoLayout.Children.Add(proImage[i]);
@@ -158,7 +161,8 @@ namespace ITI.Archi_Vite.Forms
                 {
                     proImage[i].Source = "http://3.bp.blogspot.com/_9Q_36sq8aPo/S0D4__i1w1I/AAAAAAAAACo/cgLl5IYQtjA/s400/croix.png";
                 }
-                proImage [i].Scale = 0.75;
+                proImage[i].WidthRequest = 65;
+                proImage[i].HeightRequest = 65;
                 AbsoluteLayout.SetLayoutFlags(proImage[i], AbsoluteLayoutFlags.PositionProportional);
                 AbsoluteLayout.SetLayoutBounds(proImage[i], new Rectangle(X, Y, AbsoluteLayout.AutoSize, AbsoluteLayout.AutoSize));
 				photoLayout.Children.Add(proImage[i]);
